@@ -7,12 +7,10 @@ import me.heldplayer.util.HeldCore.Updater;
 import me.heldplayer.util.HeldCore.UsageReporter;
 import me.heldplayer.util.HeldCore.config.Config;
 import me.heldplayer.util.HeldCore.config.ConfigValue;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraftforge.common.Configuration;
 import codechicken.nei.api.API;
 import codechicken.nei.recipe.DefaultOverlayHandler;
-
-import com.xcompwiz.mystcraft.client.gui.GuiInkMixer;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
@@ -34,6 +32,7 @@ public class PluginNEIMystcraft {
     private Object mystcraft;
 
     private InkMixerRecipeHandler inkMixer;
+    public static Class<? extends GuiContainer> guiInkMixerClass;
 
     @PreInit
     public void preInit(FMLPreInitializationEvent event) {
@@ -66,14 +65,14 @@ public class PluginNEIMystcraft {
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
 
-        Integrator.registerItems(mystcraft);
+        Integrator.initialize(mystcraft);
 
         this.inkMixer = new InkMixerRecipeHandler();
         API.registerRecipeHandler(inkMixer);
         API.registerUsageHandler(inkMixer);
 
-        API.registerGuiOverlay(GuiInkMixer.class, "inkmixer");
-        API.registerGuiOverlayHandler(GuiInkMixer.class, new DefaultOverlayHandler(), "inkmixer");
+        API.registerGuiOverlay(guiInkMixerClass, "inkmixer");
+        API.registerGuiOverlayHandler(guiInkMixerClass, new DefaultOverlayHandler(), "inkmixer");
     }
 
 }

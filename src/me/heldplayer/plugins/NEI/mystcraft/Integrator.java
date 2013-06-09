@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -35,7 +36,7 @@ public class Integrator {
     private static Color defaultColor = new Color(1.0F, 1.0F, 1.0F);
     private static Color emptyColor = new Color(0.0F, 0.0F, 0.0F);
 
-    public static void registerItems(Object mystcraft) {
+    public static void initialize(Object mystcraft) {
         if (mystcraft == null) {
             Objects.log.log(Level.SEVERE, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
             return;
@@ -103,6 +104,15 @@ public class Integrator {
         }
         catch (Error ex) {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields, you don't need to report this as I'll probably already know about this", ex);
+        }
+        try {
+            PluginNEIMystcraft.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.GuiInkMixer");
+        }
+        catch (Exception ex) {
+            Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
+        }
+        catch (Error ex) {
+            Objects.log.log(Level.SEVERE, "Failed getting GUI classes, you don't need to report this as I'll probably already know about this", ex);
         }
     }
 

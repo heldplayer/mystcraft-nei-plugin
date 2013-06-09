@@ -27,7 +27,6 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
-import com.xcompwiz.mystcraft.client.gui.GuiInkMixer;
 
 @SuppressWarnings("rawtypes")
 public class InkMixerRecipeHandler extends TemplateRecipeHandler {
@@ -374,7 +373,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return GuiInkMixer.class;
+        return PluginNEIMystcraft.guiInkMixerClass;
     }
 
     @Override
