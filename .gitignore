@@ -10,4 +10,5 @@ local.properties
 .classpath
 .settings/
 
+/MystNEI-Plugin/
 /HeldCore/
