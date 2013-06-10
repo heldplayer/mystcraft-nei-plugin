@@ -1,3 +1,4 @@
+
 package com.xcompwiz.mystcraft.api.symbol.logic;
 
 import net.minecraft.world.World;

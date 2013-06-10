@@ -1,3 +1,4 @@
+
 package com.xcompwiz.mystcraft.api.symbol.logic;
 
 import net.minecraft.client.renderer.RenderEngine;
@@ -8,14 +9,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Adds a sky drop to the age
  * This is rendered in front of the stars but behind the sun and the moon
+ * 
  * @author XCompWiz
- *
+ * 
  */
 public interface ISkyDoodad {
 
-	/**
-	 * The celestial body's render pass
-	 */
-	@SideOnly(Side.CLIENT)
-	public abstract void render(RenderEngine renderEngine, World worldObj, float partialTicks);
+    /**
+     * The celestial body's render pass
+     */
+    @SideOnly(Side.CLIENT)
+    public abstract void render(RenderEngine renderEngine, World worldObj, float partialTicks);
 }
