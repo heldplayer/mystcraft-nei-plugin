@@ -28,6 +28,12 @@ import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 
+/**
+ * NEI integration class for ink mixer recipes
+ * 
+ * @author heldplayer
+ * 
+ */
 @SuppressWarnings("rawtypes")
 public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
@@ -65,7 +71,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                 this.ingredient = null;
             }
 
-            InkMixerRecipe result = Integrator.getGradientForItem(this.ingredient != null ? this.ingredient.item : null);
+            InkMixerRecipe result = Integrator.getInkMixerRecipe(this.ingredient != null ? this.ingredient.item : null);
             if (result == null) {
                 this.modifiers = null;
                 this.percentages = null;

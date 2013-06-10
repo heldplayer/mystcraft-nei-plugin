@@ -3,6 +3,12 @@ package me.heldplayer.plugins.NEI.mystcraft;
 
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 
+/**
+ * Class used to store information for an ink mixer recipe
+ * 
+ * @author Mitchel
+ * 
+ */
 public class InkMixerRecipe {
 
     public ColorGradient gradient;

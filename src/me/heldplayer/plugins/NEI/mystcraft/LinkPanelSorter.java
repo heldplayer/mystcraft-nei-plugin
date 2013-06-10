@@ -3,6 +3,11 @@ package me.heldplayer.plugins.NEI.mystcraft;
 
 import java.util.Comparator;
 
+/**
+ * Sorter for link panels
+ * @author heldplayer
+ *
+ */
 @SuppressWarnings("rawtypes")
 public class LinkPanelSorter implements Comparator {
 

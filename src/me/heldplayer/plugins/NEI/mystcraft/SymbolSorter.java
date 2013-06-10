@@ -5,6 +5,12 @@ import java.util.Comparator;
 
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 
+/**
+ * Sorter for symbols
+ * 
+ * @author heldplayer
+ * 
+ */
 @SuppressWarnings("rawtypes")
 public class SymbolSorter implements Comparator {
 

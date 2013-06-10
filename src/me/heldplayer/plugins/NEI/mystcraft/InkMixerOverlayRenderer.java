@@ -12,6 +12,13 @@ import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.forge.GuiContainerManager;
 
+/**
+ * Overlay renderer for ink mixer recipes, renders when the "?" button next to a
+ * recipe is pressed
+ * 
+ * @author heldplayer
+ * 
+ */
 public class InkMixerOverlayRenderer implements IRecipeOverlayRenderer {
 
     private IStackPositioner positioner;

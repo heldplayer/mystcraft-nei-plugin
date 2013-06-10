@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 /**
  * MystNEIPlugin mod Objects
  * 
+ * @author heldplayer
+ * 
  */
 public final class Objects {
 

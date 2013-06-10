@@ -24,6 +24,12 @@ import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 
+/**
+ * Class used for integrating into Mystcraft
+ * 
+ * @author heldplayer
+ * 
+ */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
 
@@ -36,7 +42,13 @@ public class Integrator {
     private static Color defaultColor = new Color(1.0F, 1.0F, 1.0F);
     private static Color emptyColor = new Color(0.0F, 0.0F, 0.0F);
 
-    public static void initialize(Object mystcraft) {
+    /**
+     * Initialize all NEI features for Mystcraft
+     * 
+     * @param mystcraft
+     *        An instance of Mystcraft
+     */
+    protected static void initialize(Object mystcraft) {
         if (mystcraft == null) {
             Objects.log.log(Level.SEVERE, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
             return;
@@ -116,12 +128,24 @@ public class Integrator {
         }
     }
 
+    /**
+     * Hide technical blocks and items from the NEI item list
+     * 
+     * @throws Exception
+     * @throws Error
+     */
     private static void hideTechnicalBlocks() throws Exception, Error {
         API.hideItem(MystObjects.writing_desk_block.blockID);
         API.hideItem(MystObjects.portal.blockID);
         API.hideItem(MystObjects.star_fissure.blockID);
     }
 
+    /**
+     * Add all decay types that are standard Mystcraft to the NEI item list
+     * 
+     * @throws Exception
+     * @throws Error
+     */
     private static void addDecayTypes() throws Exception, Error {
         ArrayList<Integer> damageVariants = new ArrayList<Integer>();
         damageVariants.add(0);
@@ -135,12 +159,21 @@ public class Integrator {
         API.setItemDamageVariants(MystObjects.decay.blockID, damageVariants);
     }
 
+    /**
+     * Add a creative notebook to NEI
+     * 
+     * @param mystcraft
+     *        Mystcraft instance
+     * @throws Exception
+     * @throws Error
+     */
     private static void addCreativeNotebook(Object mystcraft) throws Exception, Error {
         Class mystcraftClass = Class.forName("com.xcompwiz.mystcraft.Mystcraft");
         Method createCreativeNotebook = mystcraftClass.getDeclaredMethod("createCreativeNotebook");
 
         ItemStack notebook = new ItemStack(MystObjects.notebook, 1, 0);
 
+        // Add a standard notebook, or NEI will use the creative one
         API.addNBTItem(notebook);
 
         createCreativeNotebook.setAccessible(true);
@@ -149,16 +182,23 @@ public class Integrator {
 
         API.addNBTItem(creativeNotebook);
 
-        // Clean up!
+        // Clean up reflection
         createCreativeNotebook.setAccessible(false);
     }
 
+    /**
+     * Add all pages to NEI
+     * 
+     * @throws Exception
+     * @throws Error
+     */
     private static void addPages() throws Exception, Error {
         Class symbolManagerClass = Class.forName("com.xcompwiz.mystcraft.symbols.SymbolManager");
         Method getAgeSymbols = symbolManagerClass.getDeclaredMethod("getAgeSymbols");
 
         ItemStack page = new ItemStack(MystObjects.page, 1, 0);
 
+        // Add a standard, empty page first!
         API.addNBTItem(page);
 
         // Add all the pages for all the symbols
@@ -180,12 +220,20 @@ public class Integrator {
         }
     }
 
+    /**
+     * Add all link panels to NEI
+     * 
+     * @throws Exception
+     * @throws Error
+     */
     private static void addLinkPanels() throws Exception, Error {
         Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
         Field colormapField = inkEffectsClass.getDeclaredField("colormap");
         colormapField.setAccessible(true);
 
-        // Add all link panels known to have a colour
+        // Empty pages don't get added again, as this is already done in addPages()
+
+        // Add all modifiers known to have a colour, this includes mod added modifiers
         HashMap colormap = (HashMap) colormapField.get(null);
 
         TreeMap map = new TreeMap(new LinkPanelSorter());
@@ -218,10 +266,16 @@ public class Integrator {
             API.addNBTItem(is);
         }
 
-        // Clean up!
+        // Clean up reflection
         colormapField.setAccessible(false);
     }
 
+    /**
+     * Add item ranges to the NEI interface
+     * 
+     * @throws Exception
+     * @throws Error
+     */
     private static void addItemRanges() throws Exception, Error {
         MultiItemRange mystBlocks = new MultiItemRange();
 
@@ -251,6 +305,13 @@ public class Integrator {
         API.addSetRange("Mystcraft.Pages", mystPages);
     }
 
+    /**
+     * Gets all methods and fields required by recipe handlers and such to
+     * function
+     * 
+     * @throws Exception
+     * @throws Error
+     */
     private static void getMethodsAndFields() throws Exception, Error {
         Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
 
@@ -260,17 +321,24 @@ public class Integrator {
         Field bindings = inkEffectsClass.getDeclaredField("itemstack_bindings");
         bindings.setAccessible(true);
         itemstack_bindings = (Map) bindings.get(null);
-        bindings.setAccessible(false);
+        bindings.setAccessible(false); // Clean up reflection
         bindings = inkEffectsClass.getDeclaredField("oredict_bindings");
         bindings.setAccessible(true);
         oredict_bindings = (Map) bindings.get(null);
-        bindings.setAccessible(false);
+        bindings.setAccessible(false); // Clean up reflection
         bindings = inkEffectsClass.getDeclaredField("itemId_bindings");
         bindings.setAccessible(true);
         itemId_bindings = (Map) bindings.get(null);
-        bindings.setAccessible(false);
+        bindings.setAccessible(false); // Clean up reflection
     }
 
+    /**
+     * Utility method used in {@link #addLinkPanels()}
+     * 
+     * @param bits
+     *        The amount of bits to turn to 1
+     * @return Returns an int that has bits set to 1 equal to {@link bits}
+     */
     private static int binary(int bits) {
         int result = 0;
         for (int i = 0; i < bits; i++) {
@@ -279,7 +347,13 @@ public class Integrator {
         return result;
     }
 
-    public static InkMixerRecipe getGradientForItem(ItemStack stack) {
+    /**
+     * Returns an ink mixer recipe that uses the given stack as ingredient
+     * 
+     * @param stack
+     * @return
+     */
+    public static InkMixerRecipe getInkMixerRecipe(ItemStack stack) {
         if (stack == null) {
             return null;
         }
@@ -340,6 +414,11 @@ public class Integrator {
         }
     }
 
+    /**
+     * Returns all possible ink mixer recipes as an ArrayList of Objects
+     * 
+     * @return
+     */
     public static ArrayList getALlInkMixerRecipes() {
         ArrayList result = new ArrayList();
 
