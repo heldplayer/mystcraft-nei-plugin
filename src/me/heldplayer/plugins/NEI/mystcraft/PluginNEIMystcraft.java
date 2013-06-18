@@ -21,23 +21,27 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * Main mod class
+ * 
  * @author heldplayer
- *
+ * 
  */
 @Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, version = Objects.MOD_VERSION, dependencies = Objects.MOD_DEPENCIES)
 public class PluginNEIMystcraft {
-
-    // HeldCore Objects
-    private UsageReporter reporter;
-    private Config config;
-    public static ConfigValue<Boolean> silentUpdates;
-    public static ConfigValue<Boolean> percentages;
 
     @Instance("Mystcraft")
     private Object mystcraft;
 
     private InkMixerRecipeHandler inkMixer;
     public static Class<? extends GuiContainer> guiInkMixerClass;
+
+    // HeldCore Objects
+    private UsageReporter reporter;
+    private Config config;
+    public static ConfigValue<Boolean> percentages;
+    // Config values for HeldCore
+    public static ConfigValue<Boolean> silentUpdates;
+    public static ConfigValue<Boolean> optOut;
+    public static ConfigValue<String> modPack;
 
     @PreInit
     public void preInit(FMLPreInitializationEvent event) {
@@ -49,26 +53,32 @@ public class PluginNEIMystcraft {
 
         Objects.log = event.getModLog();
 
-        reporter = new UsageReporter(Objects.MOD_ID, Objects.MOD_VERSION, FMLCommonHandler.instance().getSide(), file);
-
         // Config
-        silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
         percentages = new ConfigValue<Boolean>("percentages", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Config value to display percentages instead of colouring the ink");
+        silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
+        optOut = new ConfigValue<Boolean>("optOut", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Set this to true to opt-out from statistics gathering. If you are configuring this mod for a modpack, please leave it set to false");
+        modPack = new ConfigValue<String>("modPack", Configuration.CATEGORY_GENERAL, null, "", "If this mod is running in a modpack, please set this config value to the name of the modpack");
         config = new Config(event.getSuggestedConfigurationFile());
-        config.addConfigKey(silentUpdates);
         config.addConfigKey(percentages);
+        config.addConfigKey(silentUpdates);
+        config.addConfigKey(optOut);
+        config.addConfigKey(modPack);
         config.load();
         config.saveOnChange();
+
+        reporter = new UsageReporter(Objects.MOD_ID, Objects.MOD_VERSION, modPack.getValue(), FMLCommonHandler.instance().getSide(), file);
 
         Updater.initializeUpdater(Objects.MOD_ID, Objects.MOD_VERSION, silentUpdates.getValue());
     }
 
     @PostInit
     public void postInit(FMLPostInitializationEvent event) {
-        Thread thread = new Thread(reporter, Objects.MOD_ID + " usage reporter");
-        thread.setDaemon(true);
-        thread.setPriority(Thread.MIN_PRIORITY);
-        thread.start();
+        if (optOut.getValue()) {
+            Thread thread = new Thread(reporter, Objects.MOD_ID + " usage reporter");
+            thread.setDaemon(true);
+            thread.setPriority(Thread.MIN_PRIORITY);
+            thread.start();
+        }
 
         Integrator.initialize(mystcraft);
 
