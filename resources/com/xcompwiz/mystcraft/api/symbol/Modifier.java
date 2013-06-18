@@ -34,41 +34,41 @@ public class Modifier {
     }
 
     public Object asObject() {
-        return value;
+        return this.value;
     }
 
     public Number asNumber() {
-        if (value instanceof Number) {
-            return (Number) value;
+        if (this.value instanceof Number) {
+            return (Number) this.value;
         }
         return null;
     }
 
     //Note: This will be replaced with an actual color class in the near future
     public Color asColor() {
-        if (value instanceof Color) {
-            return (Color) value;
+        if (this.value instanceof Color) {
+            return (Color) this.value;
         }
         return null;
     }
 
     public ColorGradient asGradient() {
-        if (value instanceof ColorGradient) {
-            return (ColorGradient) value;
+        if (this.value instanceof ColorGradient) {
+            return (ColorGradient) this.value;
         }
         return null;
     }
 
     public BlockDescriptor asBlockDescriptor() {
-        if (value instanceof BlockDescriptor) {
-            return (BlockDescriptor) value;
+        if (this.value instanceof BlockDescriptor) {
+            return (BlockDescriptor) this.value;
         }
         return null;
     }
 
     public List asList() {
-        if (value instanceof List) {
-            return (List) value;
+        if (this.value instanceof List) {
+            return (List) this.value;
         }
         return null;
     }

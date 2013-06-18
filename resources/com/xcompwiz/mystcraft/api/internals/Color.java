@@ -13,12 +13,12 @@ public class Color {
     }
 
     public Color average(Color other) {
-        Color color = new Color((r + other.r) / 2, (g + other.g) / 2, (b + other.b) / 2);
+        Color color = new Color((this.r + other.r) / 2, (this.g + other.g) / 2, (this.b + other.b) / 2);
         return color;
     }
 
     public Color average(float red, float green, float blue) {
-        Color color = new Color((r + red) / 2, (g + green) / 2, (b + blue) / 2);
+        Color color = new Color((this.r + red) / 2, (this.g + green) / 2, (this.b + blue) / 2);
         return color;
     }
 

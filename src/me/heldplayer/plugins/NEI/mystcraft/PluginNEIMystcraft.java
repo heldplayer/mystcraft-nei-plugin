@@ -58,15 +58,15 @@ public class PluginNEIMystcraft {
         silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
         optOut = new ConfigValue<Boolean>("optOut", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Set this to true to opt-out from statistics gathering. If you are configuring this mod for a modpack, please leave it set to false");
         modPack = new ConfigValue<String>("modPack", Configuration.CATEGORY_GENERAL, null, "", "If this mod is running in a modpack, please set this config value to the name of the modpack");
-        config = new Config(event.getSuggestedConfigurationFile());
-        config.addConfigKey(percentages);
-        config.addConfigKey(silentUpdates);
-        config.addConfigKey(optOut);
-        config.addConfigKey(modPack);
-        config.load();
-        config.saveOnChange();
+        this.config = new Config(event.getSuggestedConfigurationFile());
+        this.config.addConfigKey(percentages);
+        this.config.addConfigKey(silentUpdates);
+        this.config.addConfigKey(optOut);
+        this.config.addConfigKey(modPack);
+        this.config.load();
+        this.config.saveOnChange();
 
-        reporter = new UsageReporter(Objects.MOD_ID, Objects.MOD_VERSION, modPack.getValue(), FMLCommonHandler.instance().getSide(), file);
+        this.reporter = new UsageReporter(Objects.MOD_ID, Objects.MOD_VERSION, modPack.getValue(), FMLCommonHandler.instance().getSide(), file);
 
         Updater.initializeUpdater(Objects.MOD_ID, Objects.MOD_VERSION, silentUpdates.getValue());
     }
@@ -74,17 +74,17 @@ public class PluginNEIMystcraft {
     @PostInit
     public void postInit(FMLPostInitializationEvent event) {
         if (optOut.getValue()) {
-            Thread thread = new Thread(reporter, Objects.MOD_ID + " usage reporter");
+            Thread thread = new Thread(this.reporter, Objects.MOD_ID + " usage reporter");
             thread.setDaemon(true);
             thread.setPriority(Thread.MIN_PRIORITY);
             thread.start();
         }
 
-        Integrator.initialize(mystcraft);
+        Integrator.initialize(this.mystcraft);
 
         this.inkMixer = new InkMixerRecipeHandler();
-        API.registerRecipeHandler(inkMixer);
-        API.registerUsageHandler(inkMixer);
+        API.registerRecipeHandler(this.inkMixer);
+        API.registerUsageHandler(this.inkMixer);
 
         API.registerGuiOverlay(guiInkMixerClass, "inkmixer");
         API.registerGuiOverlayHandler(guiInkMixerClass, new DefaultOverlayHandler(), "inkmixer");

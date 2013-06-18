@@ -57,26 +57,31 @@ public class BlockDescriptor {
     }
 
     public boolean isUsable(String key) {
-        if (key == ANY)
+        if (key == ANY) {
             return true;
-        if (!this.useable.containsKey(key))
+        }
+        if (!this.useable.containsKey(key)) {
             return false;
+        }
         return this.useable.get(key);
     }
 
     public int getInstability(int blocksPerChunk) {
-        if (blocksPerChunk < 0)
+        if (blocksPerChunk < 0) {
             throw new RuntimeException("Cannot generate negative blocks per chunk!");
-        if (formula == null)
+        }
+        if (this.formula == null) {
             return 0;
-        return (int) formula.calc(blocksPerChunk);
+        }
+        return (int) this.formula.calc(blocksPerChunk);
     }
 
     public static BlockDescriptor popBlockOfType(IAgeController controller, String type) {
         Modifier modifier = controller.popModifier("blocklist");
         List<BlockDescriptor> list = modifier.asList();
-        if (list == null)
+        if (list == null) {
             return null;
+        }
         controller.setModifier("blocklist", modifier);
         for (int i = 0; i < list.size(); ++i) {
             BlockDescriptor block = list.get(i);

@@ -19,49 +19,51 @@ public class DrawableWord {
     }
 
     public ArrayList<Integer> components() {
-        return components;
+        return this.components;
     }
 
     public ArrayList<Integer> colors() {
-        return colors;
+        return this.colors;
     }
 
     public DrawableWord addDrawComponent(int slot, int color) {
-        components.add(slot);
-        colors.add(color);
+        this.components.add(slot);
+        this.colors.add(color);
         return this;
     }
 
     public DrawableWord addDrawComponent(int x, int y, int color) {
-        return addDrawComponent(x + y * 8, color);
+        return this.addDrawComponent(x + y * 8, color);
     }
 
     public DrawableWord addDrawComponents(int[] components, int color) {
-        for (int i = 0; i < components.length; ++i)
-            addDrawComponent(components[i], color);
+        for (int i = 0; i < components.length; ++i) {
+            this.addDrawComponent(components[i], color);
+        }
         return this;
     }
 
     public DrawableWord addDrawComponents(int[] components, int[] colors) {
         int def = (colors.length > 0 ? colors[0] : 0);
-        for (int i = 0; i < components.length; ++i)
-            addDrawComponent(components[i], (colors.length > i ? colors[i] : def));
+        for (int i = 0; i < components.length; ++i) {
+            this.addDrawComponent(components[i], (colors.length > i ? colors[i] : def));
+        }
         return this;
     }
 
     public DrawableWord addDrawWord(int[][] word) {
         if (word.length == 2) {
-            addDrawComponents(word[0], word[1]);
+            this.addDrawComponents(word[0], word[1]);
         }
         return this;
     }
 
     public String imageSource() {
-        return symbolSource;
+        return this.symbolSource;
     }
 
     public DrawableWord setImageSource(String source) {
-        symbolSource = source;
+        this.symbolSource = source;
         return this;
     }
 }

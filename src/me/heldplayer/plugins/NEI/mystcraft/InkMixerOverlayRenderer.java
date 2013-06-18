@@ -27,11 +27,11 @@ public class InkMixerOverlayRenderer implements IRecipeOverlayRenderer {
 
     public InkMixerOverlayRenderer(ArrayList<PositionedStack> stacks, IStackPositioner positioner, PositionedStack ingredient) {
         this.positioner = positioner;
-        ingreds = new ArrayList<PositionedStack>();
+        this.ingreds = new ArrayList<PositionedStack>();
         for (PositionedStack stack : stacks) {
-            ingreds.add(stack.copy());
+            this.ingreds.add(stack.copy());
         }
-        ingreds = this.positioner.positionStacks(ingreds);
+        this.ingreds = this.positioner.positionStacks(this.ingreds);
 
         ArrayList<PositionedStack> temp = new ArrayList<PositionedStack>();
         temp.add(ingredient);
@@ -49,10 +49,10 @@ public class InkMixerOverlayRenderer implements IRecipeOverlayRenderer {
         gui.setColouredItemRender(true);
 
         if (slot.slotNumber == 0) {
-            gui.drawItem(ingredient.relx, ingredient.rely, ingredient.item);
+            gui.drawItem(this.ingredient.relx, this.ingredient.rely, this.ingredient.item);
         }
 
-        for (PositionedStack stack : ingreds) {
+        for (PositionedStack stack : this.ingreds) {
             if (stack.relx == slot.xDisplayPosition && stack.rely == slot.yDisplayPosition) {
                 gui.drawItem(stack.relx, stack.rely, stack.item);
             }

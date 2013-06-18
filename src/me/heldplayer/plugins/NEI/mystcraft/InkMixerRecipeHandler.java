@@ -91,8 +91,8 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
             NBTTagList list = new NBTTagList("properties");
 
-            if (modifiers != null) {
-                for (String modifier : modifiers) {
+            if (this.modifiers != null) {
+                for (String modifier : this.modifiers) {
                     list.appendTag(new NBTTagString("", modifier));
                 }
             }
@@ -112,7 +112,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public PositionedStack getResult() {
-            return stack;
+            return this.stack;
         }
 
         @Override
@@ -142,36 +142,36 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                 return false;
             }
             CachedInkMixerRecipe other = (CachedInkMixerRecipe) obj;
-            if (!getOuterType().equals(other.getOuterType())) {
+            if (!this.getOuterType().equals(other.getOuterType())) {
                 return false;
             }
-            if (ingredient == null) {
+            if (this.ingredient == null) {
                 if (other.ingredient != null) {
                     return false;
                 }
             }
-            else if (ingredient.item == null) {
+            else if (this.ingredient.item == null) {
                 if (other.ingredient.item != null) {
                     return false;
                 }
             }
-            else if (!ItemStack.areItemStacksEqual(ingredient.item, other.ingredient.item)) {
+            else if (!ItemStack.areItemStacksEqual(this.ingredient.item, other.ingredient.item)) {
                 return false;
             }
-            if (!Arrays.equals(modifiers, other.modifiers)) {
+            if (!Arrays.equals(this.modifiers, other.modifiers)) {
                 return false;
             }
-            if (stack == null) {
+            if (this.stack == null) {
                 if (other.stack != null) {
                     return false;
                 }
             }
-            else if (stack.item == null) {
+            else if (this.stack.item == null) {
                 if (other.stack.item != null) {
                     return false;
                 }
             }
-            else if (!ItemStack.areItemStacksEqual(stack.item, other.stack.item)) {
+            else if (!ItemStack.areItemStacksEqual(this.stack.item, other.stack.item)) {
                 return false;
             }
             return true;
@@ -206,14 +206,14 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (outputId.equals("item")) {
-            loadCraftingRecipes((ItemStack) results[0]);
+            this.loadCraftingRecipes((ItemStack) results[0]);
             return;
         }
 
         ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
         for (Object recipe : recipes) {
-            arecipes.add(new CachedInkMixerRecipe(recipe));
+            this.arecipes.add(new CachedInkMixerRecipe(recipe));
         }
     }
 
@@ -225,16 +225,19 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
         if (result.getItem() == MystObjects.page) {
             NBTTagCompound compound = result.getTagCompound();
-            if (compound == null)
+            if (compound == null) {
                 return;
+            }
 
             NBTTagCompound linkPanelCompound = compound.getCompoundTag("linkpanel");
-            if (linkPanelCompound == null)
+            if (linkPanelCompound == null) {
                 return;
+            }
 
             NBTTagList list = linkPanelCompound.getTagList("properties");
-            if (list == null)
+            if (list == null) {
                 return;
+            }
 
             ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
@@ -252,15 +255,15 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                                 break recipe;
                             }
                         }
-                        arecipes.add(recipe);
+                        this.arecipes.add(recipe);
                     }
                     continue;
                 }
 
                 for (int i = 0; i < list.tagCount(); i++) {
                     for (String modifier : recipe.modifiers) {
-                        if (!modifier.isEmpty() && ((NBTTagString) list.tagAt(i)).data.equals(modifier) && !arecipes.contains(recipe)) {
-                            arecipes.add(recipe);
+                        if (!modifier.isEmpty() && ((NBTTagString) list.tagAt(i)).data.equals(modifier) && !this.arecipes.contains(recipe)) {
+                            this.arecipes.add(recipe);
                             break;
                         }
                     }
@@ -273,7 +276,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             for (Object ingr : recipes) {
                 CachedInkMixerRecipe recipe = new CachedInkMixerRecipe(ingr);
                 if (recipe.modifiers != null) {
-                    arecipes.add(recipe);
+                    this.arecipes.add(recipe);
                 }
             }
         }
@@ -291,14 +294,14 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             for (Object ingr : recipes) {
                 CachedInkMixerRecipe recipe = new CachedInkMixerRecipe(ingr);
                 if (recipe.modifiers != null) {
-                    arecipes.add(recipe);
+                    this.arecipes.add(recipe);
                 }
             }
         }
         else {
             CachedInkMixerRecipe recipe = new CachedInkMixerRecipe(ingredient);
             if (recipe.modifiers != null) {
-                arecipes.add(recipe);
+                this.arecipes.add(recipe);
             }
         }
     }
@@ -313,16 +316,16 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void drawBackground(GuiContainerManager gui, int recipe) {
-        renderTank(49, 5, 66, 65, gui, (CachedInkMixerRecipe) arecipes.get(recipe));
+        this.renderTank(49, 5, 66, 65, gui, (CachedInkMixerRecipe) this.arecipes.get(recipe));
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.bindTexture(getGuiTexture());
+        gui.bindTexture(this.getGuiTexture());
         gui.drawTexturedModalRect(0, 0, 5, 11, 166, 76);
     }
 
     @Override
     public void drawExtras(GuiContainerManager gui, int recipeId) {
-        CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) arecipes.get(recipeId);
+        CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) this.arecipes.get(recipeId);
 
         if (recipe.modifiers == null || recipe.modifiers.length == 0) {
             gui.drawText(5, 80, "No effects", 0x404040, false);
@@ -364,7 +367,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     }
 
     private void renderTank(int left, int top, int width, int height, GuiContainerManager gui, CachedInkMixerRecipe recipe) {
-        GuiHelper.drawLiquid(liquid.itemID, liquid.itemMeta, left, top, width, height);
+        GuiHelper.drawLiquid(this.liquid.itemID, this.liquid.itemMeta, left, top, width, height);
 
         if (!PluginNEIMystcraft.percentages.getValue() && recipe.gradient != null && recipe.gradient.getColorCount() > 0) {
             recipe.frame++;
@@ -389,11 +392,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public IRecipeOverlayRenderer getOverlayRenderer(GuiContainer gui, int recipe) {
-        IStackPositioner positioner = RecipeInfo.getStackPositioner(gui, getOverlayIdentifier());
+        IStackPositioner positioner = RecipeInfo.getStackPositioner(gui, this.getOverlayIdentifier());
         if (positioner == null) {
             return null;
         }
-        return new InkMixerOverlayRenderer(getIngredientStacks(recipe), positioner, arecipes.get(recipe).getIngredient());
+        return new InkMixerOverlayRenderer(this.getIngredientStacks(recipe), positioner, this.arecipes.get(recipe).getIngredient());
     }
 
 }

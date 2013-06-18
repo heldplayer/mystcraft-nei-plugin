@@ -1,7 +1,6 @@
 
 package com.xcompwiz.mystcraft.api.symbol;
 
-import com.xcompwiz.mystcraft.api.instability.IInstabilityProvider;
 
 /**
  * Provides methods for interacting with the grammar rules for the symbol
