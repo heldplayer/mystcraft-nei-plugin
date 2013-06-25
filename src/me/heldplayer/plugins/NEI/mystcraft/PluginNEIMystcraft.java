@@ -37,7 +37,6 @@ public class PluginNEIMystcraft {
     // HeldCore Objects
     private UsageReporter reporter;
     private Config config;
-    public static ConfigValue<Boolean> percentages;
     // Config values for HeldCore
     public static ConfigValue<Boolean> silentUpdates;
     public static ConfigValue<Boolean> optOut;
@@ -54,12 +53,10 @@ public class PluginNEIMystcraft {
         Objects.log = event.getModLog();
 
         // Config
-        percentages = new ConfigValue<Boolean>("percentages", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Config value to display percentages instead of colouring the ink");
         silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
         optOut = new ConfigValue<Boolean>("optOut", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Set this to true to opt-out from statistics gathering. If you are configuring this mod for a modpack, please leave it set to false");
         modPack = new ConfigValue<String>("modPack", Configuration.CATEGORY_GENERAL, null, "", "If this mod is running in a modpack, please set this config value to the name of the modpack");
         this.config = new Config(event.getSuggestedConfigurationFile());
-        this.config.addConfigKey(percentages);
         this.config.addConfigKey(silentUpdates);
         this.config.addConfigKey(optOut);
         this.config.addConfigKey(modPack);
