@@ -118,7 +118,7 @@ public class Integrator {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
-            PluginNEIMystcraft.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.GuiInkMixer");
+            PluginNEIMystcraft.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
         }
         catch (Exception ex) {
             Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
