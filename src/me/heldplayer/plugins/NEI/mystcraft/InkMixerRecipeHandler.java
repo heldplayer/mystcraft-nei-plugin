@@ -4,6 +4,8 @@ package me.heldplayer.plugins.NEI.mystcraft;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.heldplayer.util.HeldCore.Vector;
+import me.heldplayer.util.HeldCore.VectorPool;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
@@ -327,57 +329,22 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     public void drawExtras(GuiContainerManager gui, int recipeId) {
         CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) this.arecipes.get(recipeId);
 
-        if (recipe.modifiers == null || recipe.modifiers.length == 0) {
-            gui.drawText(5, 80, "No effects", 0x404040, false);
-        }
-        else {
-            for (int i = 0; i < recipe.modifiers.length; i++) {
-                String message = recipe.modifiers[i];
-
-                if (message.isEmpty()) {
-                    message = "Clears modifiers";
-                }
-
-                gui.drawText(5, 80 + 8 * i, message, 0x404040, false);
-
-                if (PluginNEIMystcraft.percentages.getValue()) {
-                    int percentage = (int) (recipe.percentages[i].floatValue() * 100);
-                    message = "IT'S OVER 9000!";
-
-                    if (percentage <= 15) {
-                        message = "Tiny chance";
-                    }
-                    else if (percentage <= 30) {
-                        message = "Small chance";
-                    }
-                    else if (percentage <= 60) {
-                        message = "Medium chance";
-                    }
-                    else if (percentage <= 75) {
-                        message = "Big chance";
-                    }
-                    else if (percentage <= 90) {
-                        message = "Huge chance";
-                    }
-
-                    gui.drawText(166 - gui.getStringWidth(message), 80 + 8 * i, message, 0x404040, false);
-                }
-            }
-        }
+        Vector center = VectorPool.getFreeVector(82, 100, 0);
+        Color color = recipe.gradient.getColor(recipe.frame);
+        java.awt.Color awtColor = new java.awt.Color(color.r, color.g, color.b);
+        DniColourRenderer.render(awtColor, center, 20.0D);
     }
 
     private void renderTank(int left, int top, int width, int height, GuiContainerManager gui, CachedInkMixerRecipe recipe) {
         GuiHelper.drawLiquid(this.liquid.itemID, this.liquid.itemMeta, left, top, width, height);
 
-        if (!PluginNEIMystcraft.percentages.getValue() && recipe.gradient != null && recipe.gradient.getColorCount() > 0) {
-            recipe.frame++;
-            if (recipe.frame > recipe.gradient.getLength()) {
-                recipe.frame = 0;
-            }
-            Color color = recipe.gradient.getColor(recipe.frame);
-            int iColor = color.asInt();
-            gui.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
+        recipe.frame++;
+        if (recipe.frame > recipe.gradient.getLength()) {
+            recipe.frame = 0;
         }
+        Color color = recipe.gradient.getColor(recipe.frame);
+        int iColor = color.asInt();
+        gui.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
     }
 
     @Override
