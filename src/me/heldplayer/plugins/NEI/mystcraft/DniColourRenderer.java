@@ -12,8 +12,6 @@ import org.lwjgl.opengl.GL11;
 public class DniColourRenderer {
 
     public static void render(Color color, Vector center, double radius) {
-        VectorPool.unuseVectors();
-
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glLineWidth(3.0F);
 
@@ -103,7 +101,11 @@ public class DniColourRenderer {
             Vector vec1 = VectorPool.getFreeVector(center.posX - radius * 0.95D, center.posY - eyelidRadius, center.posZ);
             Vector vec2 = VectorPool.getFreeVector(center.posX + radius * 0.95D, center.posY - eyelidRadius, center.posZ);
 
-            Vector[] points = new Vector[] { left, vec1, vec2, right };
+            Vector[] points = VectorPool.getFreeVectorArray(4);
+            points[0] = left;
+            points[1] = vec1;
+            points[2] = vec2;
+            points[3] = right;
 
             GL11.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
@@ -118,7 +120,11 @@ public class DniColourRenderer {
             vec1 = VectorPool.getFreeVector(center.posX - radius * 0.95D, center.posY + eyelidRadius, center.posZ);
             vec2 = VectorPool.getFreeVector(center.posX + radius * 0.95D, center.posY + eyelidRadius, center.posZ);
 
-            points = new Vector[] { left, vec1, vec2, right };
+            points = VectorPool.getFreeVectorArray(4);
+            points[0] = left;
+            points[1] = vec1;
+            points[2] = vec2;
+            points[3] = right;
 
             GL11.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
@@ -135,7 +141,11 @@ public class DniColourRenderer {
             Vector vec1 = VectorPool.getFreeVector(top.posX - eyelidRadius, center.posY - radius * 0.95D, top.posZ);
             Vector vec2 = VectorPool.getFreeVector(bottom.posX - eyelidRadius, center.posY + radius * 0.95D, bottom.posZ);
 
-            Vector[] points = new Vector[] { top, vec1, vec2, bottom };
+            Vector[] points = VectorPool.getFreeVectorArray(4);
+            points[0] = top;
+            points[1] = vec1;
+            points[2] = vec2;
+            points[3] = bottom;
 
             GL11.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
@@ -148,7 +158,11 @@ public class DniColourRenderer {
             vec1 = VectorPool.getFreeVector(top.posX + eyelidRadius, center.posY - radius * 0.95D, top.posZ);
             vec2 = VectorPool.getFreeVector(bottom.posX + eyelidRadius, center.posY + radius * 0.95D, bottom.posZ);
 
-            points = new Vector[] { top, vec1, vec2, bottom };
+            points = VectorPool.getFreeVectorArray(4);
+            points[0] = top;
+            points[1] = vec1;
+            points[2] = vec2;
+            points[3] = bottom;
 
             GL11.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
@@ -173,6 +187,8 @@ public class DniColourRenderer {
         GL11.glEnd();
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+        VectorPool.unuseVectors();
     }
 
 }
