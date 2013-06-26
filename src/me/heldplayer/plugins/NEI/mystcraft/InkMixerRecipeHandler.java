@@ -207,16 +207,15 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             return;
         }
 
-        if (outputId.equals("item")) {
+        if (outputId.equals("item") || outputId.equals("inkmixer")) {
             this.loadCraftingRecipes((ItemStack) results[0]);
             return;
         }
 
-        ArrayList recipes = Integrator.getALlInkMixerRecipes();
-
-        for (Object recipe : recipes) {
-            this.arecipes.add(new CachedInkMixerRecipe(recipe));
-        }
+        // ArrayList recipes = Integrator.getALlInkMixerRecipes();
+        // for (Object recipe : recipes) {
+        // this.arecipes.add(new CachedInkMixerRecipe(recipe));
+        // }
     }
 
     @Override
@@ -231,15 +230,15 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                 return;
             }
 
+            if (!compound.hasKey("linkpanel")) {
+                return;
+            }
             NBTTagCompound linkPanelCompound = compound.getCompoundTag("linkpanel");
-            if (linkPanelCompound == null) {
-                return;
-            }
 
-            NBTTagList list = linkPanelCompound.getTagList("properties");
-            if (list == null) {
+            if (!linkPanelCompound.hasKey("properties")) {
                 return;
             }
+            NBTTagList list = linkPanelCompound.getTagList("properties");
 
             ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
@@ -329,22 +328,29 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     public void drawExtras(GuiContainerManager gui, int recipeId) {
         CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) this.arecipes.get(recipeId);
 
-        Vector center = VectorPool.getFreeVector(82, 100, 0);
-        Color color = recipe.gradient.getColor(recipe.frame);
-        java.awt.Color awtColor = new java.awt.Color(color.r, color.g, color.b);
-        DniColourRenderer.render(awtColor, center, 20.0D);
+        if (recipe != null && recipe.gradient != null) {
+            Vector center = VectorPool.getFreeVector(82.5D, 37.5D, 0.0D);
+            Color color = recipe.gradient.getColor(recipe.frame);
+            java.awt.Color awtColor = new java.awt.Color(color.r, color.g, color.b);
+            DniColourRenderer.render(awtColor, center, 20.0D);
+        }
     }
 
     private void renderTank(int left, int top, int width, int height, GuiContainerManager gui, CachedInkMixerRecipe recipe) {
         GuiHelper.drawLiquid(this.liquid.itemID, this.liquid.itemMeta, left, top, width, height);
 
-        recipe.frame++;
-        if (recipe.frame > recipe.gradient.getLength()) {
-            recipe.frame = 0;
+        if (recipe != null && recipe.gradient != null) {
+            recipe.frame++;
+            if (recipe.frame > recipe.gradient.getLength()) {
+                recipe.frame = 0;
+            }
+            Color color = recipe.gradient.getColor(recipe.frame);
+            int iColor = color.asInt();
+            gui.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
         }
-        Color color = recipe.gradient.getColor(recipe.frame);
-        int iColor = color.asInt();
-        gui.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
+        else {
+            gui.drawGradientRect(left, top, left + width, top + height, 0xFFFFFFFF, 0xFFFFFFFF);
+        }
     }
 
     @Override
