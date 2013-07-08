@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.opengl.GL11;
@@ -185,10 +185,10 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     }
 
-    private LiquidStack liquid;
+    private FluidStack liquid;
 
     public InkMixerRecipeHandler() {
-        this.liquid = LiquidDictionary.getCanonicalLiquid("Liquid Black Dye");
+        this.liquid = FluidRegistry.getFluidStack("Liquid Black Dye", 1000);
     }
 
     @Override
@@ -337,7 +337,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     }
 
     private void renderTank(int left, int top, int width, int height, GuiContainerManager gui, CachedInkMixerRecipe recipe) {
-        GuiHelper.drawLiquid(this.liquid.itemID, this.liquid.itemMeta, left, top, width, height);
+        GuiHelper.drawFluid(this.liquid.getFluid(), left, top, width, height);
 
         if (recipe != null && recipe.gradient != null) {
             recipe.frame++;

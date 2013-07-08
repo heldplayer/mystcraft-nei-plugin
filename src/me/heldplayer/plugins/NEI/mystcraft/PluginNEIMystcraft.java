@@ -13,9 +13,8 @@ import codechicken.nei.api.API;
 import codechicken.nei.recipe.DefaultOverlayHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -42,7 +41,7 @@ public class PluginNEIMystcraft {
     public static ConfigValue<Boolean> optOut;
     public static ConfigValue<String> modPack;
 
-    @PreInit
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         File file = new File(event.getModConfigurationDirectory(), "HeldCore");
 
@@ -68,7 +67,7 @@ public class PluginNEIMystcraft {
         Updater.initializeUpdater(Objects.MOD_ID, Objects.MOD_VERSION, silentUpdates.getValue());
     }
 
-    @PostInit
+    @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         if (optOut.getValue()) {
             Thread thread = new Thread(this.reporter, Objects.MOD_ID + " usage reporter");
