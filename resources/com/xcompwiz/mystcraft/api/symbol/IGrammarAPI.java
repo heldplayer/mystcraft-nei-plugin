@@ -1,7 +1,6 @@
 
 package com.xcompwiz.mystcraft.api.symbol;
 
-
 /**
  * Provides methods for interacting with the grammar rules for the symbol
  * generation system
