@@ -1,8 +1,6 @@
 
 package me.heldplayer.plugins.NEI.mystcraft;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +9,10 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
+import me.heldplayer.util.HeldCore.reflection.RClass;
+import me.heldplayer.util.HeldCore.reflection.RField;
+import me.heldplayer.util.HeldCore.reflection.RMethod;
+import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,8 +35,8 @@ import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
 
-    private static Method getItemEffectsMethod;
-    private static Method getColorForPropertyMethod;
+    private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
+    private static RMethod<Object, Color> getColorForPropertyMethod;
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
     private static Map itemId_bindings;
@@ -168,22 +170,17 @@ public class Integrator {
      * @throws Error
      */
     private static void addCreativeNotebook(Object mystcraft) throws Exception, Error {
-        Class mystcraftClass = Class.forName("com.xcompwiz.mystcraft.Mystcraft");
-        Method createCreativeNotebook = mystcraftClass.getDeclaredMethod("createCreativeNotebook");
+        RClass<Object> mystcraftClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.Mystcraft");
+        RMethod<Object, ItemStack> createCreativeNotebook = mystcraftClass.getMethod("createCreativeNotebook");
 
         ItemStack notebook = new ItemStack(MystObjects.notebook, 1, 0);
 
         // Add a standard notebook, or NEI will use the creative one
         API.addNBTItem(notebook);
 
-        createCreativeNotebook.setAccessible(true);
-
-        ItemStack creativeNotebook = (ItemStack) createCreativeNotebook.invoke(mystcraft);
+        ItemStack creativeNotebook = createCreativeNotebook.call(mystcraft);
 
         API.addNBTItem(creativeNotebook);
-
-        // Clean up reflection
-        createCreativeNotebook.setAccessible(false);
     }
 
     /**
@@ -193,8 +190,8 @@ public class Integrator {
      * @throws Error
      */
     private static void addPages() throws Exception, Error {
-        Class symbolManagerClass = Class.forName("com.xcompwiz.mystcraft.symbols.SymbolManager");
-        Method getAgeSymbols = symbolManagerClass.getDeclaredMethod("getAgeSymbols");
+        RClass<Object> symbolManagerClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.symbols.SymbolManager");
+        RMethod<Object, ArrayList<IAgeSymbol>> getAgeSymbols = symbolManagerClass.getMethod("getAgeSymbols");
 
         ItemStack page = new ItemStack(MystObjects.page, 1, 0);
 
@@ -202,13 +199,11 @@ public class Integrator {
         API.addNBTItem(page);
 
         // Add all the pages for all the symbols
-        ArrayList symbols = (ArrayList) getAgeSymbols.invoke(null);
+        ArrayList<IAgeSymbol> symbols = getAgeSymbols.callStatic();
 
         Collections.sort(symbols, new SymbolSorter());
 
-        for (Object symbolObj : symbols) {
-            IAgeSymbol symbol = (IAgeSymbol) symbolObj;
-
+        for (IAgeSymbol symbol : symbols) {
             ItemStack is = new ItemStack(MystObjects.page, 1, 0);
 
             NBTTagCompound compound = new NBTTagCompound("tag");
@@ -227,14 +222,15 @@ public class Integrator {
      * @throws Error
      */
     private static void addLinkPanels() throws Exception, Error {
-        Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
-        Field colormapField = inkEffectsClass.getDeclaredField("colormap");
-        colormapField.setAccessible(true);
+        RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
+        //Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
+        RField<Object, HashMap> colormapField = inkEffectsClass.getField("colormap");
+        //Field colormapField = inkEffectsClass.getDeclaredField("colormap");
 
         // Empty pages don't get added again, as this is already done in addPages()
 
         // Add all modifiers known to have a colour, this includes mod added modifiers
-        HashMap colormap = (HashMap) colormapField.get(null);
+        HashMap colormap = colormapField.getStatic();
 
         TreeMap map = new TreeMap(new LinkPanelSorter());
         map.putAll(colormap);
@@ -265,9 +261,6 @@ public class Integrator {
 
             API.addNBTItem(is);
         }
-
-        // Clean up reflection
-        colormapField.setAccessible(false);
     }
 
     /**
@@ -313,23 +306,19 @@ public class Integrator {
      * @throws Error
      */
     private static void getMethodsAndFields() throws Exception, Error {
-        Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
+        RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
 
-        getItemEffectsMethod = inkEffectsClass.getDeclaredMethod("getItemEffects", ItemStack.class);
-        getColorForPropertyMethod = inkEffectsClass.getDeclaredMethod("getColorForProperty", String.class);
+        getItemEffectsMethod = inkEffectsClass.getMethod("getItemEffects", ItemStack.class);
+        getColorForPropertyMethod = inkEffectsClass.getMethod("getColorForProperty", String.class);
 
-        Field bindings = inkEffectsClass.getDeclaredField("itemstack_bindings");
-        bindings.setAccessible(true);
-        itemstack_bindings = (Map) bindings.get(null);
-        bindings.setAccessible(false); // Clean up reflection
-        bindings = inkEffectsClass.getDeclaredField("oredict_bindings");
-        bindings.setAccessible(true);
-        oredict_bindings = (Map) bindings.get(null);
-        bindings.setAccessible(false); // Clean up reflection
-        bindings = inkEffectsClass.getDeclaredField("itemId_bindings");
-        bindings.setAccessible(true);
-        itemId_bindings = (Map) bindings.get(null);
-        bindings.setAccessible(false); // Clean up reflection
+        RField<Object, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
+        itemstack_bindings = bindings.getStatic();
+
+        bindings = inkEffectsClass.getField("oredict_bindings");
+        oredict_bindings = bindings.getStatic();
+
+        bindings = inkEffectsClass.getField("itemId_bindings");
+        itemId_bindings = bindings.getStatic();
     }
 
     /**
@@ -365,7 +354,7 @@ public class Integrator {
         Map<String, Float> properties = null;
 
         try {
-            properties = (Map<String, Float>) getItemEffectsMethod.invoke(null, stack);
+            properties = (Map<String, Float>) getItemEffectsMethod.callStatic(stack);
 
             ColorGradient gradient = new ColorGradient();
 
@@ -377,7 +366,7 @@ public class Integrator {
             }
 
             for (Entry<String, Float> entry : properties.entrySet()) {
-                Color color = (Color) getColorForPropertyMethod.invoke(null, entry.getKey());
+                Color color = (Color) getColorForPropertyMethod.callStatic(entry.getKey());
                 if (entry.getKey().isEmpty()) {
                     color = emptyColor;
                 }
