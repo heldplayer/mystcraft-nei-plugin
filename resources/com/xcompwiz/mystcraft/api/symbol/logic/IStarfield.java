@@ -19,5 +19,5 @@ public interface IStarfield {
      * The celestial body's render pass
      */
     @SideOnly(Side.CLIENT)
-    public abstract void render(TextureManager renderEngine, World worldObj, float partialTicks);
+    public abstract void render(TextureManager textureManager, World worldObj, float partialTicks);
 }

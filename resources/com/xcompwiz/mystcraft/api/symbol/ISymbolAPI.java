@@ -18,6 +18,9 @@ public interface ISymbolAPI {
      * Registers a logic provider "Symbol" to the system
      * The symbol should provide logic elements or push modifier values to the
      * IAgeController passed to it
+     * If a symbol throws an exception during profiling then the symbol will not
+     * be registered, the identifier will be blacklisted, and te registration
+     * function will throw an exception
      * Note: Don't forget to create grammar rules for your symbols! See
      * {@link IGrammarAPI}
      * 
@@ -30,6 +33,9 @@ public interface ISymbolAPI {
      * Registers a logic provider "Symbol" to the system
      * The symbol should provide logic elements or push modifier values to the
      * IAgeController passed to it
+     * If a symbol throws an exception during profiling then the symbol will not
+     * be registered, the identifier will be blacklisted, and te registration
+     * function will throw an exception
      * Note: Don't forget to create grammar rules for your symbols! See
      * {@link IGrammarAPI}
      * 

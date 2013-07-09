@@ -15,6 +15,7 @@ import com.xcompwiz.mystcraft.api.MystAPI;
  * You can see them here:
  * http://fc07.deviantart.net/fs19/f/2007/277/5/7/Symbols_of_Narayan_by_Killberk
  * .png
+ * http://isomerica.net/~mlah/narayan/symbols.html
  * 
  * @author xcompwiz
  * 
@@ -88,6 +89,7 @@ public class WordData {
     public static final String Celestial = "Celestial";
     public static final String Image = "Image";
     public static final String Terrain = "Terrain";
+    public static final String Order = "Order";
 
     // Suggested mappings
 
@@ -113,7 +115,7 @@ public class WordData {
         MystAPI.symbol.registerWord(Energy, new Integer[] { 4, 5, 9, 13, 16, 18, 19, 22, 23 }); // Narayan - Energy
         MystAPI.symbol.registerWord(Mutual, new Integer[] { 7, 8, 11, 15, 17, 18, 21 }); // Narayan - Mutual
         MystAPI.symbol.registerWord(Contradict, new Integer[] { 6, 12, 13, 17, 18, 20, 21, 22, 23 }); // Narayan - Contradict
-        MystAPI.symbol.registerWord(Power, new Integer[] { 5, 9, 10, 22, 23 }); // Narayan - Power
+        MystAPI.symbol.registerWord(Power, new Integer[] { 5, 8, 9, 10, 22, 23 }); // Narayan - Power
         MystAPI.symbol.registerWord(Possibility, new Integer[] { 4, 6, 8, 9, 10, 14, 16, 17, 19, 20, 23 }); // Narayan - Possibility
         MystAPI.symbol.registerWord(Convey, new Integer[] { 4, 6, 9, 14, 15, 19, 22, 23 }); // Narayan - Convey
         MystAPI.symbol.registerWord(Encourage, new Integer[] { 5, 6, 9, 13, 14, 18, 20, 21, 22, 23 }); // Narayan - Encourage
@@ -158,11 +160,12 @@ public class WordData {
         MystAPI.symbol.registerWord(Sustain, new Integer[] { 6, 16, 19, 20, 21, 23 }); // Narayan - Sustain
         MystAPI.symbol.registerWord(Ethereal, new Integer[] { 4, 6, 8, 13, 14, 16, 18, 21, 23 }); // Narayan - Ethereal
         MystAPI.symbol.registerWord(Discover, new Integer[] { 4, 5, 8, 10, 12, 13, 14, 16, 22 }); // Narayan - Discover
-        MystAPI.symbol.registerWord(Explore, new Integer[] { 6, 8, 13, 20, 21, 23 }); // Narayan - Explore
+        MystAPI.symbol.registerWord(Explore, new Integer[] { 6, 8, 12, 13, 20, 21, 23 }); // Narayan - Explore
 
         MystAPI.symbol.registerWord(Chain, new Integer[] { 4, 5, 6, 7, 24, 25, 27, 33, 34, 35, 40, 41, 42, 43 }); // Veovis - Chain
         MystAPI.symbol.registerWord(Image, new Integer[] { 7, 8, 9, 10, 11, 19, 21, 23 }); // Veovis: Image
         MystAPI.symbol.registerWord(Celestial, new Integer[] { 6, 8, 9, 10, 14, 18, 20, 21, 22, 23, 24 }); // Veovis: Celestial
         MystAPI.symbol.registerWord(Terrain, new Integer[] { 6, 10, 12, 13, 16, 19, 24, 25, 27 }); // Veovis - Terrain
+        MystAPI.symbol.registerWord(Order, new Integer[] { 11, 14, 15, 17, 20, 21 }); // Draco18s - Original Concept Art for System
     }
 }

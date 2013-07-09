@@ -1,6 +1,7 @@
 
 package com.xcompwiz.mystcraft.api.symbol;
 
+
 /**
  * Provides methods for interacting with the grammar rules for the symbol
  * generation system
@@ -46,7 +47,7 @@ public interface IGrammarAPI {
     /**
      * Registers a rule for the grammar system
      * Example:
-     * {@code registerGrammarRule(1.0F, IGrammarAPI.TERRAINMOD, IGrammarAPI.BLOCK_STRUCTURE, "TerModLattice")}
+     * {@code registerGrammarRule(IGrammarAPI.TERRAINMOD, 1.0F, IGrammarAPI.BLOCK_STRUCTURE, "SymbolIdentifer")}
      * 
      * @param parent
      *        The token to expand

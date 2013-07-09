@@ -4,7 +4,7 @@ package com.xcompwiz.mystcraft.api;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.AchievementPage;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.Fluid;
 
 /**
  * Provides various literals, items, blocks, etc of Mystcraft for external use
@@ -35,6 +35,9 @@ public class MystObjects {
     public static Block inkmixer = null;
     public static Block star_fissure = null;
 
+    /** Remember that this is a debug block! */
+    public static Block link_modifer = null;
+
     public static Item writing_desk = null;
     public static Item page = null;
     public static Item descriptive_book = null;
@@ -44,5 +47,5 @@ public class MystObjects {
     public static Item inkvial = null;
     public static Item firemarble = null;
 
-    public static LiquidStack inkliquid = null;
+    public static Fluid black_ink = null;
 }

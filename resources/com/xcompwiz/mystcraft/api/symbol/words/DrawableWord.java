@@ -5,11 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.util.ResourceLocation;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class DrawableWord {
 
     private ArrayList<Integer> components = new ArrayList<Integer>();
     private ArrayList<Integer> colors = new ArrayList<Integer>();
-    private String symbolSource = "/mods/mystcraft/textures/symbolcomponents.png";
+    @SideOnly(Side.CLIENT)
+    private ResourceLocation imageSource = null;
+    //Symbols
+    public static final ResourceLocation word_components = new ResourceLocation("mystcraft:textures/symbolcomponents.png");
 
     public DrawableWord() {}
 
@@ -58,12 +65,17 @@ public class DrawableWord {
         return this;
     }
 
-    public String imageSource() {
-        return this.symbolSource;
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation imageSource() {
+        if (this.imageSource != null) {
+            return this.imageSource;
+        }
+        return word_components;
     }
 
-    public DrawableWord setImageSource(String source) {
-        this.symbolSource = source;
+    @SideOnly(Side.CLIENT)
+    public DrawableWord setImageSource(ResourceLocation source) {
+        this.imageSource = source;
         return this;
     }
 }
