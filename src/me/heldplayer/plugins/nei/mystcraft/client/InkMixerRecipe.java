@@ -1,5 +1,5 @@
 
-package me.heldplayer.plugins.NEI.mystcraft;
+package me.heldplayer.plugins.nei.mystcraft.client;
 
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 

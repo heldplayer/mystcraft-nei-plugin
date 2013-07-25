@@ -1,9 +1,12 @@
 
-package me.heldplayer.plugins.NEI.mystcraft;
+package me.heldplayer.plugins.nei.mystcraft.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
+import me.heldplayer.plugins.nei.mystcraft.client.renderer.DniColourRenderer;
+import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
 import me.heldplayer.util.HeldCore.Vector;
 import me.heldplayer.util.HeldCore.VectorPool;
 import me.heldplayer.util.HeldCore.client.GuiHelper;

@@ -1,5 +1,5 @@
 
-package me.heldplayer.plugins.NEI.mystcraft;
+package me.heldplayer.plugins.nei.mystcraft.client;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
+import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.util.HeldCore.reflection.RClass;
 import me.heldplayer.util.HeldCore.reflection.RField;
 import me.heldplayer.util.HeldCore.reflection.RMethod;
@@ -50,7 +52,7 @@ public class Integrator {
      * @param mystcraft
      *        An instance of Mystcraft
      */
-    protected static void initialize(Object mystcraft) {
+    public static void initialize(Object mystcraft) {
         if (mystcraft == null) {
             Objects.log.log(Level.SEVERE, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
             return;

@@ -11,7 +11,8 @@
   "description": "Adds Mystcraft objects to NEI.",
   "updateUrl" : "http://binarymage.com/forum/viewtopic.php?f=13&t=696",
   "url" : "http://binarymage.com/forum/viewtopic.php?f=13&t=696",
-  "screenshots": [
+  "requiredMods": [
+    "HeldCore"
   ]
 }
 ]

@@ -1,5 +1,5 @@
 
-package me.heldplayer.plugins.NEI.mystcraft;
+package me.heldplayer.plugins.nei.mystcraft.client.renderer;
 
 import java.awt.Color;
 
