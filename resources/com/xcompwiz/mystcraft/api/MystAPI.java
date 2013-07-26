@@ -16,9 +16,8 @@ import com.xcompwiz.mystcraft.api.symbol.ISymbolFactory;
  * These are set during Mystcraft's pre-init phase
  * 
  * @author XCompWiz
- * 
  */
-public class MystAPI {
+public final class MystAPI {
     public static ILinkingAPI linking = null;
     public static IInstabilityAPI instability = null;
     public static ISymbolAPI symbol = null;

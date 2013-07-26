@@ -5,6 +5,7 @@ import net.minecraft.world.biome.WorldChunkManager;
 
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 import com.xcompwiz.mystcraft.api.symbol.logic.IBiomeController;
+import com.xcompwiz.mystcraft.api.symbol.logic.IChunkProviderFinalization;
 import com.xcompwiz.mystcraft.api.symbol.logic.ICloudColorProvider;
 import com.xcompwiz.mystcraft.api.symbol.logic.IEnvironmentalEffect;
 import com.xcompwiz.mystcraft.api.symbol.logic.IFogColorProvider;
@@ -28,14 +29,15 @@ import com.xcompwiz.mystcraft.api.symbol.logic.IWeatherController;
  * Getting values from here is inconsistent until all symbols are initialized
  * Contains functions for setting values or adding logic elements to the age
  * which should be called from AgeSymbol.instantiate
+ * Do NOT implement this yourself!
  */
 public interface IAgeController {
 
     /**
      * Binds a modifier property to the given id as an object
      * If there is already a modifier bound to this id then it is replaced and
-     * some instabiltiy is added to the world
-     * Any dangling modifiers (unpopped) at the end of age construction are
+     * some instability is added to the world
+     * Any dangling (unpopped) modifiers at the end of age construction are
      * converted to instability
      * 
      * @param id
@@ -47,6 +49,7 @@ public interface IAgeController {
 
     /**
      * Convenience function for setModifier
+     * This will wrap the object in a Modifier object
      * 
      * @param id
      *        Id at which the modifier is bound
@@ -57,61 +60,69 @@ public interface IAgeController {
 
     /**
      * Removes and returns the modifier bound to the given id
-     * If nothing is bound to the id then this returns an empty modifier object
+     * If nothing is bound to the id then this returns an empty modifier object,
+     * not null
      * 
-     * @return The object bound or empty modifier
+     * @return The object bound or empty modifier object
      */
     public Modifier popModifier(String id);
 
     /**
      * Tells the controller to clear all currently bound modifiers
      * Used in the "Clear Modifiers" symbol
+     * Generally not for common use
      */
     public void clearModifiers();
 
-    /**
-     * Returns the world's current time
-     */
+    /** Returns the world's current time */
     public long getTime();
 
     /**
      * Returns the world's total instability score without the stability
-     * provided by the registered mechanics
+     * provided by the instability mechanics
+     * This is subject to change until all the symbols in the age are
+     * initialized
      */
     public int getInstabilityScore();
 
     /**
      * returns the height at which clouds generate
+     * This is subject to change until all the symbols in the age are
+     * initialized
      */
     public float getCloudHeight();
 
     /**
      * returns the height of the horizon visual effect
+     * This is subject to change until all the symbols in the age are
+     * initialized
      */
     public double getHorizon();
 
     /**
      * returns the average height of the terrain
+     * This is subject to change until all the symbols in the age are
+     * initialized
      */
     public int getAverageGroundLevel();
 
     /**
      * returns the sea level of the age
+     * This is subject to change until all the symbols in the age are
+     * initialized
      */
     public int getSeaLevel();
 
-    /**
-     * returns the seed of the age
-     */
+    /** returns the seed of the age */
     public long getSeed();
 
-    /**
-     * returns the world's chunk manager
-     */
+    /** returns the world's chunk manager */
     public WorldChunkManager getWorldChunkManager();
 
     /**
      * returns the default sunset color
+     * 
+     * @return The default sunrise gradient if one was set, otherwise null
      */
     public ColorGradient getSunriseSunsetColor();
 
@@ -220,6 +231,12 @@ public interface IAgeController {
      * Any number of these may be registered
      */
     public void registerInterface(ITerrainModifier reg);
+
+    /**
+     * Registers a new IChunkProviderFinalization interface
+     * Any number of these may be registered
+     */
+    public void registerInterface(IChunkProviderFinalization reg);
 
     /**
      * Registers a new IPopulate interface

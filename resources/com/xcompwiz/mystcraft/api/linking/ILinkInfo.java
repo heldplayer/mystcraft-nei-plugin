@@ -9,16 +9,23 @@ import net.minecraft.util.ChunkCoordinates;
  * using the Mystcraft teleport mechanics.
  * Conversion functions to and from NBTTagCompounds are provided by the API so
  * that the description is easy to store.
+ * Unless you want to do something very specific with linking, you should not
+ * implement this yourself. Instead, get a valid link object using the
+ * {@link ILinkingAPI}
  */
 public interface ILinkInfo {
-    /*
-     * String ids for standard link flags
-     */
+    /* String ids for standard link flags */
+    /** The flag identifier for intra-linking */
     public static final String FLAG_INTRA_LINKING = "Intra Linking";
+    /** The flag identifier for generate platform */
     public static final String FLAG_GENERATE_PLATFORM = "Generate Platform";
+    /** The flag identifier for maintain momentum */
     public static final String FLAG_MAINTAIN_MOMENTUM = "Maintain Momentum";
+    /** The flag identifier for disarm */
     public static final String FLAG_DISARM = "Disarm";
+    /** The flag identifier for following books */
     public static final String FLAG_FOLLOWING = "Following";
+    /** The flag identifier for relative linking */
     public static final String FLAG_RELATIVE = "Relative";
 
     /*
@@ -93,6 +100,7 @@ public interface ILinkInfo {
      * It is possible to bind flags to the link info
      * Some flags are already listened for, but it is possible to add your own
      * and listen for them with a custom link listener
+     * See the Properties listed at the top of this interface
      */
     void setFlag(String flag, boolean value);
 
@@ -117,7 +125,9 @@ public interface ILinkInfo {
     void setProperty(String flag, String value);
 
     /**
-     * Returns an NBTTagCompound which represents this link (for saving)
+     * Returns an NBTTagCompound which represents this link
+     * This is so that you can convert the link info to a save-able format
+     * This function is not used by the {@link ILinkingAPI}
      */
     NBTTagCompound getTagCompound();
 

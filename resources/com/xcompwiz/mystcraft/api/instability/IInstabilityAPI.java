@@ -4,6 +4,8 @@ package com.xcompwiz.mystcraft.api.instability;
 /**
  * Provides methods for registering providers to and interacting with the
  * instability system
+ * The implementation of this is provided by MystAPI
+ * Do NOT implement this yourself!
  * 
  * @author xcompwiz
  */

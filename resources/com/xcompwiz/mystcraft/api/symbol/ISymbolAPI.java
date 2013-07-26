@@ -3,6 +3,15 @@ package com.xcompwiz.mystcraft.api.symbol;
 
 import com.xcompwiz.mystcraft.api.symbol.words.DrawableWord;
 
+/**
+ * Provides functions for registering different aspects to the Symbol system
+ * You can blacklist identifiers, register your own symbols, and create your own
+ * Narayan words (See WordData for examples)
+ * The implementation of this is provided by MystAPI
+ * Do NOT implement this yourself!
+ * 
+ * @author xcompwiz
+ */
 public interface ISymbolAPI {
 
     /**
@@ -26,8 +35,9 @@ public interface ISymbolAPI {
      * 
      * @param symbol
      *        The IAgeSymbol to register
+     * @return Success
      */
-    void registerSymbol(IAgeSymbol symbol);
+    boolean registerSymbol(IAgeSymbol symbol);
 
     /**
      * Registers a logic provider "Symbol" to the system
@@ -43,8 +53,9 @@ public interface ISymbolAPI {
      *        The IAgeSymbol to register
      * @param hasConfigOption
      *        Whether or not a config entry will be created for the symbol
+     * @return Success
      */
-    void registerSymbol(IAgeSymbol symbol, boolean hasConfigOption);
+    boolean registerSymbol(IAgeSymbol symbol, boolean hasConfigOption);
 
     /**
      * Binds a DrawableWord to the provided name key if no other word is already

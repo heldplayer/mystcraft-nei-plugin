@@ -3,12 +3,21 @@ package com.xcompwiz.mystcraft.api.symbol;
 
 import java.util.List;
 
-import com.xcompwiz.mystcraft.api.internals.BlockDescriptor;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 
+/**
+ * The modifier object class
+ * This wraps the modifier objects registered to the {@link IAgeController}
+ * during symbol logic initialization
+ * See {@link ModifierUtils} for more advanced modifier usages
+ * 
+ * @author xcompwiz
+ */
 public class Modifier {
     private Object value;
+
+    /** Amount of instability added if the modifier is left in the system */
     public int dangling;
 
     public static final int dangling_default = 50;
@@ -22,7 +31,6 @@ public class Modifier {
     }
 
     /**
-     * 
      * @param value
      *        contained value
      * @param dangling
@@ -33,42 +41,59 @@ public class Modifier {
         this.dangling = dangling;
     }
 
+    /**
+     * Returns the stored object without any casting
+     * 
+     * @return Returns the stored object or null
+     */
     public Object asObject() {
-        return this.value;
+        return value;
     }
 
+    /**
+     * Casts the stored object as a Number
+     * 
+     * @return Returns the stored object as a Number or null
+     */
     public Number asNumber() {
-        if (this.value instanceof Number) {
-            return (Number) this.value;
+        if (value instanceof Number) {
+            return (Number) value;
         }
         return null;
     }
 
-    //Note: This will be replaced with an actual color class in the near future
+    /**
+     * Casts the stored object as a Color
+     * 
+     * @return Returns the stored object as a Color or null
+     */
     public Color asColor() {
-        if (this.value instanceof Color) {
-            return (Color) this.value;
+        if (value instanceof Color) {
+            return (Color) value;
         }
         return null;
     }
 
+    /**
+     * Casts the stored object as a gradient
+     * 
+     * @return Returns the stored object as a gradient or null
+     */
     public ColorGradient asGradient() {
-        if (this.value instanceof ColorGradient) {
-            return (ColorGradient) this.value;
+        if (value instanceof ColorGradient) {
+            return (ColorGradient) value;
         }
         return null;
     }
 
-    public BlockDescriptor asBlockDescriptor() {
-        if (this.value instanceof BlockDescriptor) {
-            return (BlockDescriptor) this.value;
-        }
-        return null;
-    }
-
+    /**
+     * Casts the stored object as a list
+     * 
+     * @return Returns the stored object as a list or null
+     */
     public List asList() {
-        if (this.value instanceof List) {
-            return (List) this.value;
+        if (value instanceof List) {
+            return (List) value;
         }
         return null;
     }

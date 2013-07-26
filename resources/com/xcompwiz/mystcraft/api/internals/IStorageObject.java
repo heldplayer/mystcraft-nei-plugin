@@ -1,6 +1,11 @@
 
 package com.xcompwiz.mystcraft.api.internals;
 
+/**
+ * Do NOT implement this yourself!
+ * 
+ * @author xcompwiz
+ */
 public interface IStorageObject {
 
     public abstract boolean getBoolean(String string);

@@ -1,8 +1,11 @@
 
 package com.xcompwiz.mystcraft.api;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.fluids.Fluid;
 
@@ -15,14 +18,12 @@ import net.minecraftforge.fluids.Fluid;
  * 
  */
 public class MystObjects {
-    /**
-     * For use with ChestGenHooks
-     */
+    /** For use with ChestGenHooks */
     public static String treasure_info = null;
-    /**
-     * For registering Mystcraft related achievements
-     */
+    /** For registering Mystcraft related achievements */
     public static AchievementPage achivements;
+
+    public static ArrayList<ItemStack> creative_notebooks;
 
     public static Block portal = null;
     public static Block crystal = null;
@@ -48,4 +49,7 @@ public class MystObjects {
     public static Item firemarble = null;
 
     public static Fluid black_ink = null;
+
+    /** For Jaded */
+    public static Item purple_page = null;
 }

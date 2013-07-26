@@ -5,9 +5,10 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Supplies functions for adding effects to ink mixtures through item additives
+ * The implementation of this is provided by MystAPI
+ * Do NOT implement this yourself!
  * 
  * @author xcompwiz
- * 
  */
 public interface IAdditiveAPI {
 

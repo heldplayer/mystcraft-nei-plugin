@@ -20,7 +20,7 @@ import com.xcompwiz.mystcraft.api.MystAPI;
  * @author xcompwiz
  * 
  */
-public class WordData {
+public final class WordData {
 
     // Native Narayan Words
     public static final String Balance = "Balance";

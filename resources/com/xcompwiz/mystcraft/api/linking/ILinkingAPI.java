@@ -1,10 +1,20 @@
 
 package com.xcompwiz.mystcraft.api.linking;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+/**
+ * Functions for interfacing with the linking mechanics
+ * The implementation of this is provided by MystAPI
+ * Do NOT implement this yourself!
+ * 
+ * @author xcompwiz
+ * 
+ */
 public interface ILinkingAPI {
 
     /**
@@ -21,6 +31,9 @@ public interface ILinkingAPI {
      * Defaults to Non-Intra-Age, so the link only works when changing
      * dimensions
      * Note that the Entity's yaw is maintained, but not its pitch
+     * 
+     * @return The Link's descriptor. You can modify the link's properties
+     *         through this.
      */
     ILinkInfo getLinkInfoFromPosition(World world, Entity location);
 
@@ -30,6 +43,9 @@ public interface ILinkingAPI {
      * do not reflect in the compound
      * If null is passed in it returns a default link description (overworld
      * spawn)
+     * 
+     * @return The Link's descriptor. You can modify the link's properties
+     *         through this.
      */
     public ILinkInfo createLinkInfo(NBTTagCompound linkInfo);
 
@@ -40,4 +56,13 @@ public interface ILinkingAPI {
      * it to target the passed dimension
      */
     int getDimensionUID(World worldObj);
+
+    /**
+     * Use this to register your own rendering effects on the linkpanel
+     * 
+     * @param The
+     *        renderer to register
+     */
+    @SideOnly(Side.CLIENT)
+    void registerRenderEffect(LinkPanelEffect renderer);
 }
