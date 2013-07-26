@@ -77,7 +77,7 @@ public class Integrator {
             Objects.log.log(Level.SEVERE, "Failed adding different kinds of decay to NEI, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
-            addCreativeNotebook(mystcraft);
+            addCreativeNotebook();
         }
         catch (Exception ex) {
             Objects.log.log(Level.SEVERE, "Failed adding a creative notebook to NEI", ex);
@@ -166,23 +166,18 @@ public class Integrator {
     /**
      * Add a creative notebook to NEI
      * 
-     * @param mystcraft
-     *        Mystcraft instance
      * @throws Exception
      * @throws Error
      */
-    private static void addCreativeNotebook(Object mystcraft) throws Exception, Error {
-        RClass<Object> mystcraftClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.Mystcraft");
-        RMethod<Object, ItemStack> createCreativeNotebook = mystcraftClass.getMethod("createCreativeNotebook");
-
+    private static void addCreativeNotebook() throws Exception, Error {
         ItemStack notebook = new ItemStack(MystObjects.notebook, 1, 0);
 
         // Add a standard notebook, or NEI will use the creative one
         API.addNBTItem(notebook);
 
-        ItemStack creativeNotebook = createCreativeNotebook.call(mystcraft);
-
-        API.addNBTItem(creativeNotebook);
+        for (ItemStack stack : MystObjects.creative_notebooks) {
+            API.addNBTItem(stack);
+        }
     }
 
     /**
