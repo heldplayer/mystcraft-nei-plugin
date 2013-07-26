@@ -43,7 +43,7 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     // HeldCore Objects
     //public static ConfigValue<Boolean> silentUpdates;
 
-    @EventHandler
+    @Override
     public void preInit(FMLPreInitializationEvent event) {
         File file = new File(event.getModConfigurationDirectory(), "HeldCore");
 
@@ -59,7 +59,10 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         //this.config.addConfigKey(silentUpdates);
     }
 
-    @EventHandler
+    @Override
+    public void init(FMLInitializationEvent event) {}
+
+    @Override
     public void postInit(FMLPostInitializationEvent event) {
         Integrator.initialize(this.mystcraft);
 
@@ -70,9 +73,6 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         API.registerGuiOverlay(guiInkMixerClass, "inkmixer");
         API.registerGuiOverlayHandler(guiInkMixerClass, new DefaultOverlayHandler(), "inkmixer");
     }
-
-    @Override
-    public void init(FMLInitializationEvent event) {}
 
     @Override
     public ModInfo getModInfo() {
