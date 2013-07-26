@@ -16,16 +16,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.opengl.GL11;
 
+import codechicken.core.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
-import codechicken.nei.forge.GuiContainerManager;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -188,12 +186,6 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     }
 
-    private FluidStack liquid;
-
-    public InkMixerRecipeHandler() {
-        this.liquid = FluidRegistry.getFluidStack("Liquid Black Dye", 1000);
-    }
-
     @Override
     public String getRecipeName() {
         return "Ink Mixer";
@@ -201,7 +193,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return "/mods/mystcraft/gui/inkmixer.png";
+        return "mystcraft:gui/inkmixer.png";
     }
 
     @Override
@@ -319,16 +311,16 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public void drawBackground(GuiContainerManager gui, int recipe) {
-        this.renderTank(49, 5, 66, 65, gui, (CachedInkMixerRecipe) this.arecipes.get(recipe));
+    public void drawBackground(int recipe) {
+        this.renderTank(49, 5, 66, 65, (CachedInkMixerRecipe) this.arecipes.get(recipe));
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        gui.bindTexture(this.getGuiTexture());
-        gui.drawTexturedModalRect(0, 0, 5, 11, 166, 76);
+        GuiDraw.changeTexture(getGuiTexture());
+        GuiDraw.drawTexturedModalRect(0, 0, 5, 11, 166, 76);
     }
 
     @Override
-    public void drawExtras(GuiContainerManager gui, int recipeId) {
+    public void drawExtras(int recipeId) {
         CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) this.arecipes.get(recipeId);
 
         if (recipe != null && recipe.gradient != null) {
@@ -339,8 +331,8 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         }
     }
 
-    private void renderTank(int left, int top, int width, int height, GuiContainerManager gui, CachedInkMixerRecipe recipe) {
-        GuiHelper.drawFluid(this.liquid.getFluid(), left, top, width, height);
+    private void renderTank(int left, int top, int width, int height, CachedInkMixerRecipe recipe) {
+        GuiHelper.drawFluid(MystObjects.black_ink, left, top, width, height);
 
         if (recipe != null && recipe.gradient != null) {
             recipe.frame++;
@@ -349,10 +341,10 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             }
             Color color = recipe.gradient.getColor(recipe.frame);
             int iColor = color.asInt();
-            gui.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
+            GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
         }
         else {
-            gui.drawGradientRect(left, top, left + width, top + height, 0xFFFFFFFF, 0xFFFFFFFF);
+            GuiDraw.drawGradientRect(left, top, left + width, top + height, 0xFFFFFFFF, 0xFFFFFFFF);
         }
     }
 
