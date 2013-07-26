@@ -46,18 +46,18 @@ public class InkMixerOverlayRenderer implements IRecipeOverlayRenderer {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         GL11.glColor4d(0.6, 0.6, 0.6, 0.7);
 
-        gui.setColouredItemRender(true);
+        GuiContainerManager.setColouredItemRender(true);
 
         if (slot.slotNumber == 0) {
-            gui.drawItem(this.ingredient.relx, this.ingredient.rely, this.ingredient.item);
+            GuiContainerManager.drawItem(this.ingredient.relx, this.ingredient.rely, this.ingredient.item);
         }
 
         for (PositionedStack stack : this.ingreds) {
             if (stack.relx == slot.xDisplayPosition && stack.rely == slot.yDisplayPosition) {
-                gui.drawItem(stack.relx, stack.rely, stack.item);
+                GuiContainerManager.drawItem(stack.relx, stack.rely, stack.item);
             }
         }
-        gui.setColouredItemRender(false);
+        GuiContainerManager.setColouredItemRender(false);
 
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glDisable(GL11.GL_BLEND);
