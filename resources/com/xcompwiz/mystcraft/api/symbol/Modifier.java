@@ -47,7 +47,7 @@ public class Modifier {
      * @return Returns the stored object or null
      */
     public Object asObject() {
-        return value;
+        return this.value;
     }
 
     /**
@@ -56,8 +56,8 @@ public class Modifier {
      * @return Returns the stored object as a Number or null
      */
     public Number asNumber() {
-        if (value instanceof Number) {
-            return (Number) value;
+        if (this.value instanceof Number) {
+            return (Number) this.value;
         }
         return null;
     }
@@ -68,8 +68,8 @@ public class Modifier {
      * @return Returns the stored object as a Color or null
      */
     public Color asColor() {
-        if (value instanceof Color) {
-            return (Color) value;
+        if (this.value instanceof Color) {
+            return (Color) this.value;
         }
         return null;
     }
@@ -80,8 +80,8 @@ public class Modifier {
      * @return Returns the stored object as a gradient or null
      */
     public ColorGradient asGradient() {
-        if (value instanceof ColorGradient) {
-            return (ColorGradient) value;
+        if (this.value instanceof ColorGradient) {
+            return (ColorGradient) this.value;
         }
         return null;
     }
@@ -92,8 +92,8 @@ public class Modifier {
      * @return Returns the stored object as a list or null
      */
     public List asList() {
-        if (value instanceof List) {
-            return (List) value;
+        if (this.value instanceof List) {
+            return (List) this.value;
         }
         return null;
     }

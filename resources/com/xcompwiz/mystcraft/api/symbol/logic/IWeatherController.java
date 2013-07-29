@@ -1,11 +1,11 @@
 
 package com.xcompwiz.mystcraft.api.symbol.logic;
 
-import com.xcompwiz.mystcraft.api.internals.IStorageObject;
-
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
+
+import com.xcompwiz.mystcraft.api.internals.IStorageObject;
 
 public interface IWeatherController {
     public abstract void setDataObject(IStorageObject infoObj);

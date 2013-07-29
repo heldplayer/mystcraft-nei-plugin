@@ -80,12 +80,15 @@ public final class BlockDescriptor {
      * @return True is valid, false otherwise
      */
     public boolean isUsable(BlockCategory key) {
-        if (key == null)
+        if (key == null) {
             return true;
-        if (key == BlockCategory.ANY)
+        }
+        if (key == BlockCategory.ANY) {
             return true;
-        if (!this.useable.containsKey(key.getName()))
+        }
+        if (!this.useable.containsKey(key.getName())) {
             return false;
+        }
         return this.useable.get(key.getName());
     }
 
@@ -100,10 +103,12 @@ public final class BlockDescriptor {
      * @return The amount of instability to add to the age
      */
     public int getInstability(float blocksPerChunk) {
-        if (blocksPerChunk < 0)
+        if (blocksPerChunk < 0) {
             throw new RuntimeException("Cannot generate negative blocks per chunk!");
-        if (formula == null)
+        }
+        if (this.formula == null) {
             return 0;
-        return (int) formula.calc(blocksPerChunk);
+        }
+        return (int) this.formula.calc(blocksPerChunk);
     }
 }

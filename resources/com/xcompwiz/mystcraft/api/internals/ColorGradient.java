@@ -10,55 +10,60 @@ public final class ColorGradient {
     private long length = 0;
 
     public int getColorCount() {
-        return colors.size();
+        return this.colors.size();
     }
 
     public void appendGradient(ColorGradient other) {
         for (int i = 0; i < other.colors.size(); ++i) {
-            pushColor(other.colors.get(i), other.intervals.get(i));
+            this.pushColor(other.colors.get(i), other.intervals.get(i));
         }
     }
 
     public void pushColor(Color color) {
-        pushColor(color, null);
+        this.pushColor(color, null);
     }
 
     public void pushColor(Color color, Long interval) {
-        if (color == null)
+        if (color == null) {
             return;
-        if (interval == null || interval <= 0)
+        }
+        if (interval == null || interval <= 0) {
             interval = 12000L;
-        colors.add(color);
-        intervals.add((interval.longValue()));
-        length += interval.longValue();
+        }
+        this.colors.add(color);
+        this.intervals.add((interval.longValue()));
+        this.length += interval.longValue();
     }
 
     public Color getColor(long time) {
         //Case: No colors
-        if (colors.size() == 0)
+        if (this.colors.size() == 0) {
             throw new RuntimeException("Whoops, empty gradient!");
+        }
 
         //Case: Only one color
-        if (colors.size() == 1)
-            return colors.get(0);
+        if (this.colors.size() == 1) {
+            return this.colors.get(0);
+        }
 
-        if (length <= 0)
-            return colors.get(0);
-        time = time % length;
+        if (this.length <= 0) {
+            return this.colors.get(0);
+        }
+        time = time % this.length;
 
         //Get first color
         int colorcounter = 0;
-        while (time >= intervals.get(colorcounter)) {
-            time -= intervals.get(colorcounter);
-            colorcounter = (++colorcounter) % colors.size();
+        while (time >= this.intervals.get(colorcounter)) {
+            time -= this.intervals.get(colorcounter);
+            colorcounter = (++colorcounter) % this.colors.size();
         }
         //Get second color
-        int secondcolor = (colorcounter + 1) % colors.size();
+        int secondcolor = (colorcounter + 1) % this.colors.size();
         //Interpolate
-        Color color1 = colors.get(colorcounter);
-        Color color2 = colors.get(secondcolor);
-        float interp = (float) time / (float) (intervals.get(colorcounter));
-        Color colorout = new Color(interpolate(interp, color1.r, color2.r), interpolate(interp, color1.g, color2.g), interpolate(interp, color1.b, color2.b));
+        Color color1 = this.colors.get(colorcounter);
+        Color color2 = this.colors.get(secondcolor);
+        float interp = (float) time / (float) (this.intervals.get(colorcounter));
+        Color colorout = new Color(this.interpolate(interp, color1.r, color2.r), this.interpolate(interp, color1.g, color2.g), this.interpolate(interp, color1.b, color2.b));
         return colorout;
     }
 
@@ -67,7 +72,7 @@ public final class ColorGradient {
     }
 
     public long getLength() {
-        return length;
+        return this.length;
     }
 
 }

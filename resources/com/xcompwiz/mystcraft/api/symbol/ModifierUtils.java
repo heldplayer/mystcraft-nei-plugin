@@ -33,8 +33,9 @@ public final class ModifierUtils {
     public static BlockDescriptor popBlockOfType(IAgeController controller, BlockCategory type) {
         Modifier modifier = controller.popModifier("blocklist");
         List<BlockDescriptor> list = modifier.asList();
-        if (list == null)
+        if (list == null) {
             return null;
+        }
         controller.setModifier("blocklist", modifier);
         for (int i = 0; i < list.size(); ++i) {
             BlockDescriptor block = list.get(i);
@@ -82,8 +83,9 @@ public final class ModifierUtils {
     public static BiomeGenBase popBiome(IAgeController controller) {
         Modifier modifier = controller.popModifier("biomelist");
         List<BiomeGenBase> list = modifier.asList();
-        if (list == null || list.size() == 0)
+        if (list == null || list.size() == 0) {
             return null;
+        }
         controller.setModifier("biomelist", modifier);
         BiomeGenBase biome = list.remove(list.size() - 1);
         modifier.dangling -= dangling_biome;
