@@ -15,7 +15,7 @@ public final class Objects {
 
     public static final String MOD_ID = "NEI-Mystcraft-Plugin";
     public static final String MOD_NAME = "NEI Mystcraft Plugin";
-    public static final String MOD_VERSION = "1.05.02.01";
+    public static final String MOD_VERSION = "@VERSION@";
     public static final String MOD_DEPENCIES = "after:*";
     public static final String CLIENT_PROXY = "me.heldplayer.plugins.nei.mystcraft.client.ClientProxy";
     public static final String SERVER_PROXY = "me.heldplayer.plugins.nei.mystcraft.CommonProxy";

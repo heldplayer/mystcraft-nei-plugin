@@ -2,7 +2,7 @@
 {
   "modid" : "NEI-Mystcraft-Plugin",
   "name" : "NEI Mystcraft Plugin",
-  "version" : "1.05.02.01",
+  "version" : "@VERSION@",
   "credits" : "ChickenBones for NEI, xCompWiz for Mystcraft",
   "authors": [
     "heldplayer"
