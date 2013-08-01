@@ -27,6 +27,8 @@ import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.data.InkEffects;
+import com.xcompwiz.mystcraft.symbols.SymbolManager;
 
 /**
  * Class used for integrating into Mystcraft
@@ -37,8 +39,8 @@ import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
 
-    private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
-    private static RMethod<Object, Color> getColorForPropertyMethod;
+    private static RMethod<InkEffects, Map<String, Float>> getItemEffectsMethod;
+    private static RMethod<InkEffects, Color> getColorForPropertyMethod;
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
     private static Map itemId_bindings;
@@ -187,8 +189,8 @@ public class Integrator {
      * @throws Error
      */
     private static void addPages() throws Exception, Error {
-        RClass<Object> symbolManagerClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.symbols.SymbolManager");
-        RMethod<Object, ArrayList<IAgeSymbol>> getAgeSymbols = symbolManagerClass.getMethod("getAgeSymbols");
+        RClass<SymbolManager> symbolManagerClass = ReflectionHelper.getClass(SymbolManager.class);
+        RMethod<SymbolManager, ArrayList<IAgeSymbol>> getAgeSymbols = symbolManagerClass.getMethod("getAgeSymbols");
 
         ItemStack page = new ItemStack(MystObjects.page, 1, 0);
 
@@ -219,9 +221,9 @@ public class Integrator {
      * @throws Error
      */
     private static void addLinkPanels() throws Exception, Error {
-        RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
+        RClass<InkEffects> inkEffectsClass = ReflectionHelper.getClass(InkEffects.class);
         //Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
-        RField<Object, HashMap> colormapField = inkEffectsClass.getField("colormap");
+        RField<InkEffects, HashMap> colormapField = inkEffectsClass.getField("colormap");
         //Field colormapField = inkEffectsClass.getDeclaredField("colormap");
 
         // Empty pages don't get added again, as this is already done in addPages()
@@ -303,12 +305,12 @@ public class Integrator {
      * @throws Error
      */
     private static void getMethodsAndFields() throws Exception, Error {
-        RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
+        RClass<InkEffects> inkEffectsClass = ReflectionHelper.getClass(InkEffects.class);
 
         getItemEffectsMethod = inkEffectsClass.getMethod("getItemEffects", ItemStack.class);
         getColorForPropertyMethod = inkEffectsClass.getMethod("getColorForProperty", String.class);
 
-        RField<Object, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
+        RField<InkEffects, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
         itemstack_bindings = bindings.getStatic();
 
         bindings = inkEffectsClass.getField("oredict_bindings");
