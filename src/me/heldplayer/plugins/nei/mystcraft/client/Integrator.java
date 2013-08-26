@@ -64,74 +64,50 @@ public class Integrator {
         try {
             hideTechnicalBlocks();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed hiding technical blocks from NEI", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed hiding technical blocks from NEI, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
             addDecayTypes();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding different kinds of decay to NEI", ex);
         }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding different kinds of decay to NEI, you don't need to report this as I'll probably already know about this", ex);
-        }
         try {
-            addCreativeNotebook();
+            addCreativeNotebooks();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding a creative notebook to NEI", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding a creative notebook to NEI, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
             addPages();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding symbol pages to NEI", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding symbol pages to NEI, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
             addLinkPanels();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
             addItemRanges();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding item ranges to NEI", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding item ranges to NEI, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
             getMethodsAndFields();
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed getting methods and fields, you don't need to report this as I'll probably already know about this", ex);
         }
         try {
             PluginNEIMystcraft.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
-        }
-        catch (Error ex) {
-            Objects.log.log(Level.SEVERE, "Failed getting GUI classes, you don't need to report this as I'll probably already know about this", ex);
         }
     }
 
@@ -141,9 +117,9 @@ public class Integrator {
      * @throws Exception
      * @throws Error
      */
-    private static void hideTechnicalBlocks() throws Exception, Error {
-        API.hideItem(MystObjects.writing_desk_block.blockID);
+    private static void hideTechnicalBlocks() throws Throwable {
         API.hideItem(MystObjects.portal.blockID);
+        API.hideItem(MystObjects.writing_desk_block.blockID);
         API.hideItem(MystObjects.star_fissure.blockID);
     }
 
@@ -153,7 +129,7 @@ public class Integrator {
      * @throws Exception
      * @throws Error
      */
-    private static void addDecayTypes() throws Exception, Error {
+    private static void addDecayTypes() throws Throwable {
         ArrayList<Integer> damageVariants = new ArrayList<Integer>();
         damageVariants.add(0);
         damageVariants.add(1);
@@ -167,15 +143,15 @@ public class Integrator {
     }
 
     /**
-     * Add a creative notebook to NEI
+     * Add all creative notebooks to NEI
      * 
      * @throws Exception
      * @throws Error
      */
-    private static void addCreativeNotebook() throws Exception, Error {
+    private static void addCreativeNotebooks() throws Throwable {
         ItemStack notebook = new ItemStack(MystObjects.notebook, 1, 0);
 
-        // Add a standard notebook, or NEI will use the creative one
+        // Add a standard notebook first
         API.addNBTItem(notebook);
 
         for (ItemStack stack : MystObjects.creative_notebooks) {
@@ -189,7 +165,7 @@ public class Integrator {
      * @throws Exception
      * @throws Error
      */
-    private static void addPages() throws Exception, Error {
+    private static void addPages() throws Throwable {
         RClass<Object> symbolManagerClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.symbols.SymbolManager");
         RMethod<Object, ArrayList<IAgeSymbol>> getAgeSymbols = symbolManagerClass.getMethod("getAgeSymbols");
 
@@ -221,11 +197,9 @@ public class Integrator {
      * @throws Exception
      * @throws Error
      */
-    private static void addLinkPanels() throws Exception, Error {
+    private static void addLinkPanels() throws Throwable {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
-        //Class inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
         RField<Object, HashMap> colormapField = inkEffectsClass.getField("colormap");
-        //Field colormapField = inkEffectsClass.getDeclaredField("colormap");
 
         // Empty pages don't get added again, as this is already done in addPages()
 
@@ -269,7 +243,7 @@ public class Integrator {
      * @throws Exception
      * @throws Error
      */
-    private static void addItemRanges() throws Exception, Error {
+    private static void addItemRanges() throws Throwable {
         MultiItemRange mystBlocks = new MultiItemRange();
 
         mystBlocks.add(MystObjects.portal);
@@ -312,7 +286,7 @@ public class Integrator {
      * @throws Exception
      * @throws Error
      */
-    private static void getMethodsAndFields() throws Exception, Error {
+    private static void getMethodsAndFields() throws Throwable {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
 
         getItemEffectsMethod = inkEffectsClass.getMethod("getItemEffects", ItemStack.class);
