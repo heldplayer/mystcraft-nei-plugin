@@ -31,12 +31,6 @@ import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 
-/**
- * NEI integration class for ink mixer recipes
- * 
- * @author heldplayer
- * 
- */
 @SuppressWarnings("rawtypes")
 public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
