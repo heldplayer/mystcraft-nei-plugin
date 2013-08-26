@@ -4,6 +4,7 @@ package me.heldplayer.plugins.nei.mystcraft.client;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.opengl.GL11;
@@ -72,6 +74,10 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                 this.ingredient = null;
             }
 
+            if (this.ingredient != null) {
+                this.ingredient.setPermutationToRender(Objects.rnd.nextInt(this.ingredient.items.length));
+            }
+
             InkMixerRecipe result = Integrator.getInkMixerRecipe(this.ingredient != null ? this.ingredient.item : null);
             if (result == null) {
                 this.modifiers = null;
@@ -118,6 +124,9 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
+            if (cycleticks % 20 == 0) {
+                this.ingredient.setPermutationToRender(Objects.rnd.nextInt(this.ingredient.items.length));
+            }
             return this.ingredients;
         }
 
@@ -186,7 +195,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public String getRecipeName() {
-        return "Ink Mixer";
+        return StatCollector.translateToLocal("tile.myst.inkmixer.name");
     }
 
     @Override

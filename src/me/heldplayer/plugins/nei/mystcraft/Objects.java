@@ -1,6 +1,7 @@
 
 package me.heldplayer.plugins.nei.mystcraft;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 import me.heldplayer.util.HeldCore.ModInfo;
@@ -23,5 +24,7 @@ public final class Objects {
     public static final ModInfo MOD_INFO = new ModInfo(MOD_ID, MOD_NAME, MOD_VERSION);
 
     public static Logger log;
+
+    public static final Random rnd = new Random();
 
 }
