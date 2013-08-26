@@ -43,7 +43,6 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     public class CachedInkMixerRecipe extends CachedRecipe {
 
         public String[] modifiers;
-        public Float[] percentages;
         public ColorGradient gradient;
         public long frame;
         private PositionedStack stack;
@@ -81,36 +80,24 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             InkMixerRecipe result = Integrator.getInkMixerRecipe(this.ingredient != null ? this.ingredient.item : null);
             if (result == null) {
                 this.modifiers = null;
-                this.percentages = null;
                 this.gradient = null;
             }
             else {
                 this.modifiers = result.modifiers;
-                this.percentages = result.percentages;
                 this.gradient = result.gradient;
             }
             this.frame = 0;
 
-            ItemStack stack = new ItemStack(MystObjects.page, 1, 0);
-
-            NBTTagCompound compound = new NBTTagCompound("tag");
-            NBTTagCompound linkPanelCompound = new NBTTagCompound("linkpanel");
-
-            NBTTagList list = new NBTTagList("properties");
-
             if (this.modifiers != null) {
-                for (String modifier : this.modifiers) {
-                    list.appendTag(new NBTTagString("", modifier));
-                }
+                ItemStack stack = MystAPI.itemFact.buildLinkPage(this.modifiers);
+
+                this.stack = new PositionedStack(stack, 147, 37);
             }
+            else {
+                ItemStack stack = MystAPI.itemFact.buildLinkPage();
 
-            linkPanelCompound.setTag("properties", list);
-
-            compound.setTag("linkpanel", linkPanelCompound);
-
-            stack.setTagCompound(compound);
-
-            this.stack = new PositionedStack(stack, 147, 37);
+                this.stack = new PositionedStack(stack, 147, 37);
+            }
 
             this.ingredients.add(new PositionedStack(new ItemStack(MystObjects.inkvial), 3, 16));
             this.ingredients.add(new PositionedStack(new ItemStack(Item.paper), 3, 37));
@@ -213,11 +200,6 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             this.loadCraftingRecipes((ItemStack) results[0]);
             return;
         }
-
-        // ArrayList recipes = Integrator.getALlInkMixerRecipes();
-        // for (Object recipe : recipes) {
-        // this.arecipes.add(new CachedInkMixerRecipe(recipe));
-        // }
     }
 
     @Override
@@ -349,7 +331,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
         }
         else {
-            GuiDraw.drawGradientRect(left, top, left + width, top + height, 0xFFFFFFFF, 0xFFFFFFFF);
+            GuiDraw.drawGradientRect(left, top, left + width, top + height, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000);
         }
     }
 

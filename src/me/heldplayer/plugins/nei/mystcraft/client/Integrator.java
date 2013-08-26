@@ -291,15 +291,18 @@ public class Integrator {
         mystItems.add(MystObjects.descriptive_book);
         mystItems.add(MystObjects.linkbook_unlinked);
         mystItems.add(MystObjects.linkbook);
-        mystItems.add(MystObjects.notebook);
         mystItems.add(MystObjects.inkvial);
 
         MultiItemRange mystPages = new MultiItemRange();
         mystPages.add(MystObjects.page);
 
+        MultiItemRange mystNotebooks = new MultiItemRange();
+        mystNotebooks.add(MystObjects.notebook);
+
         API.addSetRange("Mystcraft.Blocks", mystBlocks);
         API.addSetRange("Mystcraft.Items", mystItems);
         API.addSetRange("Mystcraft.Pages", mystPages);
+        API.addSetRange("Mystcraft.Notebooks", mystNotebooks);
     }
 
     /**
@@ -396,10 +399,9 @@ public class Integrator {
                 gradient.pushColor(emptyColor, Long.valueOf(interval));
             }
 
-            String[] modifiers = properties.keySet().toArray(new String[0]);
-            Float[] percentages = properties.values().toArray(new Float[0]);
+            String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
 
-            return new InkMixerRecipe(gradient, modifiers, percentages);
+            return new InkMixerRecipe(gradient, modifiers);
         }
         catch (Exception e) {
             Objects.log.log(Level.WARNING, "Failed getting gradient", e);

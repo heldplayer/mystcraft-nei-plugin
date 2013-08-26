@@ -13,12 +13,10 @@ public class InkMixerRecipe {
 
     public ColorGradient gradient;
     public String[] modifiers;
-    public Float[] percentages;
 
-    public InkMixerRecipe(ColorGradient value1, String[] value2, Float[] percentages) {
+    public InkMixerRecipe(ColorGradient value1, String[] value2) {
         this.gradient = value1;
         this.modifiers = value2;
-        this.percentages = percentages;
     }
 
 }
