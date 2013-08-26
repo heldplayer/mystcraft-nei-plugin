@@ -4,6 +4,7 @@ package com.xcompwiz.mystcraft.api;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.AchievementPage;
@@ -18,7 +19,16 @@ import net.minecraftforge.fluids.Fluid;
  * 
  */
 public class MystObjects {
-    /** For use with ChestGenHooks */
+
+    /** The Creative Tab for items. This is set during Post-Init. */
+    public static CreativeTabs creativeTab = null;
+    /**
+     * The Creative Tab for page items (incl. linking pages) This is set during
+     * Post-Init.
+     */
+    public static CreativeTabs pageTab = null;
+
+    /** For use with ChestGenHooks. Treasure is not built until post-init. */
     public static String treasure_info = null;
     /** For registering Mystcraft related achievements */
     public static AchievementPage achivements;
@@ -49,7 +59,4 @@ public class MystObjects {
     public static Item firemarble = null;
 
     public static Fluid black_ink = null;
-
-    /** For Jaded */
-    public static Item purple_page = null;
 }

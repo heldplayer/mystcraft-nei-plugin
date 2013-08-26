@@ -7,6 +7,7 @@ import net.minecraft.world.chunk.Chunk;
 
 import com.xcompwiz.mystcraft.api.internals.IStorageObject;
 
+// FIXME: Stable?
 public interface IWeatherController {
     public abstract void setDataObject(IStorageObject infoObj);
 

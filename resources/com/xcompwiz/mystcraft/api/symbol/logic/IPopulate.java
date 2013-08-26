@@ -25,6 +25,8 @@ public interface IPopulate {
      * @param flag
      *        Originally a vanilla flag meaning "villages generated here." Due
      *        to ordering issues of symbols, now rather meaningless.
+     * @return True if flag should change to true. False does not reset flag to
+     *         false.
      */
     public abstract boolean populate(World worldObj, Random rand, int x, int y, boolean flag);
 }

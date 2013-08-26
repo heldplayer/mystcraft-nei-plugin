@@ -16,11 +16,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * This is the "word" class for the Narayan Poems
  * You can use this class to do very advanced words, but generally it should be
  * sufficient to use {@code registerWord(String name, Integer[] components)} in
- * {@link ISymbolAPI}
+ * {@link ISymbolAPI} See {@link WordData}
  * 
  * @author xcompwiz
  */
-public class DrawableWord {
+public final class DrawableWord {
 
     private ArrayList<Integer> components = new ArrayList<Integer>();
     private ArrayList<Integer> colors = new ArrayList<Integer>();

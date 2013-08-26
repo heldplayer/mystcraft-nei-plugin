@@ -9,16 +9,19 @@ import net.minecraftforge.event.Event;
 
 /**
  * Mystcraft link (teleport) events
- * These are primarily handled/sent server side. LinkEventAllow is the only
- * event ever sent client-side.
- * Any other client side functionality should be handled by listening on the
- * server side and notifying the client via network message
+ * These events are all fired server side only
+ * Client side functionality should be handled by listening on the server side
+ * and notifying the client via network message
  */
 public abstract class LinkEvent extends Event {
 
+    /** The world the entity is leaving. May be null. */
     public final World origin;
+    /** The destination world. May be null. */
     public final World destination;
+    /** The entity being linked */
     public final Entity entity;
+    /** The link descriptor. You should not modify this object in any way */
     public final ILinkInfo options;
 
     public LinkEvent(World origin, World destination, Entity entity, ILinkInfo info) {
@@ -29,12 +32,26 @@ public abstract class LinkEvent extends Event {
     }
 
     /**
-     * Cancel this event to prevent linking
+     * Cancel this event to prevent linking.
      */
     @Cancelable
     public static class LinkEventAllow extends LinkEvent {
         public LinkEventAllow(World origin, Entity entity, ILinkInfo info) {
             super(origin, null, entity, info);
+        }
+    }
+
+    /**
+     * Used to provide alternate values for the link
+     */
+    public static class LinkEventAlter extends LinkEvent {
+        /** Set this to alter the link (null until set) */
+        public ChunkCoordinates spawn;
+        /** Set this to alter the link (null until set) */
+        public Float rotationYaw;
+
+        public LinkEventAlter(World origin, World destination, Entity entity, ILinkInfo info) {
+            super(origin, destination, entity, info);
         }
     }
 
@@ -59,7 +76,10 @@ public abstract class LinkEvent extends Event {
 
     /**
      * Called when the entity enters the new world and their position has been
-     * set
+     * approximated.
+     * The entity is not fully associated or tuned with the world yet, and
+     * players have not been sent
+     * server-side information such as weather and time.
      */
     public static class LinkEventEnterWorld extends LinkEvent {
         public LinkEventEnterWorld(World destination, Entity entity, ILinkInfo info) {
@@ -68,23 +88,13 @@ public abstract class LinkEvent extends Event {
     }
 
     /**
-     * Called once everything is finalized
+     * Called once everything is finalized.
+     * The entity is fully realized in the world and has been updated on
+     * clients.
      */
     public static class LinkEventEnd extends LinkEvent {
         public LinkEventEnd(World destination, Entity entity, ILinkInfo info) {
             super(null, destination, entity, info);
-        }
-    }
-
-    /**
-     * Used to provide alternate values for the link
-     */
-    public static class LinkEventAlter extends LinkEvent {
-        public ChunkCoordinates spawn;
-        public Float rotationYaw;
-
-        public LinkEventAlter(World origin, World destination, Entity entity, ILinkInfo info) {
-            super(origin, destination, entity, info);
         }
     }
 }

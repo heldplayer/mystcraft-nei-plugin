@@ -1,6 +1,10 @@
 
 package com.xcompwiz.mystcraft.api.symbol;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
 import com.xcompwiz.mystcraft.api.internals.BlockCategory;
 
 /**
@@ -13,6 +17,76 @@ import com.xcompwiz.mystcraft.api.internals.BlockCategory;
  */
 public interface IGrammarAPI {
 
+    /**
+     * Registers a rule for the grammar system
+     * In general, symbols providing critical logic should only have a rule for
+     * that element. Otherwise, there is no limit to the number or kinds of
+     * rules that produce a symbol.
+     * Example:
+     * {@code registerGrammarRule(IGrammarAPI.TERRAIN, 1.0F, IGrammarAPI.BLOCK_TERRAIN, "SymbolIdentifer")}
+     * Example:
+     * {@code registerGrammarRule(IGrammarAPI.TERRAINALT, 1.0F, IGrammarAPI.BLOCK_STRUCTURE, "SymbolIdentifer")}
+     * Rules must be registered before post-init
+     * 
+     * @param parent
+     *        The token to expand
+     * @param weight
+     *        The weight value applied to the rule (higher -> more common). 1 is
+     *        "Common"
+     * @param args
+     *        The tokens to expand to
+     */
+    void registerGrammarRule(String parent, float weight, String... args);
+
+    /**
+     * Produces a list of symbols fro mthe given token
+     * 
+     * @param token
+     *        The token to expand
+     * @return A collection of all of the symbols which are contained in rules
+     *         which directly expand the token
+     */
+    Collection<IAgeSymbol> getSymbolsExpandingToken(String token);
+
+    /**
+     * Produces a list of all the tokens which have rules that produce the
+     * provided token
+     * 
+     * @param token
+     *        The token produced
+     * @return A collection of all the parents of rules producing the given
+     *         token
+     */
+    Collection<String> getTokensProducingToken(String token);
+
+    /**
+     * Produces a phrase from the given token
+     * 
+     * @param token
+     *        The token to use as the root of the phrase
+     * @param rand
+     *        The random number generator to use during expansion
+     * @return The generated phrase as a list of terminals. These should all be
+     *         symbol identifiers.
+     */
+    List<String> generateFromToken(String root, Random rand);
+
+    /**
+     * Produces a phrase from the given token and a list of tokens to include,
+     * in order
+     * 
+     * @param token
+     *        The token to use as the root of the phrase
+     * @param rand
+     *        The random number generator to use during parsing and expansion
+     * @param parsed
+     *        A set of symbols to include, in order, parsed like when generating
+     *        an age
+     * @return The generated phrase as a list of terminals. These should all be
+     *         symbol identifiers.
+     */
+    List<String> generateFromToken(String root, Random rand, List<String> parsed);
+
     /** Generates a Biome */
     public static final String BIOME = "Biome";
     /** Generates a number of Biomes */
@@ -24,12 +98,12 @@ public interface IGrammarAPI {
     /** Generates a Weather Controller */
     public static final String WEATHER = "Weather";
     /** Generates a Base Terrain Generator */
-    public static final String TERRAIN = "Terrain";
+    public static final String TERRAIN = "TerrainGen";
 
     /** Generates a Visual Effect like Sky or Fog Color */
     public static final String VISUAL_EFFECT = "Visual";
-    /** Generates a Terrain Modifier */
-    public static final String TERRAINMOD = "TerrainMod";
+    /** Generates a Terrain Alteration */
+    public static final String TERRAINALT = "TerrainAlt";
     /** Generates a Populator */
     public static final String POPULATOR = "Populator";
     /** Generates a world Effect, like Accelerated */
@@ -74,25 +148,4 @@ public interface IGrammarAPI {
     public static final String BLOCK_FLUID = BlockCategory.FLUID.getGrammarBinding();
     /** Generates a Block Modifier */
     public static final String BLOCK_ANY = BlockCategory.ANY.getGrammarBinding();
-
-    /**
-     * Registers a rule for the grammar system
-     * In general, symbols providing critical logic should only have a rule for
-     * that element. Otherwise, there is no limit to the number or kinds of
-     * rules that produce a symbol.
-     * Example:
-     * {@code registerGrammarRule(IGrammarAPI.TERRAIN, 1.0F, IGrammarAPI.BLOCK_TERRAIN, "SymbolIdentifer")}
-     * Example:
-     * {@code registerGrammarRule(IGrammarAPI.TERRAINMOD, 1.0F, IGrammarAPI.BLOCK_STRUCTURE, "SymbolIdentifer")}
-     * 
-     * @param parent
-     *        The token to expand
-     * @param weight
-     *        The weight value applied to the rule (higher -> more common). 1 is
-     *        "Common"
-     * @param args
-     *        The tokens to expand to
-     */
-    void registerGrammarRule(String parent, float weight, String... args);
-
 }

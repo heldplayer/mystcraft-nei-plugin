@@ -6,6 +6,12 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import com.xcompwiz.mystcraft.api.internals.Color;
 
+/**
+ * Used to produce a color once. This color cannot change over time.
+ * 
+ * @author xcompwiz
+ */
+//FIXME: Stable?
 public interface IStaticColorProvider {
     public final static String WATER = "Water";
     public final static String GRASS = "Grass";

@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.world.biome.BiomeGenBase;
 
+// FIXME: Stable?
 public interface IBiomeController {
     public abstract List<BiomeGenBase> getValidSpawnBiomes();
 

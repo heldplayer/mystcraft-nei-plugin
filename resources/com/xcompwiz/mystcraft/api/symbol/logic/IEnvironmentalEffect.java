@@ -12,6 +12,7 @@ import net.minecraft.world.chunk.Chunk;
  * 
  * @author xcompwiz
  */
+//FIXME: Stable?
 public interface IEnvironmentalEffect {
 
     /**

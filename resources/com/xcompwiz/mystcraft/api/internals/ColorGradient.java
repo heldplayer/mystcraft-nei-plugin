@@ -9,20 +9,54 @@ public final class ColorGradient {
     private List<Long> intervals = new ArrayList<Long>();
     private long length = 0;
 
+    /**
+     * Gets the number of color points in the gradient
+     * 
+     * @return The number of fixed colors in the gradient
+     */
     public int getColorCount() {
         return this.colors.size();
     }
 
+    /**
+     * Returns the full length of the gradient
+     * 
+     * @return The length of the gradient
+     */
+    public long getLength() {
+        return this.length;
+    }
+
+    /**
+     * Adds a gradient to the end of this gradient
+     * 
+     * @param other
+     *        The gradient to add to the end of this one
+     */
     public void appendGradient(ColorGradient other) {
         for (int i = 0; i < other.colors.size(); ++i) {
             this.pushColor(other.colors.get(i), other.intervals.get(i));
         }
     }
 
+    /**
+     * Adds a color to the end of the gradient
+     * 
+     * @param color
+     *        The color to add
+     */
     public void pushColor(Color color) {
         this.pushColor(color, null);
     }
 
+    /**
+     * Adds a color to the gradient
+     * 
+     * @param color
+     *        The color to add
+     * @param interval
+     *        How long it takes to transition to the next color
+     */
     public void pushColor(Color color, Long interval) {
         if (color == null) {
             return;
@@ -35,6 +69,13 @@ public final class ColorGradient {
         this.length += interval.longValue();
     }
 
+    /**
+     * Gets the current color at a point
+     * 
+     * @param time
+     *        The point in the gradient to use
+     * @return The color object that represents the current color
+     */
     public Color getColor(long time) {
         //Case: No colors
         if (this.colors.size() == 0) {
@@ -70,9 +111,4 @@ public final class ColorGradient {
     private float interpolate(float interp, float val1, float val2) {
         return (val2 * interp) + (val1 * (1 - interp));
     }
-
-    public long getLength() {
-        return this.length;
-    }
-
 }

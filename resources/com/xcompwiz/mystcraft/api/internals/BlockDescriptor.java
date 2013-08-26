@@ -14,7 +14,7 @@ import java.util.HashMap;
 public final class BlockDescriptor {
     public final short id;
     public final byte metadata;
-    private final IFormula formula;
+    private final IInstabilityFormula formula;
     private final HashMap<String, Boolean> useable = new HashMap<String, Boolean>();
 
     /**
@@ -26,9 +26,9 @@ public final class BlockDescriptor {
      *        Metadata value of the block to use in generation
      * @param instability_function
      *        A math function which returns the amount of instability to add to
-     *        the world based on average blocks added per chunk
+     *        the world based on average blocks added per chunk.
      */
-    public BlockDescriptor(short blockId, byte metadata, IFormula instability_function) {
+    public BlockDescriptor(short blockId, byte metadata, IInstabilityFormula instability_function) {
         this.id = blockId;
         this.metadata = metadata;
         this.formula = instability_function;
@@ -94,21 +94,28 @@ public final class BlockDescriptor {
 
     /**
      * Gets the instability value to add to the age based on the average blocks
-     * added per chunk
-     * This uses the provided instability function
-     * Standard usage is to add instability when registering symbol logic
+     * added per chunk.
+     * This uses the provided instability function.
+     * Standard usage is to add instability when registering symbol logic.
+     * Generators should use this and add the result to the age as instability
+     * during the controller registration.
      * 
-     * @param blocksPerChunk
-     *        The average number of blocks the generator will add per chunk
+     * @param clustersPerChunk
+     *        The average number of clusters per chunk
+     * @param blocksPerCluster
+     *        The average number of blocks the generator will add per cluster
      * @return The amount of instability to add to the age
      */
-    public int getInstability(float blocksPerChunk) {
-        if (blocksPerChunk < 0) {
-            throw new RuntimeException("Cannot generate negative blocks per chunk!");
+    public int getInstability(float clustersPerChunk, float blocksPerCluster) {
+        if (clustersPerChunk < 0) {
+            throw new RuntimeException("Cannot generate negative number of clusters!");
+        }
+        if (blocksPerCluster < 0) {
+            throw new RuntimeException("Cannot generate negative blocks per cluster!");
         }
         if (this.formula == null) {
             return 0;
         }
-        return (int) this.formula.calc(blocksPerChunk);
+        return (int) this.formula.calc(clustersPerChunk, blocksPerCluster);
     }
 }

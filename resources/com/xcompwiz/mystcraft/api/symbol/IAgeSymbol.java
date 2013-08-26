@@ -1,13 +1,13 @@
 
 package com.xcompwiz.mystcraft.api.symbol;
 
-import com.xcompwiz.mystcraft.api.internals.IWeightedItem;
+import com.xcompwiz.mystcraft.api.symbol.words.WordData;
 
 /**
  * Implement and register this through the ISymbolAPI to add your own symbols to
  * Mystcraft
  */
-public interface IAgeSymbol extends IWeightedItem {
+public interface IAgeSymbol {
 
     /**
      * Called when it is time for the Symbol to register its logic elements to
@@ -56,11 +56,11 @@ public interface IAgeSymbol extends IWeightedItem {
     public abstract String displayName();
 
     /**
-     * Returns a list of descriptor words that are used to render the symbol
-     * Should return 4 words
+     * Returns a list of words that are used to render the symbol
+     * Should return 4 words to build a Narayan "poem"
+     * See {@link WordData}
      * 
-     * @return 4 element array of descriptor words to be mapped to drawn symbol
-     *         parts
+     * @return 4 element array of words to be mapped to drawn symbol parts
      */
-    public abstract String[] getDescriptorWords();
+    public abstract String[] getPoem();
 }

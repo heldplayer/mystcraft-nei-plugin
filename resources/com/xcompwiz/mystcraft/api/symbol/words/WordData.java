@@ -100,7 +100,14 @@ public final class WordData {
     public static final String Ore = Machine;
     public static final String Sea = Flow;
 
+    private static boolean initialized = false;
+
+    /** Do not call this */
     public static void init() {
+        if (MystAPI.symbol == null || initialized) {
+            return;
+        }
+        initialized = true;
         MystAPI.symbol.registerWord(Nature, new Integer[] { 5, 6, 8, 10, 11, 12, 15, 16, 17, 22 }); // Narayan - Nature
         MystAPI.symbol.registerWord(Love, new Integer[] { 9, 10, 11, 14, 16, 17, 19, 20 }); // Narayan - Love
         MystAPI.symbol.registerWord(Force, new Integer[] { 4, 5, 8, 16, 17, 19 }); // Narayan - Force

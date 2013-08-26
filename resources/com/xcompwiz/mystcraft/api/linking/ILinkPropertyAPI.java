@@ -3,14 +3,70 @@ package com.xcompwiz.mystcraft.api.linking;
 
 import net.minecraft.item.ItemStack;
 
+import com.xcompwiz.mystcraft.api.internals.Color;
+
 /**
- * Supplies functions for adding effects to ink mixtures through item additives
+ * Provides functions for adding link properties
+ * Also handles interactions with the ink mixing mechanics
  * The implementation of this is provided by MystAPI
  * Do NOT implement this yourself!
  * 
  * @author xcompwiz
  */
-public interface IAdditiveAPI {
+public interface ILinkPropertyAPI {
+
+    /* String ids for standard link flags */
+    /** The link can stay within the same dimension */
+    public static final String FLAG_INTRA_LINKING = "Intra Linking";
+    /** The link will retain offset from main spawn */
+    public static final String FLAG_RELATIVE = "Relative";
+    /**
+     * The link will cause the player to drop all of their items before linking;
+     * items won't link
+     */
+    public static final String FLAG_DISARM = "Disarm";
+    /** The link will not nullify the entity's momentum */
+    public static final String FLAG_MAINTAIN_MOMENTUM = "Maintain Momentum";
+    /**
+     * The link will generate a single block platform on arrival if there is a
+     * drop
+     */
+    public static final String FLAG_GENERATE_PLATFORM = "Generate Platform";
+    /** The link should be treated as something natural */
+    public static final String FLAG_NATURAL = "Natural";
+    /** The link was initiated by an outside element (not user interaction) */
+    public static final String FLAG_EXTERNAL = "External";
+    /** The link was initiated as an attack */
+    public static final String FLAG_OFFENSIVE = "Offensive";
+
+    /** The link was started by a command */
+    public static final String FLAG_TPCOMMAND = "Op-TP";
+    /** This is used for books themselves */
+    public static final String FLAG_FOLLOWING = "Following";
+
+    /* String ids for standard link properties */
+    /**
+     * Used to indicate what sound should be played when the link occurs
+     * Ignored if the link has the disarm flag or if the linked object is an
+     * item
+     * The value of the property should be the reference of the sound to play,
+     * for example: "mystcraft:linking.link"
+     */
+    public static final String PROP_SOUND = "Sound";
+
+    /**
+     * Registers a link property name and sets the color which represents it.
+     * You can use linking events to change the effects of a link if the
+     * property is present.
+     * Note that duplicates are allowed and the final color set will override
+     * existing ones.
+     * 
+     * @param identifier
+     *        The identifier of the property
+     * @param color
+     *        The color used to represent it
+     */
+    public void registerLinkProperty(String identifier, Color color);
 
     /*
      * These functions are used for the ink mixing system.

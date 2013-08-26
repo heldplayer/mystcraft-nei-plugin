@@ -8,14 +8,89 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import com.xcompwiz.mystcraft.api.internals.BlockCategory;
 import com.xcompwiz.mystcraft.api.internals.BlockDescriptor;
+import com.xcompwiz.mystcraft.api.internals.Color;
+import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 
 /**
  * A collection of helper functions for dealing with more complex modifier
  * types, such as blocks and biomes
+ * Also includes a number of averaging functions to aid in consistent behavior
  * 
  * @author xcompwiz
  */
 public final class ModifierUtils {
+
+    public static float averageLengths(float l, float r) {
+        return (l + r) / 2;
+    }
+
+    public static Color averageColors(Color left, Color right) {
+        return left.average(right);
+    }
+
+    public static Color averageColors(Color color, float r, float g, float b) {
+        return color.average(r, g, b);
+    }
+
+    /**
+     * Returns a gradient from the current modifiers.
+     * This will always return a gradient, though the gradient may be empty.
+     * If there isn't a gradient object in the modifier system then a gradient
+     * will be built
+     * If the gradient is empty then the system will attempt to use an existing
+     * color modifier
+     * Note that if both are empty then the returned gradient will be empty
+     * If the gradient modifier exists and is not empty, then any color
+     * modifiers will be ignored
+     * If a gradient modifier is set but is empty then the color modifier will
+     * still be popped
+     * 
+     * @param controller
+     *        The controller passed to the symbol during logic registration
+     * @return A valid gradient object
+     */
+    public static ColorGradient popGradient(IAgeController controller) {
+        ColorGradient gradient = controller.popModifier("gradient").asGradient();
+        if (gradient == null) {
+            gradient = new ColorGradient();
+        }
+        if (gradient.getColorCount() == 0) {
+            gradient.pushColor(controller.popModifier("color").asColor());
+        }
+        return gradient;
+    }
+
+    /**
+     * Returns a gradient from the current modifiers.
+     * This will always return a gradient
+     * If there isn't a gradient object in the modifier system then a gradient
+     * will be built
+     * If the gradient is empty then the system will attempt to use an existing
+     * color modifier
+     * If both modifiers are unset then the provided default color will be added
+     * to the gradient
+     * If the gradient modifier exists and is not empty, then any color
+     * modifiers will be ignored
+     * If a gradient modifier is set but is empty then the color modifier will
+     * still be popped
+     * 
+     * @param controller
+     *        The controller passed to the symbol during logic registration
+     * @param r
+     *        The default color value to use (red component)
+     * @param g
+     *        The default color value to use (green component)
+     * @param b
+     *        The default color value to use (blue component)
+     * @return A valid gradient object
+     */
+    public static ColorGradient popGradient(IAgeController controller, float r, float g, float b) {
+        ColorGradient gradient = popGradient(controller);
+        if (gradient.getColorCount() == 0) {
+            gradient.pushColor(new Color(r, g, b));
+        }
+        return gradient;
+    }
 
     /**
      * Provides a block of a particular generation category if one is in the

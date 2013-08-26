@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author XCompWiz
  * 
  */
+//FIXME: Stable?
 public interface ISkyDoodad {
 
     /**

@@ -1,6 +1,8 @@
 
 package com.xcompwiz.mystcraft.api.instability;
 
+import java.util.Collection;
+
 /**
  * Provides methods for registering providers to and interacting with the
  * instability system
@@ -17,5 +19,19 @@ public interface IInstabilityAPI {
      * governed by its internal
      * stability values
      */
-    void registerInstability(IInstabilityProvider provider);
+    public void registerInstability(IInstabilityProvider provider);
+
+    /**
+     * @return An immutable list of all the instability providers registered
+     */
+    public Collection<IInstabilityProvider> getAllInstabilityProviders();
+
+    /**
+     * Maps an identifier to an instability provider
+     * 
+     * @param identifier
+     *        The indetifier to map
+     * @return The instability provider with that id or null if there isn't one
+     */
+    public IInstabilityProvider getInstabilityProvider(String identifier);
 }

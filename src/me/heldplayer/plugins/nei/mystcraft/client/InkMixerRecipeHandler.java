@@ -315,7 +315,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         this.renderTank(49, 5, 66, 65, (CachedInkMixerRecipe) this.arecipes.get(recipe));
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GuiDraw.changeTexture(getGuiTexture());
+        GuiDraw.changeTexture(this.getGuiTexture());
         GuiDraw.drawTexturedModalRect(0, 0, 5, 11, 166, 76);
     }
 

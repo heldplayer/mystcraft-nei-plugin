@@ -1,18 +1,20 @@
 
 package com.xcompwiz.mystcraft.api.linking;
 
+import com.xcompwiz.mystcraft.api.render.IRenderAPI;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This interface allows for you to add render layers to the link panel in a
  * book
- * Register it through the {@link ILinkingAPI}
+ * Register it through the {@link IRenderAPI}
  * 
  * @author xcompwiz
  */
 @SideOnly(Side.CLIENT)
-public interface LinkPanelEffect {
+public interface ILinkPanelEffect {
 
     /**
      * Called when the rendering should occur
@@ -26,7 +28,7 @@ public interface LinkPanelEffect {
      */
     public void render(int left, int top, int width, int height, ILinkInfo linkInfo);
 
-    /** Called when the book first opens */
+    /** Called when the book gui element first opens */
     public void onOpen();
 
 }

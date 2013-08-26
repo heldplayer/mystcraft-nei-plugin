@@ -14,30 +14,6 @@ import net.minecraft.util.ChunkCoordinates;
  * {@link ILinkingAPI}
  */
 public interface ILinkInfo {
-    /* String ids for standard link flags */
-    /** The flag identifier for intra-linking */
-    public static final String FLAG_INTRA_LINKING = "Intra Linking";
-    /** The flag identifier for generate platform */
-    public static final String FLAG_GENERATE_PLATFORM = "Generate Platform";
-    /** The flag identifier for maintain momentum */
-    public static final String FLAG_MAINTAIN_MOMENTUM = "Maintain Momentum";
-    /** The flag identifier for disarm */
-    public static final String FLAG_DISARM = "Disarm";
-    /** The flag identifier for following books */
-    public static final String FLAG_FOLLOWING = "Following";
-    /** The flag identifier for relative linking */
-    public static final String FLAG_RELATIVE = "Relative";
-
-    /*
-     * String ids for standard link properties
-     */
-    /**
-     * Used to indicate what sound should be played when the link occurs
-     * Ignored if the link has the disarm flag or if the linked object is an
-     * item
-     */
-    public static final String PROP_SOUND = "Sound"; //
-
     /**
      * Gets the 'name' of the link
      * Primarily used for Mystcraft books and linking items
@@ -53,7 +29,7 @@ public interface ILinkInfo {
     void setDisplayName(String displayname);
 
     /**
-     * Gets the destination's unique Dimension identifier
+     * Gets the destination's unique Dimension identifier.
      */
     int getDimensionUID();
 
@@ -90,8 +66,10 @@ public interface ILinkInfo {
      * Gets a flag for the link
      * It is possible to bind flags to the link info
      * Some flags are already listened for, but it is possible to add your own
-     * and listen for them with a custom link listener
-     * Defaults to false
+     * and listen for them using the {@link LinkEvent} events
+     * See {@link ILinkPropertyAPI} for some normal link flags
+     * 
+     * @return Returns the value of the flag, or false if not set
      */
     boolean getFlag(String flag);
 
@@ -99,8 +77,8 @@ public interface ILinkInfo {
      * Sets a flag for the link
      * It is possible to bind flags to the link info
      * Some flags are already listened for, but it is possible to add your own
-     * and listen for them with a custom link listener
-     * See the Properties listed at the top of this interface
+     * and listen for them using the {@link LinkEvent} events
+     * See {@link ILinkPropertyAPI} for some normal link flags
      */
     void setFlag(String flag, boolean value);
 
@@ -109,8 +87,11 @@ public interface ILinkInfo {
      * It is possible to bind properties to the link info
      * Some properties are already listened for, but it is possible to add your
      * own
-     * and listen for them with a custom link listener
+     * and listen for them using the {@link LinkEvent} events
      * Currently only PROP_SOUND is used
+     * See {@link ILinkPropertyAPI}
+     * 
+     * @return The value of the property. Defaults to null if nothing is set.
      */
     String getProperty(String flag);
 
@@ -119,21 +100,26 @@ public interface ILinkInfo {
      * It is possible to bind properties to the link info
      * Some properties are already listened for, but it is possible to add your
      * own
-     * and listen for them with a custom link listener
+     * and listen for them using the {@link LinkEvent} events
      * Currently only PROP_SOUND is used
+     * See {@link ILinkPropertyAPI}
      */
     void setProperty(String flag, String value);
 
     /**
-     * Returns an NBTTagCompound which represents this link
-     * This is so that you can convert the link info to a save-able format
-     * This function is not used by the {@link ILinkingAPI}
+     * Returns an NBTTagCompound which represents this link.
+     * This is so that you can convert the link info to a save-able format.
+     * This function is not used by the {@link ILinkingAPI}, so if you implement
+     * this interface you do
+     * not need to worry about matching the internal formats.
      */
     NBTTagCompound getTagCompound();
 
     /**
      * Clones the info object, creating a separate set of data (changes to one
      * do not reflect in the other).
+     * This is used internally to copy a link object so that you may implement
+     * this interface.
      * 
      * @return A new ILinkInfo object with all of the same properties as this
      *         one. The object is not backed by this one.
