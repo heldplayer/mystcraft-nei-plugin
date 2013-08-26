@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagString;
 import codechicken.nei.MultiItemRange;
 import codechicken.nei.api.API;
 
+import com.xcompwiz.mystcraft.api.MystAPI;
 import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
@@ -57,6 +58,8 @@ public class Integrator {
             Objects.log.log(Level.SEVERE, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
             return;
         }
+
+        MystAPI.linkProperties.addPropertyToItem("stairWood", "Following", 0.7F);
 
         try {
             hideTechnicalBlocks();
@@ -269,23 +272,27 @@ public class Integrator {
     private static void addItemRanges() throws Exception, Error {
         MultiItemRange mystBlocks = new MultiItemRange();
 
+        mystBlocks.add(MystObjects.portal);
         mystBlocks.add(MystObjects.crystal);
         mystBlocks.add(MystObjects.crystal_receptacle);
         mystBlocks.add(MystObjects.decay);
         mystBlocks.add(MystObjects.bookstand);
         mystBlocks.add(MystObjects.book_lectern);
+        mystBlocks.add(MystObjects.writing_desk_block);
         mystBlocks.add(MystObjects.bookbinder);
         mystBlocks.add(MystObjects.inkmixer);
         mystBlocks.add(MystObjects.star_fissure);
+
+        mystBlocks.add(MystObjects.link_modifer);
 
         MultiItemRange mystItems = new MultiItemRange();
 
         mystItems.add(MystObjects.writing_desk);
         mystItems.add(MystObjects.descriptive_book);
-        mystItems.add(MystObjects.inkvial);
-        mystItems.add(MystObjects.linkbook);
         mystItems.add(MystObjects.linkbook_unlinked);
+        mystItems.add(MystObjects.linkbook);
         mystItems.add(MystObjects.notebook);
+        mystItems.add(MystObjects.inkvial);
 
         MultiItemRange mystPages = new MultiItemRange();
         mystPages.add(MystObjects.page);
