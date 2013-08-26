@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.heldplayer.plugins.nei.mystcraft.Objects;
-import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -20,6 +19,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import codechicken.core.gui.GuiDraw;
+import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
@@ -105,7 +105,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            if (cycleticks % 20 == 0) {
+            if (!NEIClientUtils.shiftKey() && cycleticks % 20 == 0) {
                 this.ingredient.setPermutationToRender(Objects.rnd.nextInt(this.ingredient.items.length));
             }
             return this.ingredients;
@@ -278,7 +278,9 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             }
         }
         else {
-            CachedInkMixerRecipe recipe = new CachedInkMixerRecipe(ingredient);
+            ItemStack ingr = ingredient.copy();
+            ingr.stackSize = 1;
+            CachedInkMixerRecipe recipe = new CachedInkMixerRecipe(ingr);
             if (recipe.modifiers != null) {
                 this.arecipes.add(recipe);
             }
@@ -331,7 +333,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return PluginNEIMystcraft.guiInkMixerClass;
+        return ClientProxy.guiInkMixerClass;
     }
 
     @Override

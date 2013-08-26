@@ -2,15 +2,16 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
+import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
-import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
+import me.heldplayer.util.HeldCore.client.GuiHelper;
 import me.heldplayer.util.HeldCore.reflection.RClass;
 import me.heldplayer.util.HeldCore.reflection.RField;
 import me.heldplayer.util.HeldCore.reflection.RMethod;
@@ -20,6 +21,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+
+import org.lwjgl.opengl.GL11;
+
+import codechicken.core.gui.GuiDraw;
 import codechicken.nei.MultiItemRange;
 import codechicken.nei.api.API;
 
@@ -37,6 +42,8 @@ import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
+
+    // TODO: Linking book crafting
 
     private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
     private static RMethod<Object, Color> getColorForPropertyMethod;
@@ -104,7 +111,8 @@ public class Integrator {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields", ex);
         }
         try {
-            PluginNEIMystcraft.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
+            ClientProxy.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
+            ClientProxy.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
@@ -114,8 +122,7 @@ public class Integrator {
     /**
      * Hide technical blocks and items from the NEI item list
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void hideTechnicalBlocks() throws Throwable {
         API.hideItem(MystObjects.portal.blockID);
@@ -126,8 +133,7 @@ public class Integrator {
     /**
      * Add all decay types that are standard Mystcraft to the NEI item list
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void addDecayTypes() throws Throwable {
         ArrayList<Integer> damageVariants = new ArrayList<Integer>();
@@ -145,8 +151,7 @@ public class Integrator {
     /**
      * Add all creative notebooks to NEI
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void addCreativeNotebooks() throws Throwable {
         ItemStack notebook = new ItemStack(MystObjects.notebook, 1, 0);
@@ -162,40 +167,26 @@ public class Integrator {
     /**
      * Add all pages to NEI
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void addPages() throws Throwable {
-        RClass<Object> symbolManagerClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.symbols.SymbolManager");
-        RMethod<Object, ArrayList<IAgeSymbol>> getAgeSymbols = symbolManagerClass.getMethod("getAgeSymbols");
-
         ItemStack page = new ItemStack(MystObjects.page, 1, 0);
 
         // Add a standard, empty page first!
         API.addNBTItem(page);
 
         // Add all the pages for all the symbols
-        ArrayList<IAgeSymbol> symbols = getAgeSymbols.callStatic();
+        List<IAgeSymbol> allSymbols = MystAPI.symbol.getAllRegisteredSymbols();
 
-        Collections.sort(symbols, new SymbolSorter());
-
-        for (IAgeSymbol symbol : symbols) {
-            ItemStack is = new ItemStack(MystObjects.page, 1, 0);
-
-            NBTTagCompound compound = new NBTTagCompound("tag");
-            compound.setString("symbol", symbol.identifier());
-
-            is.setTagCompound(compound);
-
-            API.addNBTItem(is);
+        for (IAgeSymbol symbol : allSymbols) {
+            API.addNBTItem(MystAPI.itemFact.buildSymbolPage(symbol.identifier()));
         }
     }
 
     /**
      * Add all link panels to NEI
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void addLinkPanels() throws Throwable {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
@@ -240,8 +231,7 @@ public class Integrator {
     /**
      * Add item ranges to the NEI interface
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void addItemRanges() throws Throwable {
         MultiItemRange mystBlocks = new MultiItemRange();
@@ -283,8 +273,7 @@ public class Integrator {
      * Gets all methods and fields required by recipe handlers and such to
      * function
      * 
-     * @throws Exception
-     * @throws Error
+     * @throws Throwable
      */
     private static void getMethodsAndFields() throws Throwable {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
@@ -396,6 +385,30 @@ public class Integrator {
         result.addAll(itemId_bindings.keySet());
 
         return result;
+    }
+
+    /**
+     * Renders a symbol
+     * 
+     * @param symbol
+     *        The symbol to render
+     * @param x
+     *        X-position to render at
+     * @param y
+     *        Y-position to render at
+     * @param z
+     *        Z-index to render at
+     * @param width
+     *        Width to render
+     * @param height
+     *        Height to render
+     */
+    public static void renderPage(IAgeSymbol symbol, float x, float y, float z, float width, float height) {
+        GuiDraw.changeTexture(Assets.bookPageLeft);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GuiHelper.drawTexturedModalRect((int) x, (int) y, (int) width, (int) height, z, 0.609375F, 0.0F, 0.7294117647058824F, 0.15625F);
+
+        MystAPI.render.drawSymbol(x, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
     }
 
 }
