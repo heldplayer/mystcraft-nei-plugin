@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
-import me.heldplayer.plugins.nei.mystcraft.client.renderer.DniColourRenderer;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
-import me.heldplayer.util.HeldCore.Vector;
-import me.heldplayer.util.HeldCore.VectorPool;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
@@ -27,6 +24,7 @@ import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
+import com.xcompwiz.mystcraft.api.MystAPI;
 import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
@@ -324,10 +322,8 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) this.arecipes.get(recipeId);
 
         if (recipe != null && recipe.gradient != null) {
-            Vector center = VectorPool.getFreeVector(82.5D, 37.5D, 0.0D);
             Color color = recipe.gradient.getColor(recipe.frame);
-            java.awt.Color awtColor = new java.awt.Color(color.r, color.g, color.b);
-            DniColourRenderer.render(awtColor, center, 20.0D);
+            MystAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
     }
 
