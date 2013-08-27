@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.client.renderer.WritingDeskOverlayRenderer;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,7 +20,10 @@ import org.lwjgl.opengl.GL11;
 import codechicken.core.gui.GuiDraw;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
+import codechicken.nei.api.IRecipeOverlayRenderer;
+import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.recipe.GuiRecipe;
+import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.xcompwiz.mystcraft.api.MystAPI;
@@ -36,6 +41,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         protected int tank;
         protected boolean isNotebook;
         protected boolean nullSymbol;
+        private GuiTextField textField;
 
         public CachedWritingDeskRecipe(IAgeSymbol symbol, boolean isNotebook) {
             this.symbol = symbol;
@@ -43,6 +49,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             this.tank = 1000;
             this.isNotebook = isNotebook;
             this.nullSymbol = symbol == null;
+            this.textField = new GuiTextField(GuiDraw.fontRenderer, 23, 54, 99, 14);
 
             this.ingredients.add(new PositionedStack(new ItemStack(MystObjects.inkvial), 147, 1));
             this.ingredients.add(new PositionedStack(new ItemStack(Item.paper), 3, 1));
@@ -51,7 +58,9 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             if (isNotebook) {
                 this.result = new PositionedStack(MystAPI.itemFact.buildNotebook("Named Notebook", new String[0]), 3, 53);
 
-                if (nullSymbol) {
+                this.textField.setText("Named Notebook");
+
+                if (this.nullSymbol) {
                     List<IAgeSymbol> symbols = MystAPI.symbol.getAllRegisteredSymbols();
 
                     this.symbol = symbols.get(Objects.rnd.nextInt(symbols.size()));
@@ -60,6 +69,9 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             else {
                 if (symbol != null) {
                     this.result = new PositionedStack(MystAPI.itemFact.buildSymbolPage(symbol.identifier()), 3, 53);
+
+                    this.textField.setText(symbol.displayName());
+                    this.textField.setCursorPosition(0);
                 }
             }
         }
@@ -177,11 +189,6 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public void loadTransferRects() {
-        // this.transferRects.add(new RecipeTransferRect(new Rectangle(146, 18, 18, 34), "writingdesk"));
-    }
-
-    @Override
     public int recipiesPerPage() {
         return 1;
     }
@@ -208,6 +215,8 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         else if (recipe.symbol != null) {
             Integrator.renderPage(recipe.symbol, 27.0F, 0.0F, 0.0F, 36.0F, 48.0F);
         }
+
+        recipe.textField.drawTextBox();
     }
 
     private void renderTank(int left, int top, int width, int height, CachedWritingDeskRecipe recipe) {
@@ -231,6 +240,15 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
     @Override
     public String getOverlayIdentifier() {
         return "writingdesk";
+    }
+
+    @Override
+    public IRecipeOverlayRenderer getOverlayRenderer(GuiContainer gui, int recipe) {
+        IStackPositioner positioner = RecipeInfo.getStackPositioner(gui, this.getOverlayIdentifier());
+        if (positioner == null) {
+            return null;
+        }
+        return new WritingDeskOverlayRenderer(this.getIngredientStacks(recipe), positioner);
     }
 
     @Override
@@ -259,6 +277,10 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
         if (currenttip.isEmpty() && stack == null && new Rectangle(131, 16, 16, 71).contains(relMouse)) {
             currenttip.add(MystObjects.black_ink.getLocalizedName() + ": " + recipe.tank + "/1000");
+        }
+
+        if (currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
+            currenttip.add("Recipes");
         }
 
         Point recipepos = gui.getRecipePosition(recipeId);

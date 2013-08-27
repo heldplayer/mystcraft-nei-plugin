@@ -1,8 +1,10 @@
 
 package me.heldplayer.plugins.nei.mystcraft.client;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
@@ -23,6 +25,7 @@ import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
+import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -105,7 +108,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            if (!NEIClientUtils.shiftKey() && cycleticks % 20 == 0) {
+            if (!NEIClientUtils.shiftKey() && InkMixerRecipeHandler.this.cycleticks % 20 == 0) {
                 this.ingredient.setPermutationToRender(Objects.rnd.nextInt(this.ingredient.items.length));
             }
             return this.ingredients;
@@ -191,7 +194,19 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (outputId.equals("item") || outputId.equals("inkmixer")) {
-            this.loadCraftingRecipes((ItemStack) results[0]);
+            if (results.length > 0) {
+                this.loadCraftingRecipes((ItemStack) results[0]);
+            }
+            else {
+                ArrayList recipes = Integrator.getALlInkMixerRecipes();
+
+                for (Object ingr : recipes) {
+                    CachedInkMixerRecipe recipe = new CachedInkMixerRecipe(ingr);
+                    if (recipe.modifiers != null) {
+                        this.arecipes.add(recipe);
+                    }
+                }
+            }
             return;
         }
     }
@@ -288,9 +303,6 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public void loadTransferRects() {}
-
-    @Override
     public int recipiesPerPage() {
         return 1;
     }
@@ -348,6 +360,20 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             return null;
         }
         return new InkMixerOverlayRenderer(this.getIngredientStacks(recipe), positioner, this.arecipes.get(recipe).getIngredient());
+    }
+
+    @Override
+    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
+        currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
+
+        Point mousepos = GuiDraw.getMousePosition();
+        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
+
+        if (currenttip.isEmpty() && gui.manager.shouldShowTooltip() && new Point(87, 49).distance(relMouse) < 34.0D) {
+            currenttip.add("Recipes");
+        }
+
+        return currenttip;
     }
 
 }

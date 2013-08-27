@@ -66,8 +66,6 @@ public class Integrator {
             return;
         }
 
-        MystAPI.linkProperties.addPropertyToItem("stairWood", "Following", 0.7F);
-
         try {
             hideTechnicalBlocks();
         }

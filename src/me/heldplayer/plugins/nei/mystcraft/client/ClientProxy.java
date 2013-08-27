@@ -18,7 +18,7 @@ public class ClientProxy extends CommonProxy {
     public static Class<? extends GuiContainer> guiInkMixerClass;
     public static WritingDeskRecipeHandler writingDesk;
     public static Class<? extends GuiContainer> guiWritingDeskClass;
-    public static MystTooltipeHandler tooltipHandler;
+    public static MystTooltipHandler tooltipHandler;
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
@@ -38,7 +38,7 @@ public class ClientProxy extends CommonProxy {
         API.registerGuiOverlay(ClientProxy.guiWritingDeskClass, "writingdesk");
         API.registerGuiOverlayHandler(ClientProxy.guiWritingDeskClass, new DefaultOverlayHandler(), "writingdesk");
 
-        tooltipHandler = new MystTooltipeHandler();
+        tooltipHandler = new MystTooltipHandler();
         GuiContainerManager.addTooltipHandler(tooltipHandler);
         GuiContainerManager.addInputHandler(tooltipHandler);
     }

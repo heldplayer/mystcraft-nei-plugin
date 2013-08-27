@@ -12,9 +12,10 @@ import org.lwjgl.opengl.GL11;
 /**
  * 
  * @author heldplayer
- *
+ * 
  */
-@Deprecated // Use API method instead
+@Deprecated
+// Use API method instead
 public class DniColourRenderer {
 
     public static void render(Color color, Vector center, double radius) {
