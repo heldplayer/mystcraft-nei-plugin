@@ -172,20 +172,6 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                     }
                 }
             }
-            else if (guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof InkMixerRecipeHandler) {
-                Point center = new Point(87, 49);
-
-                if (center.distance(relMouse) < 34.0D) {
-                    if (button == 0) {
-                        GuiCraftingRecipe.openRecipeGui("inkmixer");
-                        return true;
-                    }
-                    else if (button == 1) {
-                        GuiUsageRecipe.openRecipeGui("inkmixer");
-                        return true;
-                    }
-                }
-            }
         }
         return false;
     }

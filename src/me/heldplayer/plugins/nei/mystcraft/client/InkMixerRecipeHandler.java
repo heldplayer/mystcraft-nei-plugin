@@ -369,8 +369,10 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         Point mousepos = GuiDraw.getMousePosition();
         Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
-        if (currenttip.isEmpty() && gui.manager.shouldShowTooltip() && new Point(87, 49).distance(relMouse) < 34.0D) {
-            currenttip.add("Recipes");
+        Point center = new Point(87, 54);
+
+        if (currenttip.isEmpty() && stack == null && center.distance(relMouse) < 34.0D) {
+            currenttip.add(StatCollector.translateToLocal("nei.mystcraft.inkmixer.drop"));
         }
 
         return currenttip;

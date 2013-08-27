@@ -144,10 +144,6 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(symbol), false);
             this.arecipes.add(recipe);
         }
-        else if (result.getItem() == MystObjects.notebook) {
-            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(null), true);
-            this.arecipes.add(recipe);
-        }
         else if (result.getItem() == Item.glassBottle) {
             List<IAgeSymbol> recipes = MystAPI.symbol.getAllRegisteredSymbols();
 
