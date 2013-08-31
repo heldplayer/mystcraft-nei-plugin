@@ -18,6 +18,7 @@ import me.heldplayer.util.HeldCore.reflection.RMethod;
 import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -50,6 +51,7 @@ public class Integrator {
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
     private static Map itemId_bindings;
+    private static List<ItemStack> allLinkpanels;
 
     private static Color defaultColor = new Color(1.0F, 1.0F, 1.0F);
     private static Color emptyColor = new Color(0.0F, 0.0F, 0.0F);
@@ -97,6 +99,12 @@ public class Integrator {
             Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI", ex);
         }
         try {
+            addLinkingbooks();
+        }
+        catch (Throwable ex) {
+            Objects.log.log(Level.SEVERE, "Failed adding linking books to NEI", ex);
+        }
+        try {
             addItemRanges();
         }
         catch (Throwable ex) {
@@ -109,8 +117,9 @@ public class Integrator {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields", ex);
         }
         try {
-            ClientProxy.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
-            ClientProxy.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
+            NEIConfig.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
+            NEIConfig.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
+            NEIConfig.recipeLinkingbookClass = (Class<? extends IRecipe>) Class.forName("com.xcompwiz.mystcraft.data.RecipeLinkingbook");
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
@@ -202,6 +211,8 @@ public class Integrator {
 
         int bin = binary(keys.length);
 
+        allLinkpanels = new ArrayList<ItemStack>();
+
         for (int i = 0; i <= bin; i++) {
             ItemStack is = new ItemStack(MystObjects.page, 1, 0);
 
@@ -223,6 +234,18 @@ public class Integrator {
             is.setTagCompound(compound);
 
             API.addNBTItem(is);
+
+            allLinkpanels.add(is);
+        }
+    }
+
+    private static void addLinkingbooks() throws Throwable {
+        for (ItemStack panel : allLinkpanels) {
+            ItemStack book = new ItemStack(MystObjects.linkbook_unlinked);
+
+            book.stackTagCompound = (NBTTagCompound) panel.stackTagCompound.copy();
+
+            API.addNBTItem(book);
         }
     }
 
@@ -251,7 +274,6 @@ public class Integrator {
 
         mystItems.add(MystObjects.writing_desk);
         mystItems.add(MystObjects.descriptive_book);
-        mystItems.add(MystObjects.linkbook_unlinked);
         mystItems.add(MystObjects.linkbook);
         mystItems.add(MystObjects.inkvial);
 
@@ -261,10 +283,14 @@ public class Integrator {
         MultiItemRange mystNotebooks = new MultiItemRange();
         mystNotebooks.add(MystObjects.notebook);
 
+        MultiItemRange mystLinkbooks = new MultiItemRange();
+        mystLinkbooks.add(MystObjects.linkbook_unlinked);
+
         API.addSetRange("Mystcraft.Blocks", mystBlocks);
         API.addSetRange("Mystcraft.Items", mystItems);
-        API.addSetRange("Mystcraft.Pages", mystPages);
-        API.addSetRange("Mystcraft.Notebooks", mystNotebooks);
+        API.addSetRange("Mystcraft.Items.Pages", mystPages);
+        API.addSetRange("Mystcraft.Items.Notebooks", mystNotebooks);
+        API.addSetRange("Mystcraft.Items.Linking Books", mystLinkbooks);
     }
 
     /**
@@ -383,6 +409,10 @@ public class Integrator {
         result.addAll(itemId_bindings.keySet());
 
         return result;
+    }
+
+    public static List<ItemStack> getAllLinkpanels() {
+        return allLinkpanels;
     }
 
     /**

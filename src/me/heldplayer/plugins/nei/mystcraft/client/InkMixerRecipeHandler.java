@@ -345,7 +345,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return ClientProxy.guiInkMixerClass;
+        return NEIConfig.guiInkMixerClass;
     }
 
     @Override

@@ -82,7 +82,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
 
         @Override
-        public List<PositionedStack> getIngredients() {
+        public ArrayList<PositionedStack> getIngredients() {
             return this.ingredients;
         }
 
@@ -145,10 +145,13 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             this.arecipes.add(recipe);
         }
         else if (result.getItem() == Item.glassBottle) {
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(null), true);
+            this.arecipes.add(recipe);
+
             List<IAgeSymbol> recipes = MystAPI.symbol.getAllRegisteredSymbols();
 
             for (IAgeSymbol symbol : recipes) {
-                CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(symbol, false);
+                recipe = new CachedWritingDeskRecipe(symbol, false);
                 this.arecipes.add(recipe);
             }
         }
@@ -169,16 +172,22 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(symbol), true);
             this.arecipes.add(recipe);
+
+            recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(symbol), false);
+            this.arecipes.add(recipe);
         }
         else if (ingredient.getItem() == MystObjects.notebook) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(null), true);
             this.arecipes.add(recipe);
         }
         else if (ingredient.getItem() == Item.paper || ingredient.getItem() == MystObjects.inkvial) {
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(MystAPI.symbol.getSymbolForIdentifier(null), true);
+            this.arecipes.add(recipe);
+
             List<IAgeSymbol> recipes = MystAPI.symbol.getAllRegisteredSymbols();
 
             for (IAgeSymbol symbol : recipes) {
-                CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(symbol, false);
+                recipe = new CachedWritingDeskRecipe(symbol, false);
                 this.arecipes.add(recipe);
             }
         }
@@ -230,7 +239,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return ClientProxy.guiWritingDeskClass;
+        return NEIConfig.guiWritingDeskClass;
     }
 
     @Override
@@ -275,13 +284,24 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             currenttip.add(MystObjects.black_ink.getLocalizedName() + ": " + recipe.tank + "/1000");
         }
 
+        if (currenttip.isEmpty() && stack == null && new Rectangle(28, 70, 99, 14).contains(relMouse)) {
+            if (recipe.isNotebook) {
+                currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook.name"));
+            }
+            else {
+                if (recipe.symbol != null) {
+                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page.name"));
+                }
+            }
+        }
+
         if (currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
-            currenttip.add("Recipes");
+            currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
         }
 
         Point recipepos = gui.getRecipePosition(recipeId);
 
-        if (currenttip.isEmpty() && stack == null && new Rectangle(recipepos.x, recipepos.y, 166, 130).contains(relMouse)) {
+        if (currenttip.isEmpty() && stack == null && new Rectangle(recipepos.x, recipepos.y, 166, 80).contains(relMouse)) {
             if (recipe != null) {
                 if (recipe.isNotebook) {
                     currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook"));
