@@ -36,7 +36,10 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     //public static ConfigValue<Boolean> silentUpdates;
 
     @Override
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
+
         File file = new File(event.getModConfigurationDirectory(), "HeldCore");
 
         if (!file.exists()) {
@@ -52,10 +55,16 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     }
 
     @Override
-    public void init(FMLInitializationEvent event) {}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+    }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {}
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
+    }
 
     @Override
     public ModInfo getModInfo() {
@@ -65,26 +74,6 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     @Override
     public HeldCoreProxy getProxy() {
         return proxy;
-    }
-
-    // Silly FML
-
-    @Override
-    @EventHandler
-    public void basePreInit(FMLPreInitializationEvent event) {
-        super.basePreInit(event);
-    }
-
-    @Override
-    @EventHandler
-    public void baseInit(FMLInitializationEvent event) {
-        super.baseInit(event);
-    }
-
-    @Override
-    @EventHandler
-    public void basePostInit(FMLPostInitializationEvent event) {
-        super.basePostInit(event);
     }
 
 }
