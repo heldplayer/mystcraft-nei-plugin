@@ -38,8 +38,6 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
-
         File file = new File(event.getModConfigurationDirectory(), "HeldCore");
 
         if (!file.exists()) {
@@ -52,6 +50,8 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         //silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
         this.config = new Config(event.getSuggestedConfigurationFile());
         //this.config.addConfigKey(silentUpdates);
+
+        super.preInit(event);
     }
 
     @Override
