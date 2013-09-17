@@ -25,6 +25,10 @@ public class NEIConfig implements IConfigureNEI {
 
     @Override
     public void loadConfig() {
+        if (PluginNEIMystcraft.mystcraft == null) {
+            return;
+        }
+
         Integrator.initialize(PluginNEIMystcraft.mystcraft);
 
         NEIConfig.inkMixer = new InkMixerRecipeHandler();
