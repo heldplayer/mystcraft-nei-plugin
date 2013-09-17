@@ -22,13 +22,13 @@ public interface ITerrainFeatureLocator {
      *        The world object of the dimension
      * @param identifier
      *        The name of the location or element to locate
-     * @param i
+     * @param x
      *        Block coordinates
-     * @param j
+     * @param y
      *        Block coordinates
-     * @param k
+     * @param z
      *        Block coordinates
      * @return
      */
-    public abstract ChunkPosition locate(World world, String identifier, int i, int j, int k);
+    public abstract ChunkPosition locate(World world, String identifier, int x, int y, int z);
 }

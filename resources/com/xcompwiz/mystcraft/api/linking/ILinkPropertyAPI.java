@@ -1,6 +1,9 @@
 
 package com.xcompwiz.mystcraft.api.linking;
 
+import java.util.Collection;
+import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 
 import com.xcompwiz.mystcraft.api.internals.Color;
@@ -68,6 +71,22 @@ public interface ILinkPropertyAPI {
      */
     public void registerLinkProperty(String identifier, Color color);
 
+    /**
+     * Returns an unmodifiable collection of all registered link properties
+     * 
+     * @return An unmodifiable collection of the registered link properties
+     */
+    public Collection<String> getLinkProperties();
+
+    /**
+     * Retrieves the color associated with a link property flag
+     * 
+     * @param identifier
+     *        The link property
+     * @return The color associated with the link property
+     */
+    public Color getLinkPropertyColor(String identifier);
+
     /*
      * These functions are used for the ink mixing system.
      * When a link panel is crafted from a pool of ink, each effect in the ink
@@ -98,12 +117,16 @@ public interface ILinkPropertyAPI {
      */
 
     /**
-     * Used to add an effect probability to an item
+     * Used to add an effect probability to an item.
      * Note that this adds the effect along side any other effects already on
-     * the item
-     * The total probability of the effects on the item cannot exceed 1
+     * the item.
+     * If the item would already add this property, the probability for that
+     * property is increased by the amount passed.
+     * The total probability of the effects on the item cannot exceed 1.
      * When the item is added to the mixture the probabilities in the ink will
-     * scale to fit in the "free" portion of the probability
+     * scale to fit in the "free" portion of the probability.
+     * Properties bound to an itemstack override properties bound to ore
+     * dictionary names or item ids.
      * 
      * @param itemstack
      *        The itemstack to match (exactly). Will use a stackSize=1 copy.
@@ -115,12 +138,16 @@ public interface ILinkPropertyAPI {
     public void addPropertyToItem(ItemStack itemstack, String property, float probability);
 
     /**
-     * Used to add an effect probability to an item
+     * Used to add an effect probability to an item.
      * Note that this adds the effect along side any other effects already on
-     * the item
-     * The total probability of the effects on the item cannot exceed 1
+     * the item.
+     * If the item would already add this property, the probability for that
+     * property is increased by the amount passed.
+     * The total probability of the effects on the item cannot exceed 1.
      * When the item is added to the mixture the probabilities in the ink will
-     * scale to fit in the "free" portion of the probability
+     * scale to fit in the "free" portion of the probability.
+     * Properties bound to an ore dictionary name override properties bound to
+     * item ids.
      * 
      * @param name
      *        The ore dictionary name to match
@@ -132,12 +159,14 @@ public interface ILinkPropertyAPI {
     public void addPropertyToItem(String name, String property, float probability);
 
     /**
-     * Used to add an effect probability to an item
+     * Used to add an effect probability to an item.
      * Note that this adds the effect along side any other effects already on
-     * the item
-     * The total probability of the effects on the item cannot exceed 1
+     * the item.
+     * If the item would already add this property, the probability for that
+     * property is increased by the amount passed.
+     * The total probability of the effects on the item cannot exceed 1.
      * When the item is added to the mixture the probabilities in the ink will
-     * scale to fit in the "free" portion of the probability
+     * scale to fit in the "free" portion of the probability.
      * 
      * @param itemId
      *        The item id to match
@@ -147,4 +176,15 @@ public interface ILinkPropertyAPI {
      *        The probability strength of the property to add to the mixture
      */
     public void addPropertyToItem(int itemId, String property, float probability);
+
+    /**
+     * Retrieves the properties that an item will add if thrown into an ink
+     * mixer.
+     * 
+     * @param itemstack
+     *        The itemstack to use
+     * @return An unmodifiable map of the properties bound to an item or null if
+     *         no mappings are found
+     */
+    public Map<String, Float> getPropertiesForItem(ItemStack itemstack);
 }
