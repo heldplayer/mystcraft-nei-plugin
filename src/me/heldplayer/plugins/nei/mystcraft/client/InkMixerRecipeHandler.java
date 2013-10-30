@@ -41,7 +41,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
         public String[] modifiers;
         public ColorGradient gradient;
-        public long frame;
+        public int frame;
         private PositionedStack stack;
         private PositionedStack leftOver;
         private PositionedStack ingredient;
@@ -316,30 +316,24 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         GuiDraw.drawTexturedModalRect(0, 0, 5, 11, 166, 76);
     }
 
-    @Override
-    public void drawExtras(int recipeId) {
-        CachedInkMixerRecipe recipe = (CachedInkMixerRecipe) this.arecipes.get(recipeId);
-
-        if (recipe != null && recipe.gradient != null) {
-            Color color = recipe.gradient.getColor(recipe.frame);
-            MystAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
-        }
-    }
-
     private void renderTank(int left, int top, int width, int height, CachedInkMixerRecipe recipe) {
         GuiHelper.drawFluid(MystObjects.black_ink, left, top, width, height);
 
-        if (recipe != null && recipe.gradient != null) {
+        if (recipe != null && recipe.gradient != null && recipe.gradient.getColorCount() > 0) {
             recipe.frame++;
-            if (recipe.frame > recipe.gradient.getLength()) {
-                recipe.frame = 0;
-            }
-            Color color = recipe.gradient.getColor(recipe.frame);
+            Color color = recipe.gradient.getColor((float) recipe.frame / 300.0F);
             int iColor = color.asInt();
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
+
+            MystAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
         else {
+            int iColor = Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000;
+            Color color = new Color(iColor);
+
             GuiDraw.drawGradientRect(left, top, left + width, top + height, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000);
+
+            MystAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
     }
 
