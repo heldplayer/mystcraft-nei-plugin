@@ -42,8 +42,6 @@ import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
 
-    // TODO: Linking book crafting
-
     private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
