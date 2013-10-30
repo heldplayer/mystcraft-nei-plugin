@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 
 import com.xcompwiz.mystcraft.api.internals.Color;
+import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 
 /**
  * Provides functions for adding link properties
@@ -86,6 +87,17 @@ public interface ILinkPropertyAPI {
      * @return The color associated with the link property
      */
     public Color getLinkPropertyColor(String identifier);
+
+    /**
+     * Returns a gradient which cycles through the colors assigned to the
+     * properties with lengths based on the weight of each property
+     * 
+     * @param properties
+     *        The property map to use
+     * @return A gradient of indeterminate length which will cycle through the
+     *         properties by color
+     */
+    public ColorGradient getPropertiesGradient(Map<String, Float> properties);
 
     /*
      * These functions are used for the ink mixing system.

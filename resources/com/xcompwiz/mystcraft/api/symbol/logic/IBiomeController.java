@@ -9,8 +9,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 public interface IBiomeController {
     public abstract List<BiomeGenBase> getValidSpawnBiomes();
 
-    public abstract float getTemperatureAtHeight(float temp, int y);
-
     public abstract float[] getRainfallField(float af[], int x, int z, int x1, int z1);
 
     public abstract float[] getTemperatureField(float af[], int x, int z, int x1, int z1);

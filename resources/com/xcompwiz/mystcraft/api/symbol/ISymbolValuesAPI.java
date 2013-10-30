@@ -1,6 +1,8 @@
 
 package com.xcompwiz.mystcraft.api.symbol;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 
 /**
@@ -47,6 +49,21 @@ public interface ISymbolValuesAPI {
     public void setSymbolTradeItem(IAgeSymbol symbol, ItemStack itemstack);
 
     /**
+     * Can be used to set the items a villager will trade the symbol for.
+     * This version allows the setting of multiple trade items. Both items will
+     * be required for the trade.
+     * 
+     * @param symbol
+     *        The symbol the villager will trade
+     * @param itemstack
+     *        An instance of the first item that the villager wants to trade for
+     * @param secondary
+     *        An instance of the second item that the villager wants to trade
+     *        for
+     */
+    public void setSymbolTradeItems(IAgeSymbol symbol, ItemStack itemstack, ItemStack secondary);
+
+    /**
      * @param identifier
      *        The identifier of the symbol to use
      * @return The weight used when generating treasure and selecting pages for
@@ -64,11 +81,12 @@ public interface ISymbolValuesAPI {
     public boolean getSymbolIsTradable(String identifier);
 
     /**
-     * Returns the asking item in a trade
+     * Returns the asking item(s) in a trade
      * 
      * @param identifier
      *        The identifier of the symbol to use
-     * @return The item that the villager is willing to trade for
+     * @return The item(s) that the villager is willing to trade for as a list
+     *         (which is never more than two elements).
      */
-    public ItemStack getSymbolTradeItem(String identifier);
+    public List<ItemStack> getSymbolTradeItems(String identifier);
 }

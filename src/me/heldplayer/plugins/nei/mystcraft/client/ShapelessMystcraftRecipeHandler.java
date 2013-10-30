@@ -29,12 +29,12 @@ public class ShapelessMystcraftRecipeHandler extends ShapedRecipeHandler {
         public PositionedStack result;
 
         public CachedShapelessMystcraftRecipe() {
-            ingredients = new ArrayList<PositionedStack>();
+            this.ingredients = new ArrayList<PositionedStack>();
         }
 
         public CachedShapelessMystcraftRecipe(ItemStack output) {
             this();
-            setResult(output);
+            this.setResult(output);
         }
 
         public CachedShapelessMystcraftRecipe(Object[] input, ItemStack output) {
@@ -43,42 +43,43 @@ public class ShapelessMystcraftRecipeHandler extends ShapedRecipeHandler {
 
         public CachedShapelessMystcraftRecipe(List<?> input, ItemStack output) {
             this(output);
-            setIngredients(input);
+            this.setIngredients(input);
         }
 
         public void setIngredients(List<?> items) {
-            ingredients.clear();
+            this.ingredients.clear();
             for (int ingred = 0; ingred < items.size(); ingred++) {
-                PositionedStack stack = new PositionedStack(items.get(ingred), 25 + stackorder[ingred][0] * 18, 6 + stackorder[ingred][1] * 18);
+                PositionedStack stack = new PositionedStack(items.get(ingred), 25 + ShapelessMystcraftRecipeHandler.this.stackorder[ingred][0] * 18, 6 + ShapelessMystcraftRecipeHandler.this.stackorder[ingred][1] * 18);
                 stack.setMaxSize(1);
-                ingredients.add(stack);
+                this.ingredients.add(stack);
             }
         }
 
         public void setResult(ItemStack output) {
-            result = new PositionedStack(output, 119, 24);
+            this.result = new PositionedStack(output, 119, 24);
         }
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            return (ArrayList<PositionedStack>) getCycledIngredients(cycleticks / 20, ingredients);
+            return (ArrayList<PositionedStack>) this.getCycledIngredients(ShapelessMystcraftRecipeHandler.this.cycleticks / 20, this.ingredients);
         }
 
         @Override
         public PositionedStack getResult() {
-            return result;
+            return this.result;
         }
 
     }
 
+    @Override
     public String getRecipeName() {
         return StatCollector.translateToLocal("nei.mystcraft.recipe.shapeless");
     }
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (outputId.equals("crafting") && getClass() == ShapelessMystcraftRecipeHandler.class) {
-            addAllLinkbooks();
+        if (outputId.equals("crafting") && this.getClass() == ShapelessMystcraftRecipeHandler.class) {
+            this.addAllLinkbooks();
         }
         else {
             super.loadCraftingRecipes(outputId, results);
@@ -98,24 +99,24 @@ public class ShapelessMystcraftRecipeHandler extends ShapedRecipeHandler {
 
             NBTTagCompound compound = linkingbook.getTagCompound();
             if (compound == null) {
-                addAllLinkbooks();
+                this.addAllLinkbooks();
                 return;
             }
 
             if (!compound.hasKey("linkpanel")) {
-                addAllLinkbooks();
+                this.addAllLinkbooks();
                 return;
             }
             NBTTagCompound linkPanelCompound = compound.getCompoundTag("linkpanel");
 
             if (!linkPanelCompound.hasKey("properties")) {
-                addAllLinkbooks();
+                this.addAllLinkbooks();
                 return;
             }
             NBTTagList list = linkPanelCompound.getTagList("properties");
 
             if (list.tagCount() == 0) {
-                addAllLinkbooks();
+                this.addAllLinkbooks();
                 return;
             }
 
@@ -156,13 +157,13 @@ public class ShapelessMystcraftRecipeHandler extends ShapedRecipeHandler {
             NBTTagCompound linkPanelCompound = compound.getCompoundTag("linkpanel");
 
             if (!linkPanelCompound.hasKey("properties")) {
-                addAllLinkbooks();
+                this.addAllLinkbooks();
                 return;
             }
             NBTTagList list = linkPanelCompound.getTagList("properties");
 
             if (list.tagCount() == 0) {
-                addAllLinkbooks();
+                this.addAllLinkbooks();
                 return;
             }
 
@@ -181,7 +182,7 @@ public class ShapelessMystcraftRecipeHandler extends ShapedRecipeHandler {
 
     @Override
     public boolean isRecipe2x2(int recipe) {
-        return getIngredientStacks(recipe).size() <= 4;
+        return this.getIngredientStacks(recipe).size() <= 4;
     }
 
     @Override

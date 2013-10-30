@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
@@ -31,7 +30,6 @@ import codechicken.nei.api.API;
 
 import com.xcompwiz.mystcraft.api.MystAPI;
 import com.xcompwiz.mystcraft.api.MystObjects;
-import com.xcompwiz.mystcraft.api.internals.Color;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 
@@ -47,14 +45,10 @@ public class Integrator {
     // TODO: Linking book crafting
 
     private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
-    private static RMethod<Object, Color> getColorForPropertyMethod;
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
     private static Map itemId_bindings;
     private static List<ItemStack> allLinkpanels;
-
-    private static Color defaultColor = new Color(1.0F, 1.0F, 1.0F);
-    private static Color emptyColor = new Color(0.0F, 0.0F, 0.0F);
 
     /**
      * Initialize all NEI features for Mystcraft
@@ -303,7 +297,6 @@ public class Integrator {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
 
         getItemEffectsMethod = inkEffectsClass.getMethod("getItemEffects", ItemStack.class);
-        getColorForPropertyMethod = inkEffectsClass.getMethod("getColorForProperty", String.class);
 
         RField<Object, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
         itemstack_bindings = bindings.getStatic();
@@ -350,41 +343,7 @@ public class Integrator {
         try {
             properties = (Map<String, Float>) getItemEffectsMethod.callStatic(stack);
 
-            ColorGradient gradient = new ColorGradient();
-
-            long max = 300L;
-            int total = 0;
-
-            if (properties == null) {
-                return null;
-            }
-
-            for (Entry<String, Float> entry : properties.entrySet()) {
-                Color color = (Color) getColorForPropertyMethod.callStatic(entry.getKey());
-                if (entry.getKey().isEmpty()) {
-                    color = emptyColor;
-                }
-                if (entry.getValue().floatValue() >= 0.01F) {
-                    if (color == null) {
-                        color = defaultColor;
-                    }
-                    long interval = (long) (entry.getValue().floatValue() * (float) max);
-                    total = (int) (total + interval);
-                    if (interval > 100L) {
-                        gradient.pushColor(color, Long.valueOf(interval - 100L));
-                        interval = 100L;
-                    }
-                    gradient.pushColor(color, Long.valueOf(interval));
-                }
-            }
-            if (total < max - 1L) {
-                long interval = max - total;
-                if (interval > 100L) {
-                    gradient.pushColor(emptyColor, Long.valueOf(interval - 100L));
-                    interval = 100L;
-                }
-                gradient.pushColor(emptyColor, Long.valueOf(interval));
-            }
+            ColorGradient gradient = MystAPI.linkProperties.getPropertiesGradient(properties);
 
             String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
 

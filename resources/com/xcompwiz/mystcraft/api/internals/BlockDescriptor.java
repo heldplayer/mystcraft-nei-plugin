@@ -67,6 +67,12 @@ public final class BlockDescriptor {
      *        Whether it is valid or not
      */
     public void setUsable(BlockCategory key, boolean flag) {
+        if (key == null) {
+            return;
+        }
+        if (key == BlockCategory.ANY) {
+            return;
+        }
         this.useable.put(key.getName(), flag);
     }
 
