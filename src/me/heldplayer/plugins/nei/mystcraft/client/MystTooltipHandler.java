@@ -160,7 +160,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
             GuiRecipe guiRecipe = (GuiRecipe) gui;
 
             if (guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
-                Rectangle rect = new Rectangle(156, 45, 18, 34);
+                Rectangle rect = new Rectangle(151, 34, 18, 34);
 
                 if (rect.contains(relMouse)) {
                     if (button == 0) {

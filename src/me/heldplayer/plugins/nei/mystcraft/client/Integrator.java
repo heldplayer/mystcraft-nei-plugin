@@ -11,16 +11,20 @@ import java.util.logging.Level;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
+import me.heldplayer.util.HeldCore.crafting.ICraftingResultHandler;
+import me.heldplayer.util.HeldCore.crafting.IHeldCoreRecipe;
+import me.heldplayer.util.HeldCore.crafting.ShapelessHeldCoreRecipe;
 import me.heldplayer.util.HeldCore.reflection.RClass;
 import me.heldplayer.util.HeldCore.reflection.RField;
 import me.heldplayer.util.HeldCore.reflection.RMethod;
 import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -32,6 +36,8 @@ import com.xcompwiz.mystcraft.api.MystAPI;
 import com.xcompwiz.mystcraft.api.MystObjects;
 import com.xcompwiz.mystcraft.api.internals.ColorGradient;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Class used for integrating into Mystcraft
@@ -51,70 +57,80 @@ public class Integrator {
     /**
      * Initialize all NEI features for Mystcraft
      * 
-     * @param mystcraft
-     *        An instance of Mystcraft
      */
-    public static void initialize(Object mystcraft) {
-        if (mystcraft == null) {
-            Objects.log.log(Level.SEVERE, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
-            return;
-        }
+    public static void initialize() {
+        Objects.log.log(Level.FINE, "Initializing Mystcraft Integrator");
 
         try {
+            Objects.log.log(Level.FINE, "Hiding technical blocks from NEI");
             hideTechnicalBlocks();
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed hiding technical blocks from NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Adding decay types to NEI");
             addDecayTypes();
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding different kinds of decay to NEI", ex);
+            Objects.log.log(Level.SEVERE, "Failed adding decay types to NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Adding creative notebooks to NEI view");
             addCreativeNotebooks();
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding a creative notebook to NEI", ex);
+            Objects.log.log(Level.SEVERE, "Failed adding creative notebooks to NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Adding symbol pages to NEI view");
             addPages();
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding symbol pages to NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Adding link panels to NEI");
             addLinkPanels();
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Adding linking books to NEI");
             addLinkingbooks();
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding linking books to NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Adding item ranges to NEI");
             addItemRanges();
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed adding item ranges to NEI", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Getting methods and fields");
             getMethodsAndFields();
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields", ex);
         }
         try {
+            Objects.log.log(Level.FINE, "Getting GUI classes");
             NEIConfig.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
             NEIConfig.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
-            NEIConfig.recipeLinkingbookClass = (Class<? extends IRecipe>) Class.forName("com.xcompwiz.mystcraft.data.RecipeLinkingbook");
         }
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
+        }
+        try {
+            Objects.log.log(Level.FINE, "Adding 'fake' recipes");
+            addFakeRecipes();
+        }
+        catch (Throwable ex) {
+            Objects.log.log(Level.SEVERE, "Failed adding 'fake' recipes", ex);
         }
     }
 
@@ -341,6 +357,10 @@ public class Integrator {
         try {
             properties = (Map<String, Float>) getItemEffectsMethod.callStatic(stack);
 
+            if (properties == null) {
+                return null;
+            }
+
             ColorGradient gradient = MystAPI.linkProperties.getPropertiesGradient(properties);
 
             String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
@@ -394,6 +414,67 @@ public class Integrator {
         GuiHelper.drawTexturedModalRect((int) x, (int) y, (int) width, (int) height, z, 0.609375F, 0.0F, 0.7294117647058824F, 0.15625F);
 
         MystAPI.render.drawSymbol(x, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
+    }
+
+    private static void addFakeRecipes() {
+        ICraftingResultHandler handler = new ICraftingResultHandler() {
+            @Override
+            public ItemStack getOutput(IHeldCoreRecipe recipe, List<ItemStack> input) {
+                ItemStack result = recipe.getOutput();
+
+                for (ItemStack stack : input) {
+                    if (stack != null && stack.getItem() == MystObjects.page) {
+                        if (stack.stackTagCompound != null) {
+                            result.stackTagCompound = stack.stackTagCompound;
+                            break;
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            @Override
+            public String getOwningModName() {
+                return "Mystcraft";
+            }
+
+            @Override
+            public String getOwningModId() {
+                return "Mystcraft";
+            }
+
+            @Override
+            public boolean isValidRecipeInput(ItemStack input) {
+                if (input != null && input.getItem() == MystObjects.page) {
+                    if (input.stackTagCompound == null) {
+                        return false;
+                    }
+
+                    NBTTagCompound tag = input.stackTagCompound;
+                    if (!tag.hasKey("linkpanel")) {
+                        return false;
+                    }
+
+                    return true;
+                }
+                return true;
+            }
+
+            @Override
+            public String getNEIOverlayText() {
+                return StatCollector.translateToLocal("nei.mystcraft.linkbook.activate");
+            }
+        };
+
+        List<ItemStack> linkPanels = getAllLinkpanels();
+
+        ItemStack[] stacks = new ItemStack[linkPanels.size()];
+        stacks = linkPanels.toArray(stacks);
+
+        ShapelessHeldCoreRecipe recipe = new ShapelessHeldCoreRecipe(handler, new ItemStack(MystObjects.linkbook_unlinked), stacks, new ItemStack(Item.leather));
+
+        GameRegistry.addRecipe(recipe);
     }
 
 }
