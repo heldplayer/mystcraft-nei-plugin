@@ -146,6 +146,8 @@ public interface IGrammarAPI {
     public static final String BLOCK_SEA = BlockCategory.SEA.getGrammarBinding();
     /** Generates a Block Modifier which is a valid Fluid Block */
     public static final String BLOCK_FLUID = BlockCategory.FLUID.getGrammarBinding();
+    /** Generates a Block Modifier which is a valid Fluid Block */
+    public static final String BLOCK_GAS = BlockCategory.GAS.getGrammarBinding();
     /** Generates a Block Modifier */
     public static final String BLOCK_ANY = BlockCategory.ANY.getGrammarBinding();
 }

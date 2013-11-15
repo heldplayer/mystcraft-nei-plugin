@@ -35,8 +35,10 @@ public final class BlockCategory {
     public static final BlockCategory CRYSTAL = new BlockCategory("BlockCrystal");
     /** Valid Sea blocks may be used in terrain gen as the ocean blocks */
     public static final BlockCategory SEA = new BlockCategory("BlockSea");
-    /** Valid Fluid blocks are fluids (not solid of air) */
+    /** Valid Fluid blocks are fluids (not solid or air) */
     public static final BlockCategory FLUID = new BlockCategory("BlockFluid");
+    /** Valid Fluid blocks are fluids (not solid or air) */
+    public static final BlockCategory GAS = new BlockCategory("BlockGas");
     /** All block modifiers satisfy this */
     public static final BlockCategory ANY = new BlockCategory("BlockAny");
 

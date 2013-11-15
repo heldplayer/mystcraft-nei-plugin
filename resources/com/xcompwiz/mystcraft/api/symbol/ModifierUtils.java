@@ -142,8 +142,8 @@ public final class ModifierUtils {
 
     /**
      * Provides a block of a particular generation category if one is in the
-     * queue Will pop the first block satisfying the generation category found
-     * from the top of the queue
+     * queue. This will pop the first block satisfying the generation category
+     * found from the top of the queue
      * 
      * @param controller
      *        The controller passed to the symbol during logic
@@ -153,7 +153,25 @@ public final class ModifierUtils {
      * @return A block descriptor, if one satisfying the category is found.
      *         Otherwise null
      */
+    @Deprecated
     public static BlockDescriptor popBlockOfType(IAgeController controller, BlockCategory type) {
+        return popBlockMatching(controller, type);
+    }
+
+    /**
+     * Provides the first block which matches any of the given generation
+     * categories if one is in the queue. This will pop the block from the top
+     * of the queue.
+     * 
+     * @param controller
+     *        The controller passed to the symbol during logic
+     *        registration
+     * @param types
+     *        The generation categories to match against
+     * @return A block descriptor, if one satisfying the category is found.
+     *         Otherwise null
+     */
+    public static BlockDescriptor popBlockMatching(IAgeController controller, BlockCategory... types) {
         Modifier modifier = controller.popModifier("blocklist");
         List<BlockDescriptor> list = modifier.asList();
         if (list == null) {
@@ -162,10 +180,12 @@ public final class ModifierUtils {
         controller.setModifier("blocklist", modifier);
         for (int i = 0; i < list.size(); ++i) {
             BlockDescriptor block = list.get(i);
-            if (block.isUsable(type)) {
-                list.remove(i);
-                modifier.dangling -= dangling_block;
-                return block;
+            for (BlockCategory type : types) {
+                if (block.isUsable(type)) {
+                    list.remove(i);
+                    modifier.dangling -= dangling_block;
+                    return block;
+                }
             }
         }
         return null;
