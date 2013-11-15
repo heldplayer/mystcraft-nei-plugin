@@ -10,6 +10,7 @@ import java.util.logging.Level;
 
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.util.HeldCore.client.GuiHelper;
 import me.heldplayer.util.HeldCore.crafting.ICraftingResultHandler;
 import me.heldplayer.util.HeldCore.crafting.IHeldCoreRecipe;
@@ -61,55 +62,92 @@ public class Integrator {
     public static void initialize() {
         Objects.log.log(Level.FINE, "Initializing Mystcraft Integrator");
 
+        if (PluginNEIMystcraft.hideTechnicalBlocks.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Hiding technical blocks from NEI");
+                hideTechnicalBlocks();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed hiding technical blocks from NEI", ex);
+            }
+        }
+
+        if (PluginNEIMystcraft.addDecaySubTypes.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding decay types to NEI");
+                addDecayTypes();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding decay types to NEI", ex);
+            }
+        }
+
+        if (PluginNEIMystcraft.addCreativeNotebooks.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding creative notebooks to NEI view");
+                addCreativeNotebooks();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding creative notebooks to NEI", ex);
+            }
+        }
+
         try {
-            Objects.log.log(Level.FINE, "Hiding technical blocks from NEI");
-            hideTechnicalBlocks();
+            Objects.log.log(Level.FINE, "Adding empty page to NEI");
+            addEmptyPage();
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed hiding technical blocks from NEI", ex);
+            Objects.log.log(Level.SEVERE, "Failed adding empty page to NEI", ex);
         }
+
+        if (PluginNEIMystcraft.addSymbolPages.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding symbol pages to NEI view");
+                addPages();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding symbol pages to NEI", ex);
+            }
+        }
+
         try {
-            Objects.log.log(Level.FINE, "Adding decay types to NEI");
-            addDecayTypes();
+            Objects.log.log(Level.FINE, "Getting all link panels");
+            prepareLinkPanels();
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding decay types to NEI", ex);
+            Objects.log.log(Level.SEVERE, "Failed getting all link panels", ex);
         }
-        try {
-            Objects.log.log(Level.FINE, "Adding creative notebooks to NEI view");
-            addCreativeNotebooks();
+
+        if (PluginNEIMystcraft.addLinkPanels.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding link panels to NEI");
+                addLinkPanels();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI", ex);
+            }
         }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding creative notebooks to NEI", ex);
+
+        if (PluginNEIMystcraft.addLinkingBooks.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding linking books to NEI");
+                addLinkingbooks();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding linking books to NEI", ex);
+            }
         }
-        try {
-            Objects.log.log(Level.FINE, "Adding symbol pages to NEI view");
-            addPages();
+
+        if (PluginNEIMystcraft.addItemRanges.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding item ranges to NEI");
+                addItemRanges();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding item ranges to NEI", ex);
+            }
         }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding symbol pages to NEI", ex);
-        }
-        try {
-            Objects.log.log(Level.FINE, "Adding link panels to NEI");
-            addLinkPanels();
-        }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI", ex);
-        }
-        try {
-            Objects.log.log(Level.FINE, "Adding linking books to NEI");
-            addLinkingbooks();
-        }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding linking books to NEI", ex);
-        }
-        try {
-            Objects.log.log(Level.FINE, "Adding item ranges to NEI");
-            addItemRanges();
-        }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding item ranges to NEI", ex);
-        }
+
         try {
             Objects.log.log(Level.FINE, "Getting methods and fields");
             getMethodsAndFields();
@@ -117,6 +155,7 @@ public class Integrator {
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting methods and fields", ex);
         }
+
         try {
             Objects.log.log(Level.FINE, "Getting GUI classes");
             NEIConfig.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
@@ -125,12 +164,15 @@ public class Integrator {
         catch (Throwable ex) {
             Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
         }
-        try {
-            Objects.log.log(Level.FINE, "Adding 'fake' recipes");
-            addFakeRecipes();
-        }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding 'fake' recipes", ex);
+
+        if (PluginNEIMystcraft.showRecipeForLinkbooks.getValue()) {
+            try {
+                Objects.log.log(Level.FINE, "Adding 'fake' recipes");
+                addFakeRecipes();
+            }
+            catch (Throwable ex) {
+                Objects.log.log(Level.SEVERE, "Failed adding 'fake' recipes", ex);
+            }
         }
     }
 
@@ -179,17 +221,18 @@ public class Integrator {
         }
     }
 
+    private static void addEmptyPage() throws Throwable {
+        ItemStack page = new ItemStack(MystObjects.page, 1, 0);
+
+        API.addNBTItem(page);
+    }
+
     /**
      * Add all pages to NEI
      * 
      * @throws Throwable
      */
     private static void addPages() throws Throwable {
-        ItemStack page = new ItemStack(MystObjects.page, 1, 0);
-
-        // Add a standard, empty page first!
-        API.addNBTItem(page);
-
         // Add all the pages for all the symbols
         List<IAgeSymbol> allSymbols = MystAPI.symbol.getAllRegisteredSymbols();
 
@@ -198,16 +241,9 @@ public class Integrator {
         }
     }
 
-    /**
-     * Add all link panels to NEI
-     * 
-     * @throws Throwable
-     */
-    private static void addLinkPanels() throws Throwable {
+    private static void prepareLinkPanels() throws Throwable {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
         RField<Object, HashMap> colormapField = inkEffectsClass.getField("colormap");
-
-        // Empty pages don't get added again, as this is already done in addPages()
 
         // Add all modifiers known to have a colour, this includes mod added modifiers
         HashMap colormap = colormapField.getStatic();
@@ -241,9 +277,18 @@ public class Integrator {
 
             is.setTagCompound(compound);
 
-            API.addNBTItem(is);
-
             allLinkpanels.add(is);
+        }
+    }
+
+    /**
+     * Add all link panels to NEI
+     * 
+     * @throws Throwable
+     */
+    private static void addLinkPanels() throws Throwable {
+        for (ItemStack stack : allLinkpanels) {
+            API.addNBTItem(stack);
         }
     }
 
@@ -278,6 +323,8 @@ public class Integrator {
 
         mystBlocks.add(MystObjects.link_modifer);
 
+        API.addSetRange("Mystcraft.Blocks", mystBlocks);
+
         MultiItemRange mystItems = new MultiItemRange();
 
         mystItems.add(MystObjects.writing_desk);
@@ -285,20 +332,37 @@ public class Integrator {
         mystItems.add(MystObjects.linkbook);
         mystItems.add(MystObjects.inkvial);
 
-        MultiItemRange mystPages = new MultiItemRange();
-        mystPages.add(MystObjects.page);
+        if (PluginNEIMystcraft.addSymbolPages.getValue() || PluginNEIMystcraft.addLinkPanels.getValue()) {
+            MultiItemRange mystPages = new MultiItemRange();
+            mystPages.add(MystObjects.page);
 
-        MultiItemRange mystNotebooks = new MultiItemRange();
-        mystNotebooks.add(MystObjects.notebook);
+            API.addSetRange("Mystcraft.Items.Pages", mystPages);
+        }
+        else {
+            mystItems.add(MystObjects.page);
+        }
 
-        MultiItemRange mystLinkbooks = new MultiItemRange();
-        mystLinkbooks.add(MystObjects.linkbook_unlinked);
+        if (PluginNEIMystcraft.addCreativeNotebooks.getValue()) {
+            MultiItemRange mystNotebooks = new MultiItemRange();
+            mystNotebooks.add(MystObjects.notebook);
 
-        API.addSetRange("Mystcraft.Blocks", mystBlocks);
+            API.addSetRange("Mystcraft.Items.Notebooks", mystNotebooks);
+        }
+        else {
+            mystItems.add(MystObjects.notebook);
+        }
+
+        if (PluginNEIMystcraft.addLinkingBooks.getValue()) {
+            MultiItemRange mystLinkbooks = new MultiItemRange();
+            mystLinkbooks.add(MystObjects.linkbook_unlinked);
+
+            API.addSetRange("Mystcraft.Items.Linking Books", mystLinkbooks);
+        }
+        else {
+            mystItems.add(MystObjects.linkbook_unlinked);
+        }
+
         API.addSetRange("Mystcraft.Items", mystItems);
-        API.addSetRange("Mystcraft.Items.Pages", mystPages);
-        API.addSetRange("Mystcraft.Items.Notebooks", mystNotebooks);
-        API.addSetRange("Mystcraft.Items.Linking Books", mystLinkbooks);
     }
 
     /**

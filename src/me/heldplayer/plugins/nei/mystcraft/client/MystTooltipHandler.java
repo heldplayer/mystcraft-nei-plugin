@@ -18,9 +18,19 @@ import codechicken.nei.recipe.GuiUsageRecipe;
 
 public class MystTooltipHandler implements IContainerInputHandler, IContainerTooltipHandler {
 
+    private boolean recipes;
+    private boolean recipesWritingDesk;
+    private boolean recipesInkMixer;
+
+    public MystTooltipHandler(boolean recipes, boolean recipesWritingDesk, boolean recipesInkMixer) {
+        this.recipes = recipes;
+        this.recipesWritingDesk = recipesWritingDesk;
+        this.recipesInkMixer = recipesInkMixer;
+    }
+
     @Override
     public List<String> handleTooltipFirst(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
-        if (NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
+        if (this.recipes && this.recipesWritingDesk && NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -30,7 +40,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
             }
         }
-        else if (NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
+        else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -52,13 +62,13 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
             GuiRecipe guiRecipe = (GuiRecipe) gui;
 
             if (currenttip.isEmpty() && gui.manager.shouldShowTooltip()) {
-                if (guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
+                if (this.recipes && this.recipesWritingDesk && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
                     Rectangle rect = new Rectangle(151, 34, 18, 34);
                     if (rect.contains(relMouse)) {
                         currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
                     }
                 }
-                else if (guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof InkMixerRecipeHandler) {
+                else if (this.recipes && this.recipesInkMixer && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof InkMixerRecipeHandler) {
                     Point center = new Point(87, 49);
                     if (center.distance(relMouse) < 34.0D) {
                         currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
@@ -71,7 +81,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
 
     @Override
     public boolean keyTyped(GuiContainer gui, char keyChar, int keyCode) {
-        if (NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
+        if (this.recipes && this.recipesWritingDesk && NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -88,7 +98,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 }
             }
         }
-        else if (NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
+        else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -119,7 +129,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
 
     @Override
     public boolean mouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
-        if (NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
+        if (this.recipes && this.recipesWritingDesk && NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -136,7 +146,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 }
             }
         }
-        else if (NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
+        else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -159,7 +169,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
 
             GuiRecipe guiRecipe = (GuiRecipe) gui;
 
-            if (guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
+            if (this.recipesWritingDesk && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
                 Rectangle rect = new Rectangle(151, 34, 18, 34);
 
                 if (rect.contains(relMouse)) {

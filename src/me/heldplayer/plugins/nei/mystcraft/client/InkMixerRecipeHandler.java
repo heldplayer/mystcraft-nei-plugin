@@ -358,6 +358,10 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
+        if (!NEIConfig.tooltipsInkMixer) {
+            return currenttip;
+        }
+
         currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
 
         Point mousepos = GuiDraw.getMousePosition();

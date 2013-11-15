@@ -20,6 +20,8 @@ public class NEIConfig implements IConfigureNEI {
     public static Class<? extends GuiContainer> guiWritingDeskClass;
 
     public static MystTooltipHandler tooltipHandler;
+    public static boolean tooltipsWritingDesk;
+    public static boolean tooltipsInkMixer;
 
     @Override
     public void loadConfig() {
@@ -32,33 +34,47 @@ public class NEIConfig implements IConfigureNEI {
 
         Integrator.initialize();
 
-        Objects.log.log(Level.FINE, "Adding Ink Mixer recipe handler");
+        tooltipsInkMixer = PluginNEIMystcraft.addInkMixerRecipes.getValue();
 
-        NEIConfig.inkMixer = new InkMixerRecipeHandler();
-        API.registerRecipeHandler(NEIConfig.inkMixer);
-        API.registerUsageHandler(NEIConfig.inkMixer);
+        if (tooltipsInkMixer) {
+            tooltipsInkMixer = PluginNEIMystcraft.addInkMixerTooltips.getValue();
 
-        Objects.log.log(Level.FINE, "Registering GUI overlay for Ink Mixer");
+            Objects.log.log(Level.FINE, "Adding Ink Mixer recipe handler");
 
-        API.registerGuiOverlay(NEIConfig.guiInkMixerClass, "inkmixer");
-        API.registerGuiOverlayHandler(NEIConfig.guiInkMixerClass, new DefaultOverlayHandler(), "inkmixer");
+            NEIConfig.inkMixer = new InkMixerRecipeHandler();
+            API.registerRecipeHandler(NEIConfig.inkMixer);
+            API.registerUsageHandler(NEIConfig.inkMixer);
 
-        Objects.log.log(Level.FINE, "Adding Writing Desk recipe handler");
+            Objects.log.log(Level.FINE, "Registering GUI overlay for Ink Mixer");
 
-        NEIConfig.writingDesk = new WritingDeskRecipeHandler();
-        API.registerRecipeHandler(NEIConfig.writingDesk);
-        API.registerUsageHandler(NEIConfig.writingDesk);
+            API.registerGuiOverlay(NEIConfig.guiInkMixerClass, "inkmixer");
+            API.registerGuiOverlayHandler(NEIConfig.guiInkMixerClass, new DefaultOverlayHandler(), "inkmixer");
+        }
 
-        Objects.log.log(Level.FINE, "Registering GUI overlay for Writing Desk");
+        tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskRecipes.getValue();
 
-        API.registerGuiOverlay(NEIConfig.guiWritingDeskClass, "writingdesk");
-        API.registerGuiOverlayHandler(NEIConfig.guiWritingDeskClass, new DefaultOverlayHandler(), "writingdesk");
+        if (tooltipsWritingDesk) {
+            tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskTooltips.getValue();
 
-        Objects.log.log(Level.FINE, "Registering tooltip handler");
+            Objects.log.log(Level.FINE, "Adding Writing Desk recipe handler");
 
-        NEIConfig.tooltipHandler = new MystTooltipHandler();
-        GuiContainerManager.addTooltipHandler(NEIConfig.tooltipHandler);
-        GuiContainerManager.addInputHandler(NEIConfig.tooltipHandler);
+            NEIConfig.writingDesk = new WritingDeskRecipeHandler();
+            API.registerRecipeHandler(NEIConfig.writingDesk);
+            API.registerUsageHandler(NEIConfig.writingDesk);
+
+            Objects.log.log(Level.FINE, "Registering GUI overlay for Writing Desk");
+
+            API.registerGuiOverlay(NEIConfig.guiWritingDeskClass, "writingdesk");
+            API.registerGuiOverlayHandler(NEIConfig.guiWritingDeskClass, new DefaultOverlayHandler(), "writingdesk");
+        }
+
+        if (tooltipsInkMixer || tooltipsWritingDesk) {
+            Objects.log.log(Level.FINE, "Registering tooltip handler");
+
+            NEIConfig.tooltipHandler = new MystTooltipHandler(PluginNEIMystcraft.addRecipesTooltips.getValue(), tooltipsWritingDesk, tooltipsInkMixer);
+            GuiContainerManager.addTooltipHandler(NEIConfig.tooltipHandler);
+            GuiContainerManager.addInputHandler(NEIConfig.tooltipHandler);
+        }
     }
 
     @Override

@@ -7,6 +7,8 @@ import me.heldplayer.util.HeldCore.HeldCoreMod;
 import me.heldplayer.util.HeldCore.HeldCoreProxy;
 import me.heldplayer.util.HeldCore.ModInfo;
 import me.heldplayer.util.HeldCore.config.Config;
+import me.heldplayer.util.HeldCore.config.ConfigValue;
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -14,6 +16,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * Main mod class
@@ -32,8 +35,22 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     @Instance("Mystcraft")
     public static Object mystcraft;
 
-    // HeldCore Objects
-    //public static ConfigValue<Boolean> silentUpdates;
+    //// HeldCore Objects
+    // Integrator references
+    public static ConfigValue<Boolean> hideTechnicalBlocks;
+    public static ConfigValue<Boolean> addDecaySubTypes;
+    public static ConfigValue<Boolean> addCreativeNotebooks;
+    public static ConfigValue<Boolean> addSymbolPages;
+    public static ConfigValue<Boolean> addLinkPanels;
+    public static ConfigValue<Boolean> addLinkingBooks;
+    public static ConfigValue<Boolean> addItemRanges;
+    public static ConfigValue<Boolean> showRecipeForLinkbooks;
+    // NEI Config references
+    public static ConfigValue<Boolean> addInkMixerRecipes;
+    public static ConfigValue<Boolean> addWritingDeskRecipes;
+    public static ConfigValue<Boolean> addInkMixerTooltips;
+    public static ConfigValue<Boolean> addWritingDeskTooltips;
+    public static ConfigValue<Boolean> addRecipesTooltips;
 
     @Override
     @EventHandler
@@ -47,9 +64,33 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         Objects.log = event.getModLog();
 
         // Config
-        //silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
+        hideTechnicalBlocks = new ConfigValue<Boolean>("hideTechnicalBlocks", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should technical blocks be hidden?");
+        addDecaySubTypes = new ConfigValue<Boolean>("addDecaySubTypes", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should all decay types be visible in NEI?");
+        addCreativeNotebooks = new ConfigValue<Boolean>("addCreativeNotebooks", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should creative notebooks be added to NEI?");
+        addSymbolPages = new ConfigValue<Boolean>("addSymbolPages", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should symbol pages be added to NEI?");
+        addLinkPanels = new ConfigValue<Boolean>("addLinkPanels", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should link panels be added to NEI?");
+        addLinkingBooks = new ConfigValue<Boolean>("addLinkingBooks", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should unlinked linking books be added to NEI?");
+        addItemRanges = new ConfigValue<Boolean>("addItemRanges", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should item ranges be added to NEI?");
+        showRecipeForLinkbooks = new ConfigValue<Boolean>("showRecipeForLinkbooks", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should the recipe for linking books be added to NEI?");
+        addInkMixerRecipes = new ConfigValue<Boolean>("addInkMixerRecipes", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should ink mixer recipes be added to NEI?");
+        addWritingDeskRecipes = new ConfigValue<Boolean>("addWritingDeskRecipes", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should writing desk recipes be added to NEI?");
+        addInkMixerTooltips = new ConfigValue<Boolean>("addInkMixerTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Ink Mixer?");
+        addWritingDeskTooltips = new ConfigValue<Boolean>("addWritingDeskTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Writing Desk?");
+        addRecipesTooltips = new ConfigValue<Boolean>("addRecipesTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be clickable regions to show all recipes in a crafting station?");
         this.config = new Config(event.getSuggestedConfigurationFile());
-        //this.config.addConfigKey(silentUpdates);
+        this.config.addConfigKey(hideTechnicalBlocks);
+        this.config.addConfigKey(addDecaySubTypes);
+        this.config.addConfigKey(addCreativeNotebooks);
+        this.config.addConfigKey(addSymbolPages);
+        this.config.addConfigKey(addLinkPanels);
+        this.config.addConfigKey(addLinkingBooks);
+        this.config.addConfigKey(addItemRanges);
+        this.config.addConfigKey(showRecipeForLinkbooks);
+        this.config.addConfigKey(addInkMixerRecipes);
+        this.config.addConfigKey(addWritingDeskRecipes);
+        this.config.addConfigKey(addInkMixerTooltips);
+        this.config.addConfigKey(addWritingDeskTooltips);
+        this.config.addConfigKey(addRecipesTooltips);
 
         super.preInit(event);
     }
