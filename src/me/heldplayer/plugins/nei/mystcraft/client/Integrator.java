@@ -54,6 +54,9 @@ public class Integrator {
     private static Map oredict_bindings;
     private static Map itemId_bindings;
     private static List<ItemStack> allLinkpanels;
+    private static HashMap<String, List<?>> grammarMappingsRaw;
+    private static List<GrammarMapping> grammarMappings;
+    private static HashMap<String, List<GrammarMapping>> grammarMappingsMapped;
 
     /**
      * Initialize all NEI features for Mystcraft
@@ -173,6 +176,14 @@ public class Integrator {
             catch (Throwable ex) {
                 Objects.log.log(Level.SEVERE, "Failed adding 'fake' recipes", ex);
             }
+        }
+
+        try {
+            Objects.log.log(Level.FINE, "Parsing grammar rules");
+            parseGrammarRules();
+        }
+        catch (Throwable ex) {
+            Objects.log.log(Level.SEVERE, "Failed parsing grammar rules", ex);
         }
     }
 
@@ -384,6 +395,12 @@ public class Integrator {
 
         bindings = inkEffectsClass.getField("itemId_bindings");
         itemId_bindings = bindings.getStatic();
+
+        RClass<?> grammarGenerator = new RClass<>(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator"));
+
+        RField<?, HashMap<String, List<?>>> mappings = grammarGenerator.getField("mappings");
+
+        grammarMappingsRaw = mappings.get(null);
     }
 
     /**
@@ -539,6 +556,27 @@ public class Integrator {
         ShapelessHeldCoreRecipe recipe = new ShapelessHeldCoreRecipe(handler, new ItemStack(MystObjects.linkbook_unlinked), stacks, new ItemStack(Item.leather));
 
         GameRegistry.addRecipe(recipe);
+    }
+
+    private static void parseGrammarRules() throws Throwable {
+        RClass<?> Rule = new RClass<>(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator$Rule"));
+        RField values = Rule.getField("values");
+        RField rarity = Rule.getField("rarity");
+
+        grammarMappings = new ArrayList<GrammarMapping>();
+        grammarMappingsMapped = new HashMap<String, List<GrammarMapping>>();
+
+        for (String key : grammarMappingsRaw.keySet()) {
+            List<?> rules = grammarMappingsRaw.get(key);
+            List<GrammarMapping> mappings = new ArrayList<GrammarMapping>();
+            grammarMappingsMapped.put(key, mappings);
+
+            for (Object rule : rules) {
+                GrammarMapping mapping = new GrammarMapping(key, (List<String>) values.get(rule), (float) rarity.get(rule));
+                grammarMappings.add(mapping);
+                mappings.add(mapping);
+            }
+        }
     }
 
 }
