@@ -236,8 +236,32 @@ public class BooksRecipeHandler extends TemplateRecipeHandler {
             }
 
             recipe.scroll();
+        }
 
-            currenttip.add("Scrolling...");
+        int i = Mouse.getDWheel();
+
+        if (i != 0) {
+            int j = recipe.stacks.size() / 8 - 6 + 1;
+
+            if (i > 0) {
+                i = 1;
+            }
+
+            if (i < 0) {
+                i = -1;
+            }
+
+            recipe.currentScroll = (float) ((double) recipe.currentScroll - (double) i / (double) j);
+
+            if (recipe.currentScroll < 0.0F) {
+                recipe.currentScroll = 0.0F;
+            }
+
+            if (recipe.currentScroll > 1.0F) {
+                recipe.currentScroll = 1.0F;
+            }
+
+            recipe.scroll();
         }
 
         return super.handleTooltip(gui, currenttip, recipeId);
