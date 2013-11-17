@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.WorldProvider;
 
 import org.lwjgl.opengl.GL11;
 
@@ -50,11 +51,17 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class Integrator {
 
     private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
+    private static RField<Object, Object> agedataField;
+    private static RField<Object, List<String>> symbolsField;
+    private static RField<Object, List<ItemStack>> pagesField;
+    private static Class worldProviderMystClass;
+
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
     private static Map itemId_bindings;
+    private static HashMap<String, List> grammarMappingsRaw;
+
     private static List<ItemStack> allLinkpanels;
-    private static HashMap<String, List<?>> grammarMappingsRaw;
     private static List<GrammarMapping> grammarMappings;
     private static HashMap<String, List<GrammarMapping>> grammarMappingsMapped;
 
@@ -178,6 +185,7 @@ public class Integrator {
             }
         }
 
+        // TODO: Config setting?
         try {
             Objects.log.log(Level.FINE, "Parsing grammar rules");
             parseGrammarRules();
@@ -396,11 +404,16 @@ public class Integrator {
         bindings = inkEffectsClass.getField("itemId_bindings");
         itemId_bindings = bindings.getStatic();
 
-        RClass<?> grammarGenerator = new RClass<>(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator"));
+        RClass<Object> grammarGeneratorClass = new RClass(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator"));
+        RField<Object, HashMap<String, List>> mappingsField = grammarGeneratorClass.getField("mappings");
+        grammarMappingsRaw = mappingsField.get(null);
 
-        RField<?, HashMap<String, List<?>>> mappings = grammarGenerator.getField("mappings");
+        RClass<Object> worldProviderMystClass = new RClass(Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst"));
+        agedataField = worldProviderMystClass.getField("agedata");
 
-        grammarMappingsRaw = mappings.get(null);
+        RClass<Object> ageDataClass = new RClass(Class.forName("com.xcompwiz.mystcraft.world.agedata.AgeData"));
+        symbolsField = ageDataClass.getField("symbols");
+        pagesField = ageDataClass.getField("pages");
     }
 
     /**
@@ -577,6 +590,26 @@ public class Integrator {
                 mappings.add(mapping);
             }
         }
+    }
+
+    public static List<String> getAgeSymbols(WorldProvider provider) {
+        if (!worldProviderMystClass.isAssignableFrom(provider.getClass())) {
+            return null;
+        }
+
+        Object ageData = agedataField.get(provider);
+
+        return symbolsField.get(ageData);
+    }
+
+    public static List<ItemStack> getAgePages(WorldProvider provider) {
+        if (!worldProviderMystClass.isAssignableFrom(provider.getClass())) {
+            return null;
+        }
+
+        Object ageData = agedataField.get(provider);
+
+        return pagesField.get(ageData);
     }
 
 }

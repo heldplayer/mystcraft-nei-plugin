@@ -19,6 +19,8 @@ public class NEIConfig implements IConfigureNEI {
     public static WritingDeskRecipeHandler writingDesk;
     public static Class<? extends GuiContainer> guiWritingDeskClass;
 
+    public static BooksRecipeHandler books;
+
     public static MystTooltipHandler tooltipHandler;
     public static boolean tooltipsWritingDesk;
     public static boolean tooltipsInkMixer;
@@ -37,9 +39,9 @@ public class NEIConfig implements IConfigureNEI {
         tooltipsInkMixer = PluginNEIMystcraft.addInkMixerRecipes.getValue();
 
         if (tooltipsInkMixer) {
-            tooltipsInkMixer = PluginNEIMystcraft.addInkMixerTooltips.getValue();
-
             Objects.log.log(Level.FINE, "Adding Ink Mixer recipe handler");
+
+            tooltipsInkMixer = PluginNEIMystcraft.addInkMixerTooltips.getValue();
 
             NEIConfig.inkMixer = new InkMixerRecipeHandler();
             API.registerRecipeHandler(NEIConfig.inkMixer);
@@ -54,9 +56,9 @@ public class NEIConfig implements IConfigureNEI {
         tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskRecipes.getValue();
 
         if (tooltipsWritingDesk) {
-            tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskTooltips.getValue();
-
             Objects.log.log(Level.FINE, "Adding Writing Desk recipe handler");
+
+            tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskTooltips.getValue();
 
             NEIConfig.writingDesk = new WritingDeskRecipeHandler();
             API.registerRecipeHandler(NEIConfig.writingDesk);
@@ -75,6 +77,11 @@ public class NEIConfig implements IConfigureNEI {
             GuiContainerManager.addTooltipHandler(NEIConfig.tooltipHandler);
             GuiContainerManager.addInputHandler(NEIConfig.tooltipHandler);
         }
+
+        // TODO: add config option
+        NEIConfig.books = new BooksRecipeHandler();
+        API.registerRecipeHandler(NEIConfig.books);
+        API.registerUsageHandler(NEIConfig.books);
     }
 
     @Override

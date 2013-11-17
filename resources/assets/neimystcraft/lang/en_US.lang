@@ -6,8 +6,9 @@ nei.mystcraft.writingdesk.notebook.name=Rename the notebook using the textfield
 
 nei.mystcraft.inkmixer.drop=Drop items in the ink well to add effects
 
-nei.mystcraft.recipe.shapeless=Mystcraft Shapeless
-nei.mystcraft.recipe.shaped=Mystcraft Shaped
+nei.mystcraft.recipe.ages=Mystcraft Ages
+nei.mystcraft.recipe.ages.modes.0=Pages
+nei.mystcraft.recipe.ages.modes.1=Symbols
 
 nei.mystcraft.linkbook.activate=Right click with the book in hand to create a link
 
