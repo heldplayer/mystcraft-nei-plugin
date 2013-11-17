@@ -92,10 +92,14 @@ public class CommonProxy extends HeldCoreProxy {
 
     public void serverStopped(FMLServerStoppedEvent event) {
         for (AgeInfo info : serverAgesMap.values()) {
-            info.symbols.clear();
-            info.symbols = null;
-            info.pages.clear();
-            info.pages = null;
+            if (info.symbols != null) {
+                info.symbols.clear();
+                info.symbols = null;
+            }
+            if (info.pages != null) {
+                info.pages.clear();
+                info.pages = null;
+            }
         }
 
         serverAgesMap.clear();

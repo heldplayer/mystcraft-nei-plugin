@@ -581,7 +581,7 @@ public class Integrator {
     }
 
     private static void parseGrammarRules() throws Throwable {
-        RClass<?> Rule = new RClass<>(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator$Rule"));
+        RClass<Object> Rule = new RClass(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator$Rule"));
         RField values = Rule.getField("values");
         RField rarity = Rule.getField("rarity");
 
@@ -594,7 +594,7 @@ public class Integrator {
             grammarMappingsMapped.put(key, mappings);
 
             for (Object rule : rules) {
-                GrammarMapping mapping = new GrammarMapping(key, (List<String>) values.get(rule), (float) rarity.get(rule));
+                GrammarMapping mapping = new GrammarMapping(key, (List<String>) values.get(rule), (Float) rarity.get(rule));
                 grammarMappings.add(mapping);
                 mappings.add(mapping);
             }

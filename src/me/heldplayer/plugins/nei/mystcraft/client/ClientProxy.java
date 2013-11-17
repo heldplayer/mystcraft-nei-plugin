@@ -51,10 +51,14 @@ public class ClientProxy extends CommonProxy implements IConnectionHandler {
     @Override
     public void connectionClosed(INetworkManager manager) {
         for (AgeInfo info : clientAgesMap.values()) {
-            info.symbols.clear();
-            info.symbols = null;
-            info.pages.clear();
-            info.pages = null;
+            if (info.symbols != null) {
+                info.symbols.clear();
+                info.symbols = null;
+            }
+            if (info.pages != null) {
+                info.pages.clear();
+                info.pages = null;
+            }
         }
 
         clientAgesMap.clear();
