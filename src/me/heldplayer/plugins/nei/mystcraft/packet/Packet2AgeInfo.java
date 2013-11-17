@@ -27,17 +27,23 @@ public class Packet2AgeInfo extends HeldCorePacket {
     public String ageName;
     public List<String> symbols;
     public List<ItemStack> pages;
+    public boolean addToNEI;
 
     public Packet2AgeInfo(int packetId) {
         super(packetId, null);
     }
 
-    public Packet2AgeInfo(AgeInfo info) {
+    public Packet2AgeInfo(AgeInfo info, boolean addToNEI, boolean listSymbols, boolean listPages) {
         super(2, null);
         this.dimId = info.dimId;
         this.ageName = info.ageName;
-        this.symbols = info.symbols;
-        this.pages = info.pages;
+        if (listSymbols) {
+            this.symbols = info.symbols;
+        }
+        if (listPages) {
+            this.pages = info.pages;
+        }
+        this.addToNEI = addToNEI;
     }
 
     @Override
@@ -48,6 +54,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
     @Override
     public void read(ByteArrayDataInput in) throws IOException {
         this.dimId = in.readInt();
+        this.addToNEI = in.readBoolean();
 
         byte[] ageName = new byte[in.readInt()];
         in.readFully(ageName);
@@ -77,6 +84,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
     @Override
     public void write(DataOutputStream out) throws IOException {
         out.writeInt(this.dimId);
+        out.writeBoolean(addToNEI);
 
         byte[] ageName = this.ageName.getBytes();
         out.writeInt(ageName.length);
@@ -120,7 +128,9 @@ public class Packet2AgeInfo extends HeldCorePacket {
         tag.setInteger("Dimension", this.dimId);
         tag.setString("agename", this.ageName);
 
-        API.addNBTItem(stack);
+        if (addToNEI) {
+            API.addNBTItem(stack);
+        }
     }
 
 }

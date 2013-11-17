@@ -6,9 +6,11 @@ import java.io.IOException;
 
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.util.HeldCore.packet.HeldCorePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -37,8 +39,24 @@ public class Packet1RequestAges extends HeldCorePacket {
 
     @Override
     public void onData(INetworkManager manager, EntityPlayer player) {
+        boolean addToNEI = PluginNEIMystcraft.addAgeExplorer.getValue();
+        boolean listSymbols = PluginNEIMystcraft.allowSymbolExploring.getValue();
+        boolean listPages = PluginNEIMystcraft.allowPageExploring.getValue();
+
+        boolean playerOpped = MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username);
+
+        if (addToNEI && PluginNEIMystcraft.opOnlyAgeList.getValue()) {
+            addToNEI = playerOpped;
+        }
+        if (listSymbols && PluginNEIMystcraft.opOnlySymbolExplorer.getValue()) {
+            listSymbols = playerOpped;
+        }
+        if (listPages && PluginNEIMystcraft.opOnlyPageExploring.getValue()) {
+            listPages = playerOpped;
+        }
+
         for (AgeInfo info : CommonProxy.serverAgesMap.values()) {
-            manager.addToSendQueue(PacketHandler.instance.createPacket(new Packet2AgeInfo(info)));
+            manager.addToSendQueue(PacketHandler.instance.createPacket(new Packet2AgeInfo(info, addToNEI, listSymbols, listPages)));
         }
     }
 

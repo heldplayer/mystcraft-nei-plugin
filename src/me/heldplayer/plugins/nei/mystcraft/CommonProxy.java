@@ -58,21 +58,25 @@ public class CommonProxy extends HeldCoreProxy {
                     int dimId = Integer.parseInt(name.substring(8, name.indexOf(".dat")));
                     AgeInfo info = new AgeInfo(dimId);
 
-                    NBTTagList symbols = data.getTagList("Symbols");
-                    info.symbols = new ArrayList<String>(symbols.tagCount());
-                    for (int i = 0; i < symbols.tagCount(); i++) {
-                        NBTTagString symbol = (NBTTagString) symbols.tagAt(i);
-                        info.symbols.add(symbol.data);
+                    if (PluginNEIMystcraft.allowSymbolExploring.getValue()) {
+                        NBTTagList symbols = data.getTagList("Symbols");
+                        info.symbols = new ArrayList<String>(symbols.tagCount());
+                        for (int i = 0; i < symbols.tagCount(); i++) {
+                            NBTTagString symbol = (NBTTagString) symbols.tagAt(i);
+                            info.symbols.add(symbol.data);
+                        }
                     }
 
-                    NBTTagList pages = data.getTagList("Pages");
-                    info.pages = new ArrayList<ItemStack>(pages.tagCount());
-                    for (int i = 0; i < pages.tagCount(); i++) {
-                        NBTTagCompound tag = (NBTTagCompound) pages.tagAt(i);
-                        tag.setName("tag");
-                        ItemStack stack = new ItemStack(MystObjects.page);
-                        stack.stackTagCompound = tag;
-                        info.pages.add(stack);
+                    if (PluginNEIMystcraft.allowPageExploring.getValue()) {
+                        NBTTagList pages = data.getTagList("Pages");
+                        info.pages = new ArrayList<ItemStack>(pages.tagCount());
+                        for (int i = 0; i < pages.tagCount(); i++) {
+                            NBTTagCompound tag = (NBTTagCompound) pages.tagAt(i);
+                            tag.setName("tag");
+                            ItemStack stack = new ItemStack(MystObjects.page);
+                            stack.stackTagCompound = tag;
+                            info.pages.add(stack);
+                        }
                     }
 
                     info.ageName = data.getString("AgeName");

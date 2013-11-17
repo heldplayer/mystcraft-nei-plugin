@@ -10,7 +10,10 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.forge.GuiContainerManager;
 import codechicken.nei.recipe.DefaultOverlayHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class NEIConfig implements IConfigureNEI {
 
     public static InkMixerRecipeHandler inkMixer;
@@ -19,7 +22,7 @@ public class NEIConfig implements IConfigureNEI {
     public static WritingDeskRecipeHandler writingDesk;
     public static Class<? extends GuiContainer> guiWritingDeskClass;
 
-    public static BooksRecipeHandler books;
+    public static AgeExplorerRecipeHandler ageExplorer;
 
     public static MystTooltipHandler tooltipHandler;
     public static boolean tooltipsWritingDesk;
@@ -77,11 +80,12 @@ public class NEIConfig implements IConfigureNEI {
             GuiContainerManager.addTooltipHandler(NEIConfig.tooltipHandler);
             GuiContainerManager.addInputHandler(NEIConfig.tooltipHandler);
         }
-
-        // TODO: add config option
-        NEIConfig.books = new BooksRecipeHandler();
-        API.registerRecipeHandler(NEIConfig.books);
-        API.registerUsageHandler(NEIConfig.books);
+        
+        if(PluginNEIMystcraft.addAgeExplorer.getValue()){
+            NEIConfig.ageExplorer = new AgeExplorerRecipeHandler();
+            API.registerRecipeHandler(NEIConfig.ageExplorer);
+            API.registerUsageHandler(NEIConfig.ageExplorer);
+        }
     }
 
     @Override

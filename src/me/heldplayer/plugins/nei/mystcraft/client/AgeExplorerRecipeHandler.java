@@ -24,7 +24,7 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.api.MystAPI;
 import com.xcompwiz.mystcraft.api.MystObjects;
 
-public class BooksRecipeHandler extends TemplateRecipeHandler {
+public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     public class CachedBooksRecipe extends CachedRecipe {
 

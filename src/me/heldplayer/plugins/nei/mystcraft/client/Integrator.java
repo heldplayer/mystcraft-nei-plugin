@@ -347,7 +347,6 @@ public class Integrator {
         MultiItemRange mystItems = new MultiItemRange();
 
         mystItems.add(MystObjects.writing_desk);
-        mystItems.add(MystObjects.descriptive_book);
         mystItems.add(MystObjects.linkbook);
         mystItems.add(MystObjects.inkvial);
 
@@ -376,6 +375,16 @@ public class Integrator {
             mystLinkbooks.add(MystObjects.linkbook_unlinked);
 
             API.addSetRange("Mystcraft.Items.Linking Books", mystLinkbooks);
+        }
+        else {
+            mystItems.add(MystObjects.linkbook_unlinked);
+        }
+
+        if (PluginNEIMystcraft.addAgeExplorer.getValue()) {
+            MultiItemRange mystDescriptiveBooks = new MultiItemRange();
+            mystDescriptiveBooks.add(MystObjects.descriptive_book);
+
+            API.addSetRange("Mystcraft.Items.Descriptive Books", mystDescriptiveBooks);
         }
         else {
             mystItems.add(MystObjects.linkbook_unlinked);

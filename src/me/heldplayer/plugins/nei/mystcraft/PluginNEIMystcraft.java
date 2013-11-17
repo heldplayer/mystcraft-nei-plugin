@@ -57,6 +57,13 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     public static ConfigValue<Boolean> addWritingDeskTooltips;
     public static ConfigValue<Boolean> addRecipesTooltips;
 
+    public static ConfigValue<Boolean> addAgeExplorer;
+    public static ConfigValue<Boolean> allowSymbolExploring;
+    public static ConfigValue<Boolean> allowPageExploring;
+    public static ConfigValue<Boolean> opOnlyAgeList;
+    public static ConfigValue<Boolean> opOnlySymbolExplorer;
+    public static ConfigValue<Boolean> opOnlyPageExploring;
+
     @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -82,6 +89,12 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         addInkMixerTooltips = new ConfigValue<Boolean>("addInkMixerTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Ink Mixer?");
         addWritingDeskTooltips = new ConfigValue<Boolean>("addWritingDeskTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Writing Desk?");
         addRecipesTooltips = new ConfigValue<Boolean>("addRecipesTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be clickable regions to show all recipes in a crafting station?");
+        addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Should ages be explorable?");
+        allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Allow age symbols to be explored?");
+        allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Allow age pages to be explored?");
+        opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Only allow ops to see a list of ages in NEI?");
+        opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Only allow ops to explore age symbols?");
+        opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Only allow ops to explore age pages?");
         this.config = new Config(event.getSuggestedConfigurationFile());
         this.config.addConfigKey(hideTechnicalBlocks);
         this.config.addConfigKey(addDecaySubTypes);
@@ -96,6 +109,12 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         this.config.addConfigKey(addInkMixerTooltips);
         this.config.addConfigKey(addWritingDeskTooltips);
         this.config.addConfigKey(addRecipesTooltips);
+        this.config.addConfigKey(addAgeExplorer);
+        this.config.addConfigKey(allowSymbolExploring);
+        this.config.addConfigKey(allowPageExploring);
+        this.config.addConfigKey(opOnlyAgeList);
+        this.config.addConfigKey(opOnlySymbolExplorer);
+        this.config.addConfigKey(opOnlyPageExploring);
 
         super.preInit(event);
     }
