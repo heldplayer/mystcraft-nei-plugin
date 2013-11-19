@@ -380,7 +380,7 @@ public class Integrator {
             mystItems.add(MystObjects.linkbook_unlinked);
         }
 
-        if (PluginNEIMystcraft.addAgeExplorer.getValue()) {
+        if (PluginNEIMystcraft.addAgeList.getValue()) {
             MultiItemRange mystDescriptiveBooks = new MultiItemRange();
             mystDescriptiveBooks.add(MystObjects.descriptive_book);
 

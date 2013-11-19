@@ -58,6 +58,7 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     public static ConfigValue<Boolean> addRecipesTooltips;
 
     public static ConfigValue<Boolean> addAgeExplorer;
+    public static ConfigValue<Boolean> addAgeList;
     public static ConfigValue<Boolean> allowSymbolExploring;
     public static ConfigValue<Boolean> allowPageExploring;
     public static ConfigValue<Boolean> opOnlyAgeList;
@@ -90,6 +91,7 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         addWritingDeskTooltips = new ConfigValue<Boolean>("addWritingDeskTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Writing Desk?");
         addRecipesTooltips = new ConfigValue<Boolean>("addRecipesTooltips", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should there be clickable regions to show all recipes in a crafting station?");
         addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Should ages be explorable?");
+        addAgeList = new ConfigValue<Boolean>("addAgeList", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Should there be a list of items in NEI?");
         allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Allow age symbols to be explored?");
         allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Allow age pages to be explored?");
         opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Only allow ops to see a list of ages in NEI?");
@@ -110,6 +112,7 @@ public class PluginNEIMystcraft extends HeldCoreMod {
         this.config.addConfigKey(addWritingDeskTooltips);
         this.config.addConfigKey(addRecipesTooltips);
         this.config.addConfigKey(addAgeExplorer);
+        this.config.addConfigKey(addAgeList);
         this.config.addConfigKey(allowSymbolExploring);
         this.config.addConfigKey(allowPageExploring);
         this.config.addConfigKey(opOnlyAgeList);

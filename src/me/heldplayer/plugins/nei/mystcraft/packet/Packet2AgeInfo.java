@@ -8,6 +8,7 @@ import java.util.List;
 
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.util.HeldCore.packet.HeldCorePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -128,7 +129,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
         tag.setInteger("Dimension", this.dimId);
         tag.setString("agename", this.ageName);
 
-        if (addToNEI) {
+        if (addToNEI && PluginNEIMystcraft.addAgeList.getValue()) {
             API.addNBTItem(stack);
         }
     }

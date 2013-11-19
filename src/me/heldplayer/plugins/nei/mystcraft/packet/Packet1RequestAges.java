@@ -39,9 +39,9 @@ public class Packet1RequestAges extends HeldCorePacket {
 
     @Override
     public void onData(INetworkManager manager, EntityPlayer player) {
-        boolean addToNEI = PluginNEIMystcraft.addAgeExplorer.getValue();
-        boolean listSymbols = PluginNEIMystcraft.allowSymbolExploring.getValue();
-        boolean listPages = PluginNEIMystcraft.allowPageExploring.getValue();
+        boolean addToNEI = PluginNEIMystcraft.addAgeList.getValue();
+        boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
+        boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
 
         boolean playerOpped = MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username);
 
