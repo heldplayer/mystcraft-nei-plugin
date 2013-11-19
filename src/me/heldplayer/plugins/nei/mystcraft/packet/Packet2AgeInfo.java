@@ -85,7 +85,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
     @Override
     public void write(DataOutputStream out) throws IOException {
         out.writeInt(this.dimId);
-        out.writeBoolean(addToNEI);
+        out.writeBoolean(this.addToNEI);
 
         byte[] ageName = this.ageName.getBytes();
         out.writeInt(ageName.length);
@@ -129,7 +129,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
         tag.setInteger("Dimension", this.dimId);
         tag.setString("agename", this.ageName);
 
-        if (addToNEI && PluginNEIMystcraft.addAgeList.getValue()) {
+        if (this.addToNEI && PluginNEIMystcraft.addAgeList.getValue()) {
             API.addNBTItem(stack);
         }
     }

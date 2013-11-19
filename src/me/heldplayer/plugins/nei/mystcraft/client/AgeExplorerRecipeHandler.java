@@ -52,14 +52,14 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
             if (mode == 0) {
                 for (int i = 0; i < ageInfo.pages.size(); i++) {
-                    stacks.add(ageInfo.pages.get(i));
+                    this.stacks.add(ageInfo.pages.get(i));
                     //this.visibleStacks.add(new PositionedStack(ageInfo.pages.get(i), (i % 8) * 18 + 4, i / 8 * 18 + 17));
                 }
             }
             if (mode == 1) {
                 for (int i = 0; i < ageInfo.symbols.size(); i++) {
                     ItemStack stack = MystAPI.itemFact.buildSymbolPage(ageInfo.symbols.get(i));
-                    stacks.add(stack);
+                    this.stacks.add(stack);
                     //this.visibleStacks.add(new PositionedStack(stack, (i % 8) * 18 + 4, i / 8 * 18 + 17));
                 }
             }
@@ -185,7 +185,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
     @Override
     public void drawBackground(int recipe) {
         GL11.glColor4f(1, 1, 1, 1);
-        changeTexture(getGuiTexture());
+        changeTexture(this.getGuiTexture());
         drawTexturedModalRect(0, 10, 5, 11, 166, 114);
     }
 

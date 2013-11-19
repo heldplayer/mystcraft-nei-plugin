@@ -80,8 +80,8 @@ public class NEIConfig implements IConfigureNEI {
             GuiContainerManager.addTooltipHandler(NEIConfig.tooltipHandler);
             GuiContainerManager.addInputHandler(NEIConfig.tooltipHandler);
         }
-        
-        if(PluginNEIMystcraft.addAgeExplorer.getValue()){
+
+        if (PluginNEIMystcraft.addAgeExplorer.getValue()) {
             NEIConfig.ageExplorer = new AgeExplorerRecipeHandler();
             API.registerRecipeHandler(NEIConfig.ageExplorer);
             API.registerUsageHandler(NEIConfig.ageExplorer);
