@@ -17,7 +17,6 @@ import me.heldplayer.util.HeldCore.crafting.IHeldCoreRecipe;
 import me.heldplayer.util.HeldCore.crafting.ShapelessHeldCoreRecipe;
 import me.heldplayer.util.HeldCore.reflection.RClass;
 import me.heldplayer.util.HeldCore.reflection.RField;
-import me.heldplayer.util.HeldCore.reflection.RMethod;
 import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
@@ -50,7 +49,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
 
-    private static RMethod<Object, Map<String, Float>> getItemEffectsMethod;
     private static RField<Object, Object> agedataField;
     private static RField<Object, List<String>> symbolsField;
     private static RField<Object, List<ItemStack>> pagesField;
@@ -402,8 +400,6 @@ public class Integrator {
     private static void getMethodsAndFields() throws Throwable {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
 
-        getItemEffectsMethod = inkEffectsClass.getMethod("getItemEffects", ItemStack.class);
-
         RField<Object, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
         itemstack_bindings = bindings.getStatic();
 
@@ -447,18 +443,12 @@ public class Integrator {
      * @return
      */
     public static InkMixerRecipe getInkMixerRecipe(ItemStack stack) {
-        if (stack == null) {
-            return null;
-        }
-
-        if (getItemEffectsMethod == null) {
-            return null;
-        }
-
-        Map<String, Float> properties = null;
-
         try {
-            properties = (Map<String, Float>) getItemEffectsMethod.callStatic(stack);
+            if (stack == null) {
+                return null;
+            }
+
+            Map<String, Float> properties = MystAPI.linkProperties.getPropertiesForItem(stack);
 
             if (properties == null) {
                 return null;
@@ -470,7 +460,7 @@ public class Integrator {
 
             return new InkMixerRecipe(gradient, modifiers);
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             Objects.log.log(Level.WARNING, "Failed getting gradient", e);
             return null;
         }
