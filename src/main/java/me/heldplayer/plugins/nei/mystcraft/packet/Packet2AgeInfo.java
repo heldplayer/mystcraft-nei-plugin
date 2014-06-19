@@ -1,7 +1,9 @@
 
 package me.heldplayer.plugins.nei.mystcraft.packet;
 
-import java.io.DataOutputStream;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,20 +11,16 @@ import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
-import me.heldplayer.util.HeldCore.packet.HeldCorePacket;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
+import net.specialattack.forge.core.packet.SpACorePacket;
 import codechicken.nei.api.API;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.xcompwiz.mystcraft.api.MystObjects;
-
 import cpw.mods.fml.relauncher.Side;
 
-public class Packet2AgeInfo extends HeldCorePacket {
+public class Packet2AgeInfo extends SpACorePacket {
 
     public int dimId;
     public String ageName;
@@ -30,12 +28,12 @@ public class Packet2AgeInfo extends HeldCorePacket {
     public List<ItemStack> pages;
     public boolean addToNEI;
 
-    public Packet2AgeInfo(int packetId) {
-        super(packetId, null);
+    public Packet2AgeInfo() {
+        super(null);
     }
 
     public Packet2AgeInfo(AgeInfo info, boolean addToNEI, boolean listSymbols, boolean listPages) {
-        super(2, null);
+        super(null);
         this.dimId = info.dimId;
         this.ageName = info.ageName;
         if (listSymbols) {
@@ -53,12 +51,12 @@ public class Packet2AgeInfo extends HeldCorePacket {
     }
 
     @Override
-    public void read(ByteArrayDataInput in) throws IOException {
+    public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {
         this.dimId = in.readInt();
         this.addToNEI = in.readBoolean();
 
         byte[] ageName = new byte[in.readInt()];
-        in.readFully(ageName);
+        in.readBytes(ageName);
         this.ageName = new String(ageName);
 
         int symbols = in.readInt();
@@ -66,7 +64,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
             this.symbols = new ArrayList<String>(symbols);
             for (int i = 0; i < symbols; i++) {
                 byte[] bytes = new byte[in.readInt()];
-                in.readFully(bytes);
+                in.readBytes(bytes);
                 this.symbols.add(new String(bytes));
             }
         }
@@ -75,7 +73,9 @@ public class Packet2AgeInfo extends HeldCorePacket {
         if (pages >= 0) {
             this.pages = new ArrayList<ItemStack>(pages);
             for (int i = 0; i < pages; i++) {
-                NBTTagCompound tag = CompressedStreamTools.read(in);
+                byte[] data = new byte[in.readInt()];
+                in.readBytes(data);
+                NBTTagCompound tag = CompressedStreamTools.decompress(data);
                 ItemStack stack = ItemStack.loadItemStackFromNBT(tag);
                 this.pages.add(stack);
             }
@@ -83,13 +83,13 @@ public class Packet2AgeInfo extends HeldCorePacket {
     }
 
     @Override
-    public void write(DataOutputStream out) throws IOException {
+    public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {
         out.writeInt(this.dimId);
         out.writeBoolean(this.addToNEI);
 
         byte[] ageName = this.ageName.getBytes();
         out.writeInt(ageName.length);
-        out.write(ageName);
+        out.writeBytes(ageName);
 
         if (this.symbols == null) {
             out.writeInt(-1);
@@ -99,7 +99,7 @@ public class Packet2AgeInfo extends HeldCorePacket {
             for (String symbol : this.symbols) {
                 byte[] bytes = symbol.getBytes();
                 out.writeInt(bytes.length);
-                out.write(bytes);
+                out.writeBytes(bytes);
             }
         }
 
@@ -109,28 +109,30 @@ public class Packet2AgeInfo extends HeldCorePacket {
         else {
             out.writeInt(this.pages.size());
             for (ItemStack page : this.pages) {
-                NBTTagCompound tag = new NBTTagCompound("tag");
+                NBTTagCompound tag = new NBTTagCompound();
                 page.writeToNBT(tag);
-                CompressedStreamTools.write(tag, out);
+                byte[] data = CompressedStreamTools.compress(tag);
+                out.writeInt(data.length);
+                out.writeBytes(data);
             }
         }
     }
 
     @Override
-    public void onData(INetworkManager manager, EntityPlayer player) {
+    public void onData(ChannelHandlerContext context, EntityPlayer player) {
         AgeInfo info = new AgeInfo(this.dimId);
         info.ageName = this.ageName;
         info.symbols = this.symbols;
         info.pages = this.pages;
         CommonProxy.clientAgesMap.put(Integer.valueOf(this.dimId), info);
 
-        ItemStack stack = new ItemStack(MystObjects.descriptive_book);
-        NBTTagCompound tag = stack.stackTagCompound = new NBTTagCompound("tag");
+        ItemStack stack = new ItemStack(MystObjs.descriptive_book);
+        NBTTagCompound tag = stack.stackTagCompound = new NBTTagCompound();
         tag.setInteger("Dimension", this.dimId);
         tag.setString("agename", this.ageName);
 
         if (this.addToNEI && PluginNEIMystcraft.addAgeList.getValue()) {
-            API.addNBTItem(stack);
+            API.addItemListEntry(stack);
         }
     }
 

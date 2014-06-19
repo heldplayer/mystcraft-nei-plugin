@@ -8,10 +8,11 @@ import java.util.List;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import codechicken.core.gui.GuiDraw;
+import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
-import codechicken.nei.forge.IContainerInputHandler;
-import codechicken.nei.forge.IContainerTooltipHandler;
+import codechicken.nei.guihook.GuiContainerManager;
+import codechicken.nei.guihook.IContainerInputHandler;
+import codechicken.nei.guihook.IContainerTooltipHandler;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
@@ -29,14 +30,19 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
     }
 
     @Override
-    public List<String> handleTooltipFirst(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
+    public List<String> handleItemDisplayName(GuiContainer gui, ItemStack stack, List<String> currenttip) {
+        return currenttip;
+    }
+
+    @Override
+    public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
         if (this.recipes && this.recipesWritingDesk && NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
             Rectangle rect = new Rectangle(156 + 228, 45, 18, 34);
 
-            if (currenttip.isEmpty() && gui.manager.shouldShowTooltip() && rect.contains(relMouse)) {
+            if (currenttip.isEmpty() && GuiContainerManager.shouldShowTooltip(gui) && rect.contains(relMouse)) {
                 currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
             }
         }
@@ -46,7 +52,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
 
             Point center = new Point(87, 49);
 
-            if (currenttip.isEmpty() && gui.manager.shouldShowTooltip() && center.distance(relMouse) < 34.0D) {
+            if (currenttip.isEmpty() && GuiContainerManager.shouldShowTooltip(gui) && center.distance(relMouse) < 34.0D) {
                 currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
             }
         }
@@ -54,14 +60,14 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
     }
 
     @Override
-    public List<String> handleItemTooltip(GuiContainer gui, ItemStack itemstack, List<String> currenttip) {
+    public List<String> handleItemTooltip(GuiContainer gui, ItemStack stack, int mouseX, int mouseY, List<String> currenttip) {
         if (gui instanceof GuiRecipe) {
-            Point mousepos = GuiDraw.getMousePosition();
+            Point mousepos = new Point(mouseX, mouseY);
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
             GuiRecipe guiRecipe = (GuiRecipe) gui;
 
-            if (currenttip.isEmpty() && gui.manager.shouldShowTooltip()) {
+            if (currenttip.isEmpty() && GuiContainerManager.shouldShowTooltip(gui)) {
                 if (this.recipes && this.recipesWritingDesk && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
                     Rectangle rect = new Rectangle(151, 34, 18, 34);
                     if (rect.contains(relMouse)) {

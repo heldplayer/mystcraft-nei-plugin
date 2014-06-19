@@ -3,7 +3,7 @@ package me.heldplayer.plugins.nei.mystcraft.client;
 
 import java.util.Comparator;
 
-import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
 
 /**
  * Sorter for symbols

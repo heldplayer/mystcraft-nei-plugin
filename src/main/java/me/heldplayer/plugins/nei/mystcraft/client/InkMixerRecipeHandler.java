@@ -8,19 +8,19 @@ import java.util.List;
 
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
-import me.heldplayer.util.HeldCore.client.GuiHelper;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
+import net.specialattack.forge.core.client.GuiHelper;
 
 import org.lwjgl.opengl.GL11;
 
-import codechicken.core.gui.GuiDraw;
+import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IRecipeOverlayRenderer;
@@ -29,10 +29,9 @@ import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
-import com.xcompwiz.mystcraft.api.MystAPI;
-import com.xcompwiz.mystcraft.api.MystObjects;
-import com.xcompwiz.mystcraft.api.internals.Color;
-import com.xcompwiz.mystcraft.api.internals.ColorGradient;
+import com.xcompwiz.mystcraft.core.InternalAPI;
+import com.xcompwiz.mystcraft.symbol.Color;
+import com.xcompwiz.mystcraft.symbol.ColorGradient;
 
 @SuppressWarnings("rawtypes")
 public class InkMixerRecipeHandler extends TemplateRecipeHandler {
@@ -62,10 +61,6 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                     this.ingredients.add(this.ingredient);
                 }
             }
-            else if (ingredient instanceof Integer) {
-                this.ingredient = new PositionedStack(new ItemStack((Integer) ingredient, 1, OreDictionary.WILDCARD_VALUE), 74, 29);
-                this.ingredients.add(this.ingredient);
-            }
             else {
                 this.ingredient = null;
             }
@@ -86,19 +81,19 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             this.frame = 0;
 
             if (this.modifiers != null) {
-                ItemStack stack = MystAPI.itemFact.buildLinkPage(this.modifiers);
+                ItemStack stack = InternalAPI.itemFact.buildLinkPage(this.modifiers);
 
                 this.stack = new PositionedStack(stack, 147, 37);
             }
             else {
-                ItemStack stack = MystAPI.itemFact.buildLinkPage();
+                ItemStack stack = InternalAPI.itemFact.buildLinkPage();
 
                 this.stack = new PositionedStack(stack, 147, 37);
             }
 
-            this.ingredients.add(new PositionedStack(new ItemStack(MystObjects.inkvial), 3, 16));
-            this.ingredients.add(new PositionedStack(new ItemStack(Item.paper), 3, 37));
-            this.leftOver = new PositionedStack(new ItemStack(Item.glassBottle), 147, 16);
+            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial), 3, 16));
+            this.ingredients.add(new PositionedStack(new ItemStack(Items.paper), 3, 37));
+            this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 16);
         }
 
         @Override
@@ -189,7 +184,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjects.page == null) {
+        if (MystObjs.page == null) {
             return;
         }
 
@@ -213,11 +208,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjects.page == null) {
+        if (MystObjs.page == null) {
             return;
         }
 
-        if (result.getItem() == MystObjects.page) {
+        if (result.getItem() == MystObjs.page) {
             NBTTagCompound compound = result.getTagCompound();
             if (compound == null) {
                 return;
@@ -231,7 +226,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             if (!linkPanelCompound.hasKey("properties")) {
                 return;
             }
-            NBTTagList list = linkPanelCompound.getTagList("properties");
+            NBTTagList list = linkPanelCompound.getTagList("properties", 8);
 
             ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
@@ -256,7 +251,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
                 for (int i = 0; i < list.tagCount(); i++) {
                     for (String modifier : recipe.modifiers) {
-                        if (!modifier.isEmpty() && ((NBTTagString) list.tagAt(i)).data.equals(modifier) && !this.arecipes.contains(recipe)) {
+                        if (!modifier.isEmpty() && list.getStringTagAt(i).equals(modifier) && !this.arecipes.contains(recipe)) {
                             this.arecipes.add(recipe);
                             break;
                         }
@@ -264,7 +259,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                 }
             }
         }
-        else if (result.getItem() == Item.glassBottle) {
+        else if (result.getItem() == Items.glass_bottle) {
             ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
             for (Object ingr : recipes) {
@@ -278,11 +273,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjects.page == null) {
+        if (MystObjs.page == null) {
             return;
         }
 
-        if (ingredient.getItem() == Item.paper || ingredient.getItem() == MystObjects.inkvial) {
+        if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial) {
             ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
             for (Object ingr : recipes) {
@@ -317,7 +312,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     }
 
     private void renderTank(int left, int top, int width, int height, CachedInkMixerRecipe recipe) {
-        GuiHelper.drawFluid(MystObjects.black_ink, left, top, width, height);
+        GuiHelper.drawFluid(MystObjs.black_ink, left, top, width, height);
 
         if (recipe != null && recipe.gradient != null && recipe.gradient.getColorCount() > 0) {
             recipe.frame++;
@@ -325,7 +320,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             int iColor = color.asInt();
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
 
-            MystAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
+            InternalAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
         else {
             int iColor = Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000;
@@ -333,7 +328,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
             GuiDraw.drawGradientRect(left, top, left + width, top + height, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000);
 
-            MystAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
+            InternalAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
     }
 

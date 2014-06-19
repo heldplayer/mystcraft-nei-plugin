@@ -3,9 +3,9 @@ package me.heldplayer.plugins.nei.mystcraft.client.renderer;
 
 import java.awt.Color;
 
-import me.heldplayer.util.HeldCore.MathHelper;
-import me.heldplayer.util.HeldCore.Vector;
-import me.heldplayer.util.HeldCore.VectorPool;
+import net.specialattack.forge.core.MathHelper;
+import net.specialattack.forge.core.Vector;
+import net.specialattack.forge.core.VectorPool;
 
 import org.lwjgl.opengl.GL11;
 

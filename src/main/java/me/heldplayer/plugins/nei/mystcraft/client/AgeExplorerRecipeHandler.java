@@ -1,14 +1,13 @@
 
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import static codechicken.core.gui.GuiDraw.*;
-
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -16,13 +15,12 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import codechicken.core.gui.GuiDraw;
+import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
-import com.xcompwiz.mystcraft.api.MystAPI;
-import com.xcompwiz.mystcraft.api.MystObjects;
+import com.xcompwiz.mystcraft.core.InternalAPI;
 
 public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
@@ -53,14 +51,12 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
             if (mode == 0) {
                 for (int i = 0; i < ageInfo.pages.size(); i++) {
                     this.stacks.add(ageInfo.pages.get(i));
-                    //this.visibleStacks.add(new PositionedStack(ageInfo.pages.get(i), (i % 8) * 18 + 4, i / 8 * 18 + 17));
                 }
             }
             if (mode == 1) {
                 for (int i = 0; i < ageInfo.symbols.size(); i++) {
-                    ItemStack stack = MystAPI.itemFact.buildSymbolPage(ageInfo.symbols.get(i));
+                    ItemStack stack = InternalAPI.itemFact.buildSymbolPage(ageInfo.symbols.get(i));
                     this.stacks.add(stack);
-                    //this.visibleStacks.add(new PositionedStack(stack, (i % 8) * 18 + 4, i / 8 * 18 + 17));
                 }
             }
 
@@ -116,7 +112,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjects.page == null) {
+        if (MystObjs.page == null) {
             return;
         }
 
@@ -129,11 +125,11 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjects.page == null) {
+        if (MystObjs.page == null) {
             return;
         }
 
-        if (result.getItem() == MystObjects.descriptive_book) {
+        if (result.getItem() == MystObjs.descriptive_book) {
             NBTTagCompound tag = result.stackTagCompound;
             if (tag == null) {
                 return;
@@ -154,11 +150,11 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjects.page == null) {
+        if (MystObjs.page == null) {
             return;
         }
 
-        if (ingredient.getItem() == MystObjects.descriptive_book) {
+        if (ingredient.getItem() == MystObjs.descriptive_book) {
             NBTTagCompound tag = ingredient.stackTagCompound;
             if (tag == null) {
                 return;
@@ -185,8 +181,8 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
     @Override
     public void drawBackground(int recipe) {
         GL11.glColor4f(1, 1, 1, 1);
-        changeTexture(this.getGuiTexture());
-        drawTexturedModalRect(0, 10, 5, 11, 166, 114);
+        GuiDraw.changeTexture(this.getGuiTexture());
+        GuiDraw.drawTexturedModalRect(0, 10, 5, 11, 166, 114);
     }
 
     @Override
@@ -195,10 +191,10 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
         //recipe.currentScroll = (float) ((this.cycleticks % 42) / 2) / 20.0F;
 
-        drawTexturedModalRect(152, 17 + (int) (91 * recipe.currentScroll), recipe.canScroll ? 232 : 244, 0, 12, 15);
+        GuiDraw.drawTexturedModalRect(152, 17 + (int) (91 * recipe.currentScroll), recipe.canScroll ? 232 : 244, 0, 12, 15);
 
-        drawString(recipe.ageInfo.ageName, 5, 2, 0x404040, false);
-        drawStringR(StatCollector.translateToLocal("nei.mystcraft.recipe.ages.modes." + recipe.mode), 160, 2, 0x404040, false);
+        GuiDraw.drawString(recipe.ageInfo.ageName, 5, 2, 0x404040, false);
+        GuiDraw.drawStringR(StatCollector.translateToLocal("nei.mystcraft.recipe.ages.modes." + recipe.mode), 160, 2, 0x404040, false);
     }
 
     @Override

@@ -1,15 +1,15 @@
 
 package me.heldplayer.plugins.nei.mystcraft;
 
-import java.io.File;
-
-import me.heldplayer.plugins.nei.mystcraft.packet.PacketHandler;
-import me.heldplayer.util.HeldCore.HeldCoreMod;
-import me.heldplayer.util.HeldCore.HeldCoreProxy;
-import me.heldplayer.util.HeldCore.ModInfo;
-import me.heldplayer.util.HeldCore.config.Config;
-import me.heldplayer.util.HeldCore.config.ConfigValue;
-import net.minecraftforge.common.Configuration;
+import me.heldplayer.plugins.nei.mystcraft.packet.Packet1RequestAges;
+import me.heldplayer.plugins.nei.mystcraft.packet.Packet2AgeInfo;
+import net.minecraftforge.common.config.Configuration;
+import net.specialattack.forge.core.ModInfo;
+import net.specialattack.forge.core.SpACoreMod;
+import net.specialattack.forge.core.SpACoreProxy;
+import net.specialattack.forge.core.config.Config;
+import net.specialattack.forge.core.config.ConfigValue;
+import net.specialattack.forge.core.packet.PacketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -19,7 +19,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -28,9 +27,8 @@ import cpw.mods.fml.relauncher.Side;
  * @author heldplayer
  * 
  */
-@Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, version = Objects.MOD_VERSION, dependencies = Objects.MOD_DEPENCIES)
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = { Objects.MOD_CHANNEL }, packetHandler = PacketHandler.class)
-public class PluginNEIMystcraft extends HeldCoreMod {
+@Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, dependencies = Objects.MOD_DEPENCIES)
+public class PluginNEIMystcraft extends SpACoreMod {
 
     @Instance(value = Objects.MOD_ID)
     public static PluginNEIMystcraft instance;
@@ -39,8 +37,9 @@ public class PluginNEIMystcraft extends HeldCoreMod {
 
     @Instance("Mystcraft")
     public static Object mystcraft;
+    public static PacketHandler packetHandler;
 
-    //// HeldCore Objects
+    //// SpACore Objects
     // Integrator references
     public static ConfigValue<Boolean> hideTechnicalBlocks;
     public static ConfigValue<Boolean> addDecaySubTypes;
@@ -66,15 +65,12 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     public static ConfigValue<Boolean> opOnlyPageExploring;
 
     @Override
+    @SuppressWarnings("unchecked")
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        File file = new File(event.getModConfigurationDirectory(), "HeldCore");
-
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
         Objects.log = event.getModLog();
+
+        PluginNEIMystcraft.packetHandler = new PacketHandler("NEI-Mystcraft-Plugin", Packet1RequestAges.class, Packet2AgeInfo.class);
 
         // Config
         hideTechnicalBlocks = new ConfigValue<Boolean>("hideTechnicalBlocks", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Should technical blocks be hidden?");
@@ -150,7 +146,7 @@ public class PluginNEIMystcraft extends HeldCoreMod {
     }
 
     @Override
-    public HeldCoreProxy getProxy() {
+    public SpACoreProxy getProxy() {
         return proxy;
     }
 

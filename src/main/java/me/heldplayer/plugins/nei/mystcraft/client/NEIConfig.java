@@ -1,14 +1,15 @@
 
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import java.util.logging.Level;
-
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+
+import org.apache.logging.log4j.Level;
+
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
-import codechicken.nei.forge.GuiContainerManager;
+import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.DefaultOverlayHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,10 +31,10 @@ public class NEIConfig implements IConfigureNEI {
 
     @Override
     public void loadConfig() {
-        Objects.log.log(Level.FINE, "Loading NEI config for Mystcraft");
+        Objects.log.log(Level.DEBUG, "Loading NEI config for Mystcraft");
 
         if (PluginNEIMystcraft.mystcraft == null) {
-            Objects.log.log(Level.SEVERE, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
+            Objects.log.log(Level.ERROR, "Mystcraft is not installed or not found! This mod requires mystcraft to function!");
             return;
         }
 
@@ -42,7 +43,7 @@ public class NEIConfig implements IConfigureNEI {
         tooltipsInkMixer = PluginNEIMystcraft.addInkMixerRecipes.getValue();
 
         if (tooltipsInkMixer) {
-            Objects.log.log(Level.FINE, "Adding Ink Mixer recipe handler");
+            Objects.log.log(Level.DEBUG, "Adding Ink Mixer recipe handler");
 
             tooltipsInkMixer = PluginNEIMystcraft.addInkMixerTooltips.getValue();
 
@@ -50,7 +51,7 @@ public class NEIConfig implements IConfigureNEI {
             API.registerRecipeHandler(NEIConfig.inkMixer);
             API.registerUsageHandler(NEIConfig.inkMixer);
 
-            Objects.log.log(Level.FINE, "Registering GUI overlay for Ink Mixer");
+            Objects.log.log(Level.DEBUG, "Registering GUI overlay for Ink Mixer");
 
             API.registerGuiOverlay(NEIConfig.guiInkMixerClass, "inkmixer");
             API.registerGuiOverlayHandler(NEIConfig.guiInkMixerClass, new DefaultOverlayHandler(), "inkmixer");
@@ -59,7 +60,7 @@ public class NEIConfig implements IConfigureNEI {
         tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskRecipes.getValue();
 
         if (tooltipsWritingDesk) {
-            Objects.log.log(Level.FINE, "Adding Writing Desk recipe handler");
+            Objects.log.log(Level.DEBUG, "Adding Writing Desk recipe handler");
 
             tooltipsWritingDesk = PluginNEIMystcraft.addWritingDeskTooltips.getValue();
 
@@ -67,14 +68,14 @@ public class NEIConfig implements IConfigureNEI {
             API.registerRecipeHandler(NEIConfig.writingDesk);
             API.registerUsageHandler(NEIConfig.writingDesk);
 
-            Objects.log.log(Level.FINE, "Registering GUI overlay for Writing Desk");
+            Objects.log.log(Level.DEBUG, "Registering GUI overlay for Writing Desk");
 
             API.registerGuiOverlay(NEIConfig.guiWritingDeskClass, "writingdesk");
             API.registerGuiOverlayHandler(NEIConfig.guiWritingDeskClass, new DefaultOverlayHandler(), "writingdesk");
         }
 
         if (tooltipsInkMixer || tooltipsWritingDesk) {
-            Objects.log.log(Level.FINE, "Registering tooltip handler");
+            Objects.log.log(Level.DEBUG, "Registering tooltip handler");
 
             NEIConfig.tooltipHandler = new MystTooltipHandler(PluginNEIMystcraft.addRecipesTooltips.getValue(), tooltipsWritingDesk, tooltipsInkMixer);
             GuiContainerManager.addTooltipHandler(NEIConfig.tooltipHandler);

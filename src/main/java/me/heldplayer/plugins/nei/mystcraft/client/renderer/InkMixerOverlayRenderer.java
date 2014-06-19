@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
-import codechicken.nei.forge.GuiContainerManager;
+import codechicken.nei.guihook.GuiContainerManager;
 
 public class InkMixerOverlayRenderer implements IRecipeOverlayRenderer {
 

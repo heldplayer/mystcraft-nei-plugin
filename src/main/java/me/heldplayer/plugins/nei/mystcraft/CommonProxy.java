@@ -6,25 +6,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 
-import me.heldplayer.util.HeldCore.HeldCoreProxy;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
+import net.specialattack.forge.core.SpACoreProxy;
 
-import com.xcompwiz.mystcraft.api.MystObjects;
+import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 
-public class CommonProxy extends HeldCoreProxy {
+public class CommonProxy extends SpACoreProxy {
 
     public static HashMap<Integer, AgeInfo> serverAgesMap = new HashMap<Integer, AgeInfo>();
     public static HashMap<Integer, AgeInfo> clientAgesMap = new HashMap<Integer, AgeInfo>();
@@ -38,6 +38,7 @@ public class CommonProxy extends HeldCoreProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {}
 
+    @EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         File dataFolder = new File(MinecraftServer.getServer().anvilFile, MinecraftServer.getServer().worldServers[0].getSaveHandler().getWorldDirectoryName() + File.separator + "data");
 
@@ -59,21 +60,19 @@ public class CommonProxy extends HeldCoreProxy {
                     AgeInfo info = new AgeInfo(dimId);
 
                     if (PluginNEIMystcraft.allowSymbolExploring.getValue()) {
-                        NBTTagList symbols = data.getTagList("Symbols");
+                        NBTTagList symbols = data.getTagList("Symbols", 8);
                         info.symbols = new ArrayList<String>(symbols.tagCount());
                         for (int i = 0; i < symbols.tagCount(); i++) {
-                            NBTTagString symbol = (NBTTagString) symbols.tagAt(i);
-                            info.symbols.add(symbol.data);
+                            info.symbols.add(symbols.getStringTagAt(i));
                         }
                     }
 
                     if (PluginNEIMystcraft.allowPageExploring.getValue()) {
-                        NBTTagList pages = data.getTagList("Pages");
+                        NBTTagList pages = data.getTagList("Pages", 10);
                         info.pages = new ArrayList<ItemStack>(pages.tagCount());
                         for (int i = 0; i < pages.tagCount(); i++) {
-                            NBTTagCompound tag = (NBTTagCompound) pages.tagAt(i);
-                            tag.setName("tag");
-                            ItemStack stack = new ItemStack(MystObjects.page);
+                            NBTTagCompound tag = pages.getCompoundTagAt(i);
+                            ItemStack stack = new ItemStack(MystObjs.page);
                             stack.stackTagCompound = tag;
                             info.pages.add(stack);
                         }
@@ -84,12 +83,13 @@ public class CommonProxy extends HeldCoreProxy {
                     serverAgesMap.put(Integer.valueOf(dimId), info);
                 }
                 catch (Throwable e) {
-                    Objects.log.log(Level.SEVERE, "Failed reading agedata file " + file.getName(), e);
+                    Objects.log.log(Level.ERROR, "Failed reading agedata file " + file.getName(), e);
                 }
             }
         }
     }
 
+    @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
         for (AgeInfo info : serverAgesMap.values()) {
             if (info.symbols != null) {

@@ -6,37 +6,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
 
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
-import me.heldplayer.util.HeldCore.client.GuiHelper;
-import me.heldplayer.util.HeldCore.crafting.ICraftingResultHandler;
-import me.heldplayer.util.HeldCore.crafting.IHeldCoreRecipe;
-import me.heldplayer.util.HeldCore.crafting.ShapelessHeldCoreRecipe;
-import me.heldplayer.util.HeldCore.reflection.RClass;
-import me.heldplayer.util.HeldCore.reflection.RField;
-import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldProvider;
+import net.specialattack.forge.core.client.GuiHelper;
+import net.specialattack.forge.core.crafting.ICraftingResultHandler;
+import net.specialattack.forge.core.crafting.ISpACoreRecipe;
+import net.specialattack.forge.core.crafting.ShapelessSpACoreRecipe;
+import net.specialattack.forge.core.reflection.RClass;
+import net.specialattack.forge.core.reflection.RField;
+import net.specialattack.forge.core.reflection.ReflectionHelper;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
-import codechicken.core.gui.GuiDraw;
-import codechicken.nei.MultiItemRange;
+import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.api.API;
 
-import com.xcompwiz.mystcraft.api.MystAPI;
-import com.xcompwiz.mystcraft.api.MystObjects;
-import com.xcompwiz.mystcraft.api.internals.ColorGradient;
-import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.core.InternalAPI;
+import com.xcompwiz.mystcraft.symbol.ColorGradient;
+import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -57,139 +56,119 @@ public class Integrator {
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
     private static Map itemId_bindings;
-    private static HashMap<String, List> grammarMappingsRaw;
 
     private static List<ItemStack> allLinkpanels;
-    private static List<GrammarMapping> grammarMappings;
-    private static HashMap<String, List<GrammarMapping>> grammarMappingsMapped;
 
     /**
      * Initialize all NEI features for Mystcraft
      * 
      */
     public static void initialize() {
-        Objects.log.log(Level.FINE, "Initializing Mystcraft Integrator");
+        Objects.log.log(Level.DEBUG, "Initializing Mystcraft Integrator");
 
         if (PluginNEIMystcraft.hideTechnicalBlocks.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Hiding technical blocks from NEI");
+                Objects.log.log(Level.DEBUG, "Hiding technical blocks from NEI");
                 hideTechnicalBlocks();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed hiding technical blocks from NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed hiding technical blocks from NEI", ex);
             }
         }
 
         if (PluginNEIMystcraft.addDecaySubTypes.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding decay types to NEI");
+                Objects.log.log(Level.DEBUG, "Adding decay types to NEI");
                 addDecayTypes();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding decay types to NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed adding decay types to NEI", ex);
             }
         }
 
         if (PluginNEIMystcraft.addCreativeNotebooks.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding creative notebooks to NEI view");
+                Objects.log.log(Level.DEBUG, "Adding creative notebooks to NEI view");
                 addCreativeNotebooks();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding creative notebooks to NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed adding creative notebooks to NEI", ex);
             }
-        }
-
-        try {
-            Objects.log.log(Level.FINE, "Adding empty page to NEI");
-            addEmptyPage();
-        }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed adding empty page to NEI", ex);
         }
 
         if (PluginNEIMystcraft.addSymbolPages.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding symbol pages to NEI view");
+                Objects.log.log(Level.DEBUG, "Adding symbol pages to NEI view");
                 addPages();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding symbol pages to NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed adding symbol pages to NEI", ex);
             }
         }
 
         try {
-            Objects.log.log(Level.FINE, "Getting all link panels");
+            Objects.log.log(Level.DEBUG, "Getting all link panels");
             prepareLinkPanels();
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed getting all link panels", ex);
+            Objects.log.log(Level.ERROR, "Failed getting all link panels", ex);
         }
 
         if (PluginNEIMystcraft.addLinkPanels.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding link panels to NEI");
+                Objects.log.log(Level.DEBUG, "Adding link panels to NEI");
                 addLinkPanels();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding link panels to NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed adding link panels to NEI", ex);
             }
         }
 
         if (PluginNEIMystcraft.addLinkingBooks.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding linking books to NEI");
+                Objects.log.log(Level.DEBUG, "Adding linking books to NEI");
                 addLinkingbooks();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding linking books to NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed adding linking books to NEI", ex);
             }
         }
 
         if (PluginNEIMystcraft.addItemRanges.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding item ranges to NEI");
+                Objects.log.log(Level.DEBUG, "Adding item ranges to NEI");
                 addItemRanges();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding item ranges to NEI", ex);
+                Objects.log.log(Level.ERROR, "Failed adding item ranges to NEI", ex);
             }
         }
 
         try {
-            Objects.log.log(Level.FINE, "Getting methods and fields");
+            Objects.log.log(Level.DEBUG, "Getting methods and fields");
             getMethodsAndFields();
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed getting methods and fields", ex);
+            Objects.log.log(Level.ERROR, "Failed getting methods and fields", ex);
         }
 
         try {
-            Objects.log.log(Level.FINE, "Getting GUI classes");
+            Objects.log.log(Level.DEBUG, "Getting GUI classes");
             NEIConfig.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
             NEIConfig.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
         }
         catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed getting GUI classes", ex);
+            Objects.log.log(Level.ERROR, "Failed getting GUI classes", ex);
         }
 
         if (PluginNEIMystcraft.showRecipeForLinkbooks.getValue()) {
             try {
-                Objects.log.log(Level.FINE, "Adding 'fake' recipes");
+                Objects.log.log(Level.DEBUG, "Adding 'fake' recipes");
                 addFakeRecipes();
             }
             catch (Throwable ex) {
-                Objects.log.log(Level.SEVERE, "Failed adding 'fake' recipes", ex);
+                Objects.log.log(Level.ERROR, "Failed adding 'fake' recipes", ex);
             }
-        }
-
-        // TODO: Config setting?
-        try {
-            Objects.log.log(Level.FINE, "Parsing grammar rules");
-            parseGrammarRules();
-        }
-        catch (Throwable ex) {
-            Objects.log.log(Level.SEVERE, "Failed parsing grammar rules", ex);
         }
     }
 
@@ -199,9 +178,9 @@ public class Integrator {
      * @throws Throwable
      */
     private static void hideTechnicalBlocks() throws Throwable {
-        API.hideItem(MystObjects.portal.blockID);
-        API.hideItem(MystObjects.writing_desk_block.blockID);
-        API.hideItem(MystObjects.star_fissure.blockID);
+        API.hideItem(new ItemStack(MystObjs.portal));
+        API.hideItem(new ItemStack(MystObjs.writing_desk_block));
+        API.hideItem(new ItemStack(MystObjs.star_fissure));
     }
 
     /**
@@ -219,7 +198,9 @@ public class Integrator {
 
         damageVariants.add(6);
 
-        API.setItemDamageVariants(MystObjects.decay.blockID, damageVariants);
+        for (Integer damage : damageVariants) {
+            API.addItemListEntry(new ItemStack(MystObjs.decay, 1, damage));
+        }
     }
 
     /**
@@ -228,20 +209,14 @@ public class Integrator {
      * @throws Throwable
      */
     private static void addCreativeNotebooks() throws Throwable {
-        ItemStack notebook = new ItemStack(MystObjects.notebook, 1, 0);
+        // ItemStack notebook = new ItemStack(MystObjs.notebook, 1, 0);
 
         // Add a standard notebook first
-        API.addNBTItem(notebook);
+        // API.addItemListEntry(notebook);
 
-        for (ItemStack stack : MystObjects.creative_notebooks) {
-            API.addNBTItem(stack);
+        for (ItemStack stack : MystObjs.creative_notebooks) {
+            API.addItemListEntry(stack);
         }
-    }
-
-    private static void addEmptyPage() throws Throwable {
-        ItemStack page = new ItemStack(MystObjects.page, 1, 0);
-
-        API.addNBTItem(page);
     }
 
     /**
@@ -250,11 +225,10 @@ public class Integrator {
      * @throws Throwable
      */
     private static void addPages() throws Throwable {
-        // Add all the pages for all the symbols
-        List<IAgeSymbol> allSymbols = MystAPI.symbol.getAllRegisteredSymbols();
+        List<IAgeSymbol> allSymbols = InternalAPI.symbol.getAllRegisteredSymbols();
 
         for (IAgeSymbol symbol : allSymbols) {
-            API.addNBTItem(MystAPI.itemFact.buildSymbolPage(symbol.identifier()));
+            API.addItemListEntry(InternalAPI.itemFact.buildSymbolPage(symbol.identifier()));
         }
     }
 
@@ -267,6 +241,9 @@ public class Integrator {
 
         TreeMap map = new TreeMap(new LinkPanelSorter());
         map.putAll(colormap);
+        if (!map.containsKey("Following")) {
+            map.put("Following", null);
+        }
 
         Object[] keys = map.keySet().toArray(new Object[0]);
 
@@ -275,16 +252,16 @@ public class Integrator {
         allLinkpanels = new ArrayList<ItemStack>();
 
         for (int i = 0; i <= bin; i++) {
-            ItemStack is = new ItemStack(MystObjects.page, 1, 0);
+            ItemStack is = new ItemStack(MystObjs.page, 1, 0);
 
-            NBTTagCompound compound = new NBTTagCompound("tag");
-            NBTTagCompound linkPanelCompound = new NBTTagCompound("linkpanel");
+            NBTTagCompound compound = new NBTTagCompound();
+            NBTTagCompound linkPanelCompound = new NBTTagCompound();
 
-            NBTTagList list = new NBTTagList("properties");
+            NBTTagList list = new NBTTagList();
 
             for (int j = 0; j < keys.length; j++) {
                 if (((i >> j) & 0x1) == 1) {
-                    list.appendTag(new NBTTagString("", (String) keys[j]));
+                    list.appendTag(new NBTTagString((String) keys[j]));
                 }
             }
 
@@ -305,17 +282,17 @@ public class Integrator {
      */
     private static void addLinkPanels() throws Throwable {
         for (ItemStack stack : allLinkpanels) {
-            API.addNBTItem(stack);
+            API.addItemListEntry(stack);
         }
     }
 
     private static void addLinkingbooks() throws Throwable {
         for (ItemStack panel : allLinkpanels) {
-            ItemStack book = new ItemStack(MystObjects.linkbook_unlinked);
+            ItemStack book = new ItemStack(MystObjs.linkbook_unlinked);
 
             book.stackTagCompound = (NBTTagCompound) panel.stackTagCompound.copy();
 
-            API.addNBTItem(book);
+            API.addItemListEntry(book);
         }
     }
 
@@ -325,70 +302,71 @@ public class Integrator {
      * @throws Throwable
      */
     private static void addItemRanges() throws Throwable {
-        MultiItemRange mystBlocks = new MultiItemRange();
-
-        mystBlocks.add(MystObjects.portal);
-        mystBlocks.add(MystObjects.crystal);
-        mystBlocks.add(MystObjects.crystal_receptacle);
-        mystBlocks.add(MystObjects.decay);
-        mystBlocks.add(MystObjects.bookstand);
-        mystBlocks.add(MystObjects.book_lectern);
-        mystBlocks.add(MystObjects.writing_desk_block);
-        mystBlocks.add(MystObjects.bookbinder);
-        mystBlocks.add(MystObjects.inkmixer);
-        mystBlocks.add(MystObjects.star_fissure);
-
-        mystBlocks.add(MystObjects.link_modifer);
-
-        API.addSetRange("Mystcraft.Blocks", mystBlocks);
-
-        MultiItemRange mystItems = new MultiItemRange();
-
-        mystItems.add(MystObjects.writing_desk);
-        mystItems.add(MystObjects.linkbook);
-        mystItems.add(MystObjects.inkvial);
-
-        if (PluginNEIMystcraft.addSymbolPages.getValue() || PluginNEIMystcraft.addLinkPanels.getValue()) {
-            MultiItemRange mystPages = new MultiItemRange();
-            mystPages.add(MystObjects.page);
-
-            API.addSetRange("Mystcraft.Items.Pages", mystPages);
-        }
-        else {
-            mystItems.add(MystObjects.page);
-        }
-
-        if (PluginNEIMystcraft.addCreativeNotebooks.getValue()) {
-            MultiItemRange mystNotebooks = new MultiItemRange();
-            mystNotebooks.add(MystObjects.notebook);
-
-            API.addSetRange("Mystcraft.Items.Notebooks", mystNotebooks);
-        }
-        else {
-            mystItems.add(MystObjects.notebook);
-        }
-
-        if (PluginNEIMystcraft.addLinkingBooks.getValue()) {
-            MultiItemRange mystLinkbooks = new MultiItemRange();
-            mystLinkbooks.add(MystObjects.linkbook_unlinked);
-
-            API.addSetRange("Mystcraft.Items.Linking Books", mystLinkbooks);
-        }
-        else {
-            mystItems.add(MystObjects.linkbook_unlinked);
-        }
-
-        if (PluginNEIMystcraft.addAgeList.getValue()) {
-            MultiItemRange mystDescriptiveBooks = new MultiItemRange();
-            mystDescriptiveBooks.add(MystObjects.descriptive_book);
-
-            API.addSetRange("Mystcraft.Items.Descriptive Books", mystDescriptiveBooks);
-        }
-        else {
-            mystItems.add(MystObjects.linkbook_unlinked);
-        }
-
-        API.addSetRange("Mystcraft.Items", mystItems);
+        // FIXME
+        //        MultiItemRange mystBlocks = new MultiItemRange();
+        //
+        //        mystBlocks.add(MystObjects.portal);
+        //        mystBlocks.add(MystObjects.crystal);
+        //        mystBlocks.add(MystObjects.crystal_receptacle);
+        //        mystBlocks.add(MystObjects.decay);
+        //        mystBlocks.add(MystObjects.bookstand);
+        //        mystBlocks.add(MystObjects.book_lectern);
+        //        mystBlocks.add(MystObjects.writing_desk_block);
+        //        mystBlocks.add(MystObjects.bookbinder);
+        //        mystBlocks.add(MystObjects.inkmixer);
+        //        mystBlocks.add(MystObjects.star_fissure);
+        //
+        //        mystBlocks.add(MystObjects.link_modifer);
+        //
+        //        API.addSetRange("Mystcraft.Blocks", mystBlocks);
+        //
+        //        MultiItemRange mystItems = new MultiItemRange();
+        //
+        //        mystItems.add(MystObjects.writing_desk);
+        //        mystItems.add(MystObjects.linkbook);
+        //        mystItems.add(MystObjects.inkvial);
+        //
+        //        if (PluginNEIMystcraft.addSymbolPages.getValue() || PluginNEIMystcraft.addLinkPanels.getValue()) {
+        //            MultiItemRange mystPages = new MultiItemRange();
+        //            mystPages.add(MystObjects.page);
+        //
+        //            API.addSetRange("Mystcraft.Items.Pages", mystPages);
+        //        }
+        //        else {
+        //            mystItems.add(MystObjects.page);
+        //        }
+        //
+        //        if (PluginNEIMystcraft.addCreativeNotebooks.getValue()) {
+        //            MultiItemRange mystNotebooks = new MultiItemRange();
+        //            mystNotebooks.add(MystObjects.notebook);
+        //
+        //            API.addSetRange("Mystcraft.Items.Notebooks", mystNotebooks);
+        //        }
+        //        else {
+        //            mystItems.add(MystObjects.notebook);
+        //        }
+        //
+        //        if (PluginNEIMystcraft.addLinkingBooks.getValue()) {
+        //            MultiItemRange mystLinkbooks = new MultiItemRange();
+        //            mystLinkbooks.add(MystObjects.linkbook_unlinked);
+        //
+        //            API.addSetRange("Mystcraft.Items.Linking Books", mystLinkbooks);
+        //        }
+        //        else {
+        //            mystItems.add(MystObjects.linkbook_unlinked);
+        //        }
+        //
+        //        if (PluginNEIMystcraft.addAgeList.getValue()) {
+        //            MultiItemRange mystDescriptiveBooks = new MultiItemRange();
+        //            mystDescriptiveBooks.add(MystObjects.descriptive_book);
+        //
+        //            API.addSetRange("Mystcraft.Items.Descriptive Books", mystDescriptiveBooks);
+        //        }
+        //        else {
+        //            mystItems.add(MystObjects.linkbook_unlinked);
+        //        }
+        //
+        //        API.addSetRange("Mystcraft.Items", mystItems);
     }
 
     /**
@@ -408,10 +386,6 @@ public class Integrator {
 
         bindings = inkEffectsClass.getField("itemId_bindings");
         itemId_bindings = bindings.getStatic();
-
-        RClass<Object> grammarGeneratorClass = new RClass(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator"));
-        RField<Object, HashMap<String, List>> mappingsField = grammarGeneratorClass.getField("mappings");
-        grammarMappingsRaw = mappingsField.get(null);
 
         RClass<Object> worldProviderMystClass = new RClass(Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst"));
         agedataField = worldProviderMystClass.getField("agedata");
@@ -448,20 +422,23 @@ public class Integrator {
                 return null;
             }
 
-            Map<String, Float> properties = MystAPI.linkProperties.getPropertiesForItem(stack);
+            Map<String, Float> properties = InternalAPI.linkProperties.getPropertiesForItem(stack);
 
             if (properties == null) {
                 return null;
             }
 
-            ColorGradient gradient = MystAPI.linkProperties.getPropertiesGradient(properties);
+            ColorGradient gradient = InternalAPI.linkProperties.getPropertiesGradient(properties);
 
             String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
 
             return new InkMixerRecipe(gradient, modifiers);
         }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
         catch (Throwable e) {
-            Objects.log.log(Level.WARNING, "Failed getting gradient", e);
+            Objects.log.log(Level.WARN, "Failed getting gradient", e);
             return null;
         }
     }
@@ -506,17 +483,17 @@ public class Integrator {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiHelper.drawTexturedModalRect((int) x, (int) y, (int) width, (int) height, z, 0.609375F, 0.0F, 0.7294117647058824F, 0.15625F);
 
-        MystAPI.render.drawSymbol(x, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
+        InternalAPI.render.drawSymbol(x, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
     }
 
     private static void addFakeRecipes() {
         ICraftingResultHandler handler = new ICraftingResultHandler() {
             @Override
-            public ItemStack getOutput(IHeldCoreRecipe recipe, List<ItemStack> input) {
+            public ItemStack getOutput(ISpACoreRecipe recipe, List<ItemStack> input) {
                 ItemStack result = recipe.getOutput();
 
                 for (ItemStack stack : input) {
-                    if (stack != null && stack.getItem() == MystObjects.page) {
+                    if (stack != null && stack.getItem() == MystObjs.page) {
                         if (stack.stackTagCompound != null) {
                             result.stackTagCompound = stack.stackTagCompound;
                             break;
@@ -539,7 +516,7 @@ public class Integrator {
 
             @Override
             public boolean isValidRecipeInput(ItemStack input) {
-                if (input != null && input.getItem() == MystObjects.page) {
+                if (input != null && input.getItem() == MystObjs.page) {
                     if (input.stackTagCompound == null) {
                         return false;
                     }
@@ -565,30 +542,9 @@ public class Integrator {
         ItemStack[] stacks = new ItemStack[linkPanels.size()];
         stacks = linkPanels.toArray(stacks);
 
-        ShapelessHeldCoreRecipe recipe = new ShapelessHeldCoreRecipe(handler, new ItemStack(MystObjects.linkbook_unlinked), stacks, new ItemStack(Item.leather));
+        ShapelessSpACoreRecipe recipe = new ShapelessSpACoreRecipe(handler, new ItemStack(MystObjs.linkbook_unlinked), stacks, new ItemStack(Items.leather));
 
         GameRegistry.addRecipe(recipe);
-    }
-
-    private static void parseGrammarRules() throws Throwable {
-        RClass<Object> Rule = new RClass(Class.forName("com.xcompwiz.mystcraft.symbols.GrammarGenerator$Rule"));
-        RField values = Rule.getField("values");
-        RField rarity = Rule.getField("rarity");
-
-        grammarMappings = new ArrayList<GrammarMapping>();
-        grammarMappingsMapped = new HashMap<String, List<GrammarMapping>>();
-
-        for (String key : grammarMappingsRaw.keySet()) {
-            List<?> rules = grammarMappingsRaw.get(key);
-            List<GrammarMapping> mappings = new ArrayList<GrammarMapping>();
-            grammarMappingsMapped.put(key, mappings);
-
-            for (Object rule : rules) {
-                GrammarMapping mapping = new GrammarMapping(key, (List<String>) values.get(rule), (Float) rarity.get(rule));
-                grammarMappings.add(mapping);
-                mappings.add(mapping);
-            }
-        }
     }
 
     public static List<String> getAgeSymbols(WorldProvider provider) {
