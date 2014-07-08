@@ -1,22 +1,4 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
-
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
-import me.heldplayer.plugins.nei.mystcraft.Objects;
-import me.heldplayer.plugins.nei.mystcraft.client.renderer.WritingDeskOverlayRenderer;
-import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.specialattack.forge.core.client.GuiHelper;
-
-import org.lwjgl.opengl.GL11;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientUtils;
@@ -26,81 +8,28 @@ import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-
 import com.xcompwiz.mystcraft.core.InternalAPI;
 import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.client.renderer.WritingDeskOverlayRenderer;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import net.specialattack.forge.core.client.GuiHelper;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
-
-    public class CachedWritingDeskRecipe extends CachedRecipe {
-
-        private PositionedStack leftOver;
-        private PositionedStack result;
-        private ArrayList<PositionedStack> ingredients;
-        protected IAgeSymbol symbol;
-        protected int tank;
-        protected boolean isNotebook;
-        protected boolean nullSymbol;
-        private GuiTextField textField;
-
-        public CachedWritingDeskRecipe(IAgeSymbol symbol, boolean isNotebook) {
-            this.symbol = symbol;
-            this.ingredients = new ArrayList<PositionedStack>();
-            this.tank = 1000;
-            this.isNotebook = isNotebook;
-            this.nullSymbol = symbol == null;
-            this.textField = new GuiTextField(GuiDraw.fontRenderer, 23, 54, 99, 14);
-
-            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial), 147, 1));
-            this.ingredients.add(new PositionedStack(new ItemStack(Items.paper), 3, 1));
-            this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 53);
-
-            if (isNotebook) {
-                this.result = new PositionedStack(InternalAPI.itemFact.buildNotebook("Named Notebook", new String[0]), 3, 53);
-
-                this.textField.setText("Named Notebook");
-
-                if (this.nullSymbol) {
-                    List<IAgeSymbol> symbols = MystObjs.getAllRegisteredSymbols();
-
-                    this.symbol = symbols.get(Objects.rnd.nextInt(symbols.size()));
-                }
-            }
-            else {
-                if (symbol != null) {
-                    this.result = new PositionedStack(InternalAPI.itemFact.buildSymbolPage(symbol.identifier()), 3, 53);
-
-                    this.textField.setText(symbol.displayName());
-                    this.textField.setCursorPosition(0);
-                }
-            }
-        }
-
-        @Override
-        public PositionedStack getResult() {
-            return this.result;
-        }
-
-        @Override
-        public ArrayList<PositionedStack> getIngredients() {
-            return this.ingredients;
-        }
-
-        @Override
-        public PositionedStack getOtherStack() {
-            return this.leftOver;
-        }
-
-    }
 
     @Override
     public String getRecipeName() {
         return StatCollector.translateToLocal("tile.myst.writing_desk.name");
-    }
-
-    @Override
-    public String getGuiTexture() {
-        return "mystcraft:gui/writingdesk.png";
     }
 
     @Override
@@ -112,8 +41,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         if (outputId.equals("item") || outputId.equals("writingdesk")) {
             if (results.length > 0) {
                 this.loadCraftingRecipes((ItemStack) results[0]);
-            }
-            else {
+            } else {
                 CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
                 this.arecipes.add(recipe);
 
@@ -143,8 +71,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(symbol), false);
             this.arecipes.add(recipe);
-        }
-        else if (result.getItem() == Items.glass_bottle) {
+        } else if (result.getItem() == Items.glass_bottle) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
             this.arecipes.add(recipe);
 
@@ -175,12 +102,10 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
             recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(symbol), false);
             this.arecipes.add(recipe);
-        }
-        else if (ingredient.getItem() == MystObjs.notebook) {
+        } else if (ingredient.getItem() == MystObjs.notebook) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
             this.arecipes.add(recipe);
-        }
-        else if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial) {
+        } else if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
             this.arecipes.add(recipe);
 
@@ -194,15 +119,13 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public int recipiesPerPage() {
-        return 1;
+    public String getGuiTexture() {
+        return "mystcraft:gui/writingdesk.png";
     }
 
     @Override
-    public void drawBackground(int recipe) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GuiDraw.changeTexture(this.getGuiTexture());
-        GuiDraw.drawTexturedModalRect(0, 0, 5, 7, 166, 70);
+    public String getOverlayIdentifier() {
+        return "writingdesk";
     }
 
     @Override
@@ -216,8 +139,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             GuiDraw.drawRect(25 + 80, 0, 10, 50, 0x33000000);
 
             Integrator.renderPage(recipe.symbol, 37.0F, 3.0F, 0.0F, 33.0F, 44.0F);
-        }
-        else if (recipe.symbol != null) {
+        } else if (recipe.symbol != null) {
             Integrator.renderPage(recipe.symbol, 27.0F, 0.0F, 0.0F, 36.0F, 48.0F);
         }
 
@@ -243,81 +165,10 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public String getOverlayIdentifier() {
-        return "writingdesk";
-    }
-
-    @Override
-    public IRecipeOverlayRenderer getOverlayRenderer(GuiContainer gui, int recipe) {
-        IStackPositioner positioner = RecipeInfo.getStackPositioner(gui, this.getOverlayIdentifier());
-        if (positioner == null) {
-            return null;
-        }
-        return new WritingDeskOverlayRenderer(this.getIngredientStacks(recipe), positioner);
-    }
-
-    @Override
-    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
-        if (!NEIConfig.tooltipsWritingDesk) {
-            return currenttip;
-        }
-
-        CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) this.arecipes.get(recipeId);
-
-        currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
-
-        Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
-
-        if (recipe.isNotebook) {
-            if (currenttip.isEmpty() && stack == null && new Rectangle(42, 19, 33, 44).contains(relMouse)) {
-                if (recipe.symbol != null) {
-                    currenttip.add(recipe.symbol.displayName());
-                }
-            }
-        }
-        else if (recipe.symbol != null) {
-            if (currenttip.isEmpty() && stack == null && new Rectangle(32, 16, 36, 48).contains(relMouse)) {
-                if (recipe.symbol != null) {
-                    currenttip.add(recipe.symbol.displayName());
-                }
-            }
-        }
-
-        if (currenttip.isEmpty() && stack == null && new Rectangle(131, 16, 16, 71).contains(relMouse)) {
-            currenttip.add(MystObjs.black_ink.getLocalizedName() + ": " + recipe.tank + "/1000");
-        }
-
-        if (currenttip.isEmpty() && stack == null && new Rectangle(28, 70, 99, 14).contains(relMouse)) {
-            if (recipe.isNotebook) {
-                currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook.name"));
-            }
-            else {
-                if (recipe.symbol != null) {
-                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page.name"));
-                }
-            }
-        }
-
-        if (currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
-            currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
-        }
-
-        Point recipepos = gui.getRecipePosition(recipeId);
-
-        if (currenttip.isEmpty() && stack == null && new Rectangle(recipepos.x, recipepos.y, 166, 80).contains(relMouse)) {
-            if (recipe != null) {
-                if (recipe.isNotebook) {
-                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook"));
-                }
-                else {
-                    if (recipe.symbol != null) {
-                        currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page"));
-                    }
-                }
-            }
-        }
-        return currenttip;
+    public void drawBackground(int recipe) {
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GuiDraw.changeTexture(this.getGuiTexture());
+        GuiDraw.drawTexturedModalRect(0, 0, 5, 7, 166, 70);
     }
 
     @Override
@@ -343,6 +194,141 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 }
             }
         }
+    }
+
+    @Override
+    public IRecipeOverlayRenderer getOverlayRenderer(GuiContainer gui, int recipe) {
+        IStackPositioner positioner = RecipeInfo.getStackPositioner(gui, this.getOverlayIdentifier());
+        if (positioner == null) {
+            return null;
+        }
+        return new WritingDeskOverlayRenderer(this.getIngredientStacks(recipe), positioner);
+    }
+
+    @Override
+    public int recipiesPerPage() {
+        return 1;
+    }
+
+    @Override
+    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
+        if (!NEIConfig.tooltipsWritingDesk) {
+            return currenttip;
+        }
+
+        CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) this.arecipes.get(recipeId);
+
+        currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
+
+        Point mousepos = GuiDraw.getMousePosition();
+        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
+
+        if (recipe.isNotebook) {
+            if (currenttip.isEmpty() && stack == null && new Rectangle(42, 19, 33, 44).contains(relMouse)) {
+                if (recipe.symbol != null) {
+                    currenttip.add(recipe.symbol.displayName());
+                }
+            }
+        } else if (recipe.symbol != null) {
+            if (currenttip.isEmpty() && stack == null && new Rectangle(32, 16, 36, 48).contains(relMouse)) {
+                if (recipe.symbol != null) {
+                    currenttip.add(recipe.symbol.displayName());
+                }
+            }
+        }
+
+        if (currenttip.isEmpty() && stack == null && new Rectangle(131, 16, 16, 71).contains(relMouse)) {
+            currenttip.add(MystObjs.black_ink.getLocalizedName() + ": " + recipe.tank + "/1000");
+        }
+
+        if (currenttip.isEmpty() && stack == null && new Rectangle(28, 70, 99, 14).contains(relMouse)) {
+            if (recipe.isNotebook) {
+                currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook.name"));
+            } else {
+                if (recipe.symbol != null) {
+                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page.name"));
+                }
+            }
+        }
+
+        if (currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
+            currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
+        }
+
+        Point recipepos = gui.getRecipePosition(recipeId);
+
+        if (currenttip.isEmpty() && stack == null && new Rectangle(recipepos.x, recipepos.y, 166, 80).contains(relMouse)) {
+            if (recipe != null) {
+                if (recipe.isNotebook) {
+                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook"));
+                } else {
+                    if (recipe.symbol != null) {
+                        currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page"));
+                    }
+                }
+            }
+        }
+        return currenttip;
+    }
+
+    public class CachedWritingDeskRecipe extends CachedRecipe {
+
+        protected IAgeSymbol symbol;
+        protected int tank;
+        protected boolean isNotebook;
+        protected boolean nullSymbol;
+        private PositionedStack leftOver;
+        private PositionedStack result;
+        private ArrayList<PositionedStack> ingredients;
+        private GuiTextField textField;
+
+        public CachedWritingDeskRecipe(IAgeSymbol symbol, boolean isNotebook) {
+            this.symbol = symbol;
+            this.ingredients = new ArrayList<PositionedStack>();
+            this.tank = 1000;
+            this.isNotebook = isNotebook;
+            this.nullSymbol = symbol == null;
+            this.textField = new GuiTextField(GuiDraw.fontRenderer, 23, 54, 99, 14);
+
+            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial), 147, 1));
+            this.ingredients.add(new PositionedStack(new ItemStack(Items.paper), 3, 1));
+            this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 53);
+
+            if (isNotebook) {
+                this.result = new PositionedStack(InternalAPI.itemFact.buildNotebook("Named Notebook", new String[0]), 3, 53);
+
+                this.textField.setText("Named Notebook");
+
+                if (this.nullSymbol) {
+                    List<IAgeSymbol> symbols = MystObjs.getAllRegisteredSymbols();
+
+                    this.symbol = symbols.get(Objects.rnd.nextInt(symbols.size()));
+                }
+            } else {
+                if (symbol != null) {
+                    this.result = new PositionedStack(InternalAPI.itemFact.buildSymbolPage(symbol.identifier()), 3, 53);
+
+                    this.textField.setText(symbol.displayName());
+                    this.textField.setCursorPosition(0);
+                }
+            }
+        }
+
+        @Override
+        public PositionedStack getResult() {
+            return this.result;
+        }
+
+        @Override
+        public ArrayList<PositionedStack> getIngredients() {
+            return this.ingredients;
+        }
+
+        @Override
+        public PositionedStack getOtherStack() {
+            return this.leftOver;
+        }
+
     }
 
 }

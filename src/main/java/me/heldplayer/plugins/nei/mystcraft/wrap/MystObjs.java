@@ -1,9 +1,8 @@
-
 package me.heldplayer.plugins.nei.mystcraft.wrap;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.xcompwiz.mystcraft.api.MystObjects;
+import com.xcompwiz.mystcraft.core.InternalAPI;
+import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -12,9 +11,8 @@ import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import com.xcompwiz.mystcraft.api.MystObjects;
-import com.xcompwiz.mystcraft.core.InternalAPI;
-import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import java.util.ArrayList;
+import java.util.List;
 
 @Deprecated
 public class MystObjs {
@@ -74,14 +72,16 @@ public class MystObjs {
         creative_notebooks = new ArrayList<ItemStack>();
 
         for (CreativeTabs tab : CreativeTabs.creativeTabArray) {
-            if (tab == null)
+            if (tab == null) {
                 continue;
+            }
             if (tab.getTabLabel().equals("mystcraft.common")) {
                 List<ItemStack> items = new ArrayList<ItemStack>();
                 tab.displayAllReleventItems(items);
                 for (ItemStack stack : items) {
-                    if (stack == null)
+                    if (stack == null) {
                         continue;
+                    }
                     if (stack.getItem() == MystObjs.notebook) {
                         creative_notebooks.add(stack);
                     }
@@ -90,12 +90,12 @@ public class MystObjs {
         }
     }
 
-    private static Item getItem(String name) {
-        return (Item) Item.itemRegistry.getObject("Mystcraft:" + name);
-    }
-
     private static Block getBlock(String name) {
         return Block.getBlockFromName("Mystcraft:" + name);
+    }
+
+    private static Item getItem(String name) {
+        return (Item) Item.itemRegistry.getObject("Mystcraft:" + name);
     }
 
     public static List<IAgeSymbol> getAllRegisteredSymbols() {

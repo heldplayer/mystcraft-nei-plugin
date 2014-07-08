@@ -1,12 +1,11 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.api.API;
+import com.xcompwiz.mystcraft.core.InternalAPI;
+import com.xcompwiz.mystcraft.symbol.ColorGradient;
+import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import cpw.mods.fml.common.registry.GameRegistry;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
@@ -26,24 +25,15 @@ import net.specialattack.forge.core.crafting.ShapelessSpACoreRecipe;
 import net.specialattack.forge.core.reflection.RClass;
 import net.specialattack.forge.core.reflection.RField;
 import net.specialattack.forge.core.reflection.ReflectionHelper;
-
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.api.API;
-
-import com.xcompwiz.mystcraft.core.InternalAPI;
-import com.xcompwiz.mystcraft.symbol.ColorGradient;
-import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import java.util.*;
 
 /**
  * Class used for integrating into Mystcraft
- * 
+ *
  * @author heldplayer
- * 
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Integrator {
@@ -61,7 +51,6 @@ public class Integrator {
 
     /**
      * Initialize all NEI features for Mystcraft
-     * 
      */
     public static void initialize() {
         Objects.log.log(Level.DEBUG, "Initializing Mystcraft Integrator");
@@ -70,8 +59,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Hiding technical blocks from NEI");
                 hideTechnicalBlocks();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed hiding technical blocks from NEI", ex);
             }
         }
@@ -80,8 +68,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding decay types to NEI");
                 addDecayTypes();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding decay types to NEI", ex);
             }
         }
@@ -90,8 +77,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding creative notebooks to NEI view");
                 addCreativeNotebooks();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding creative notebooks to NEI", ex);
             }
         }
@@ -100,8 +86,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding symbol pages to NEI view");
                 addPages();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding symbol pages to NEI", ex);
             }
         }
@@ -109,8 +94,7 @@ public class Integrator {
         try {
             Objects.log.log(Level.DEBUG, "Getting all link panels");
             prepareLinkPanels();
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             Objects.log.log(Level.ERROR, "Failed getting all link panels", ex);
         }
 
@@ -118,8 +102,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding link panels to NEI");
                 addLinkPanels();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding link panels to NEI", ex);
             }
         }
@@ -128,8 +111,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding linking books to NEI");
                 addLinkingbooks();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding linking books to NEI", ex);
             }
         }
@@ -138,8 +120,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding item ranges to NEI");
                 addItemRanges();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding item ranges to NEI", ex);
             }
         }
@@ -147,8 +128,7 @@ public class Integrator {
         try {
             Objects.log.log(Level.DEBUG, "Getting methods and fields");
             getMethodsAndFields();
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             Objects.log.log(Level.ERROR, "Failed getting methods and fields", ex);
         }
 
@@ -156,8 +136,7 @@ public class Integrator {
             Objects.log.log(Level.DEBUG, "Getting GUI classes");
             NEIConfig.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
             NEIConfig.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             Objects.log.log(Level.ERROR, "Failed getting GUI classes", ex);
         }
 
@@ -165,8 +144,7 @@ public class Integrator {
             try {
                 Objects.log.log(Level.DEBUG, "Adding 'fake' recipes");
                 addFakeRecipes();
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 Objects.log.log(Level.ERROR, "Failed adding 'fake' recipes", ex);
             }
         }
@@ -174,7 +152,7 @@ public class Integrator {
 
     /**
      * Hide technical blocks and items from the NEI item list
-     * 
+     *
      * @throws Throwable
      */
     private static void hideTechnicalBlocks() throws Throwable {
@@ -185,7 +163,7 @@ public class Integrator {
 
     /**
      * Add all decay types that are standard Mystcraft to the NEI item list
-     * 
+     *
      * @throws Throwable
      */
     private static void addDecayTypes() throws Throwable {
@@ -205,7 +183,7 @@ public class Integrator {
 
     /**
      * Add all creative notebooks to NEI
-     * 
+     *
      * @throws Throwable
      */
     private static void addCreativeNotebooks() throws Throwable {
@@ -221,7 +199,7 @@ public class Integrator {
 
     /**
      * Add all pages to NEI
-     * 
+     *
      * @throws Throwable
      */
     private static void addPages() throws Throwable {
@@ -277,7 +255,7 @@ public class Integrator {
 
     /**
      * Add all link panels to NEI
-     * 
+     *
      * @throws Throwable
      */
     private static void addLinkPanels() throws Throwable {
@@ -298,7 +276,7 @@ public class Integrator {
 
     /**
      * Add item ranges to the NEI interface
-     * 
+     *
      * @throws Throwable
      */
     private static void addItemRanges() throws Throwable {
@@ -372,7 +350,7 @@ public class Integrator {
     /**
      * Gets all methods and fields required by recipe handlers and such to
      * function
-     * 
+     *
      * @throws Throwable
      */
     private static void getMethodsAndFields() throws Throwable {
@@ -395,99 +373,9 @@ public class Integrator {
         pagesField = ageDataClass.getField("pages");
     }
 
-    /**
-     * Utility method used in {@link #addLinkPanels()}
-     * 
-     * @param bits
-     *        The amount of bits to turn to 1
-     * @return Returns an int that has bits set to 1 equal to {@link bits}
-     */
-    private static int binary(int bits) {
-        int result = 0;
-        for (int i = 0; i < bits; i++) {
-            result |= 1 << i;
-        }
-        return result;
-    }
-
-    /**
-     * Returns an ink mixer recipe that uses the given stack as ingredient
-     * 
-     * @param stack
-     * @return
-     */
-    public static InkMixerRecipe getInkMixerRecipe(ItemStack stack) {
-        try {
-            if (stack == null) {
-                return null;
-            }
-
-            Map<String, Float> properties = InternalAPI.linkProperties.getPropertiesForItem(stack);
-
-            if (properties == null) {
-                return null;
-            }
-
-            ColorGradient gradient = InternalAPI.linkProperties.getPropertiesGradient(properties);
-
-            String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
-
-            return new InkMixerRecipe(gradient, modifiers);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
-        catch (Throwable e) {
-            Objects.log.log(Level.WARN, "Failed getting gradient", e);
-            return null;
-        }
-    }
-
-    /**
-     * Returns all possible ink mixer recipes as an ArrayList of Objects
-     * 
-     * @return
-     */
-    public static ArrayList getALlInkMixerRecipes() {
-        ArrayList result = new ArrayList();
-
-        result.addAll(itemstack_bindings.keySet());
-        result.addAll(oredict_bindings.keySet());
-        result.addAll(itemId_bindings.keySet());
-
-        return result;
-    }
-
-    public static List<ItemStack> getAllLinkpanels() {
-        return allLinkpanels;
-    }
-
-    /**
-     * Renders a symbol
-     * 
-     * @param symbol
-     *        The symbol to render
-     * @param x
-     *        X-position to render at
-     * @param y
-     *        Y-position to render at
-     * @param z
-     *        Z-index to render at
-     * @param width
-     *        Width to render
-     * @param height
-     *        Height to render
-     */
-    public static void renderPage(IAgeSymbol symbol, float x, float y, float z, float width, float height) {
-        GuiDraw.changeTexture(Assets.bookPageLeft);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GuiHelper.drawTexturedModalRect((int) x, (int) y, (int) width, (int) height, z, 0.609375F, 0.0F, 0.7294117647058824F, 0.15625F);
-
-        InternalAPI.render.drawSymbol(x, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
-    }
-
     private static void addFakeRecipes() {
         ICraftingResultHandler handler = new ICraftingResultHandler() {
+
             @Override
             public ItemStack getOutput(ISpACoreRecipe recipe, List<ItemStack> input) {
                 ItemStack result = recipe.getOutput();
@@ -545,6 +433,88 @@ public class Integrator {
         ShapelessSpACoreRecipe recipe = new ShapelessSpACoreRecipe(handler, new ItemStack(MystObjs.linkbook_unlinked), stacks, new ItemStack(Items.leather));
 
         GameRegistry.addRecipe(recipe);
+    }
+
+    /**
+     * Utility method used in {@link #addLinkPanels()}
+     *
+     * @param bits The amount of bits to turn to 1
+     * @return Returns an int that has bits set to 1 equal to {@link bits}
+     */
+    private static int binary(int bits) {
+        int result = 0;
+        for (int i = 0; i < bits; i++) {
+            result |= 1 << i;
+        }
+        return result;
+    }
+
+    public static List<ItemStack> getAllLinkpanels() {
+        return allLinkpanels;
+    }
+
+    /**
+     * Returns an ink mixer recipe that uses the given stack as ingredient
+     *
+     * @param stack
+     * @return
+     */
+    public static InkMixerRecipe getInkMixerRecipe(ItemStack stack) {
+        try {
+            if (stack == null) {
+                return null;
+            }
+
+            Map<String, Float> properties = InternalAPI.linkProperties.getPropertiesForItem(stack);
+
+            if (properties == null) {
+                return null;
+            }
+
+            ColorGradient gradient = InternalAPI.linkProperties.getPropertiesGradient(properties);
+
+            String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
+
+            return new InkMixerRecipe(gradient, modifiers);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        } catch (Throwable e) {
+            Objects.log.log(Level.WARN, "Failed getting gradient", e);
+            return null;
+        }
+    }
+
+    /**
+     * Returns all possible ink mixer recipes as an ArrayList of Objects
+     *
+     * @return
+     */
+    public static ArrayList getALlInkMixerRecipes() {
+        ArrayList result = new ArrayList();
+
+        result.addAll(itemstack_bindings.keySet());
+        result.addAll(oredict_bindings.keySet());
+        result.addAll(itemId_bindings.keySet());
+
+        return result;
+    }
+
+    /**
+     * Renders a symbol
+     *
+     * @param symbol The symbol to render
+     * @param x      X-position to render at
+     * @param y      Y-position to render at
+     * @param z      Z-index to render at
+     * @param width  Width to render
+     * @param height Height to render
+     */
+    public static void renderPage(IAgeSymbol symbol, float x, float y, float z, float width, float height) {
+        GuiDraw.changeTexture(Assets.bookPageLeft);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GuiHelper.drawTexturedModalRect((int) x, (int) y, (int) width, (int) height, z, 0.609375F, 0.0F, 0.7294117647058824F, 0.15625F);
+
+        InternalAPI.render.drawSymbol(x, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
     }
 
     public static List<String> getAgeSymbols(WorldProvider provider) {

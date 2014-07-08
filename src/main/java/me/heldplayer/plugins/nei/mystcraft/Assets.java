@@ -1,4 +1,3 @@
-
 package me.heldplayer.plugins.nei.mystcraft;
 
 import net.minecraft.util.ResourceLocation;

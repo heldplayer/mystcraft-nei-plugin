@@ -1,18 +1,16 @@
-
 package me.heldplayer.plugins.nei.mystcraft.packet;
 
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.io.IOException;
-
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.specialattack.forge.core.packet.SpACorePacket;
-import cpw.mods.fml.relauncher.Side;
+
+import java.io.IOException;
 
 public class Packet1RequestAges extends SpACorePacket {
 
@@ -26,10 +24,12 @@ public class Packet1RequestAges extends SpACorePacket {
     }
 
     @Override
-    public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {}
+    public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {
+    }
 
     @Override
-    public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {}
+    public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {
+    }
 
     @Override
     public void onData(ChannelHandlerContext context, EntityPlayer player) {
@@ -37,7 +37,7 @@ public class Packet1RequestAges extends SpACorePacket {
         boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
         boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
 
-        boolean playerOpped = MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getCommandSenderName());
+        boolean playerOpped = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 
         if (addToNEI && PluginNEIMystcraft.opOnlyAgeList.getValue()) {
             addToNEI = playerOpped;

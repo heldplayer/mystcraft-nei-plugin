@@ -1,4 +1,3 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import java.util.List;

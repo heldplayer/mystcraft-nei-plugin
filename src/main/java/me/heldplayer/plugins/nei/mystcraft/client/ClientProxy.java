@@ -1,16 +1,4 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
-
-import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
-import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
-import me.heldplayer.plugins.nei.mystcraft.Objects;
-import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
-import me.heldplayer.plugins.nei.mystcraft.packet.Packet1RequestAges;
-import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
-import net.minecraftforge.common.MinecraftForge;
-import net.specialattack.forge.core.event.SyncEvent;
-
-import org.apache.logging.log4j.Level;
 
 import codechicken.nei.api.ItemInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -19,6 +7,15 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
+import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
+import me.heldplayer.plugins.nei.mystcraft.packet.Packet1RequestAges;
+import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
+import net.minecraftforge.common.MinecraftForge;
+import net.specialattack.forge.core.event.SyncEvent;
+import org.apache.logging.log4j.Level;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -33,8 +30,7 @@ public class ClientProxy extends CommonProxy {
         try {
             Objects.log.log(Level.DEBUG, "Initializing temporary wrappers for 1.7");
             MystObjs.initialize();
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             Objects.log.log(Level.ERROR, "Failed initializing temporary wrappers for 1.7", ex);
         }
     }

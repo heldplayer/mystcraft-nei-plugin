@@ -1,11 +1,4 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
-
-import me.heldplayer.plugins.nei.mystcraft.Objects;
-import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-
-import org.apache.logging.log4j.Level;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
@@ -13,6 +6,10 @@ import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.DefaultOverlayHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import org.apache.logging.log4j.Level;
 
 @SideOnly(Side.CLIENT)
 public class NEIConfig implements IConfigureNEI {

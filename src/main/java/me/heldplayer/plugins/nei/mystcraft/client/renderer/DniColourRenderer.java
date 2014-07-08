@@ -1,18 +1,14 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client.renderer;
-
-import java.awt.Color;
 
 import net.specialattack.util.MathHelper;
 import net.specialattack.util.Vector;
 import net.specialattack.util.VectorPool;
-
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
- * 
  * @author heldplayer
- * 
  */
 @Deprecated
 // Use API method instead
@@ -39,21 +35,18 @@ public class DniColourRenderer {
                 eyelidRadius = MathHelper.abs(MathHelper.cos(((float) temp / 114.0F)) * radius);
                 outerEyelid = true;
                 innerEyelid = true;
-            }
-            else if (H <= 114) {
+            } else if (H <= 114) {
                 int temp = H - 30;
                 outerEyelid = true;
                 eyelidRadius = MathHelper.abs(MathHelper.sin(((float) temp / 86.0F)) * radius);
                 eye = true;
-            }
-            else if (H <= 274) {
+            } else if (H <= 274) {
                 int temp = H - 114;
                 innerEyelid = true;
                 eyelidRadius = MathHelper.abs(MathHelper.cos(((float) temp / 160.0F)) * radius);
                 eye = true;
             }
-        }
-        else {
+        } else {
             float mod = MathHelper.min(HSB[1] / 0.3F, HSB[2] / 0.5F);
             eyeRadius *= HSB[2] / 0.5F;
             if (H <= 28 || H > 274) {
@@ -61,20 +54,17 @@ public class DniColourRenderer {
                 if (mod < 0.3F) {
                     eyelidRadius = MathHelper.abs(MathHelper.max(MathHelper.cos(((float) temp / 114.0F)), 1.0F - mod / 0.3F) * radius);
                     eye = true;
-                }
-                else {
+                } else {
                     eyelidRadius = MathHelper.abs(MathHelper.min(MathHelper.cos(((float) temp / 114.0F)), (mod - 0.3F) / 0.7F) * radius);
                     innerEyelid = true;
                 }
                 outerEyelid = true;
-            }
-            else if (H <= 114) {
+            } else if (H <= 114) {
                 int temp = H - 30;
                 outerEyelid = true;
                 eyelidRadius = MathHelper.abs(MathHelper.max(MathHelper.cos(((float) temp / 86.0F)), 1.0F - mod) * radius);
                 eye = true;
-            }
-            else if (H <= 274) {
+            } else if (H <= 274) {
                 int temp = H - 114;
                 innerEyelid = true;
                 eyelidRadius = MathHelper.abs(MathHelper.max(MathHelper.cos(((float) temp / 160.0F)), 1.0F - mod) * radius);
@@ -178,8 +168,7 @@ public class DniColourRenderer {
                 GL11.glVertex3d(point.posX, point.posY, point.posZ);
             }
             GL11.glEnd();
-        }
-        else if (innerEyelid) {
+        } else if (innerEyelid) {
             GL11.glBegin(GL11.GL_LINES);
             GL11.glVertex3d(top.posX, top.posY, top.posZ);
             GL11.glVertex3d(bottom.posX, bottom.posY, bottom.posZ);

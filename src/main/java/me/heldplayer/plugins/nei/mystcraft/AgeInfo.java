@@ -1,9 +1,8 @@
-
 package me.heldplayer.plugins.nei.mystcraft;
 
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 public class AgeInfo {
 

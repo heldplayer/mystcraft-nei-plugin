@@ -13,3 +13,25 @@ nei.mystcraft.recipe.ages.modes.1=Symbols
 nei.mystcraft.linkbook.activate=Right click with the book in hand to create a link
 
 nei.mystcraft.recipes=Recipes
+
+config.nei.mystcraft.category.general=General
+config.nei.mystcraft.key.hideTechnicalBlocks=Hide technical blocks
+config.nei.mystcraft.key.addDecaySubTypes=Add Decay subtypes
+config.nei.mystcraft.key.addCreativeNotebooks=Add Creative Notebooks
+config.nei.mystcraft.key.addSymbolPages=Add Symbol Pages
+config.nei.mystcraft.key.addLinkPanels=Add Link Panels
+config.nei.mystcraft.key.addLinkingBooks=Add Linking Books
+config.nei.mystcraft.key.addItemRanges=Add item ranges
+config.nei.mystcraft.key.showRecipeForLinkbooks=Show Linking Book recipes
+config.nei.mystcraft.key.addInkMixerRecipes=Show Ink Mixer recipes
+config.nei.mystcraft.key.addWritingDeskRecipes=Show Writing Desk recipes
+config.nei.mystcraft.key.addInkMixerTooltips=Show Ink Mixer tooltips
+config.nei.mystcraft.key.addWritingDeskTooltips=Show Writing Desk tooltips
+config.nei.mystcraft.key.addRecipesTooltips=Show 'Recipes' tooltips
+config.nei.mystcraft.key.addAgeExplorer=Enable Age Explorer
+config.nei.mystcraft.key.addAgeList=Add Descriptive Books
+config.nei.mystcraft.key.allowSymbolExploring=Allow symbol exploring
+config.nei.mystcraft.key.allowPageExploring=Allow page exploring
+config.nei.mystcraft.key.opOnlyAgeList=Op-only Age Explorer
+config.nei.mystcraft.key.opOnlySymbolExplorer=Op-only symbol exploring
+config.nei.mystcraft.key.opOnlyPageExploring=Op-only page exploring

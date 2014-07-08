@@ -1,13 +1,5 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.guihook.GuiContainerManager;
@@ -16,6 +8,12 @@ import codechicken.nei.guihook.IContainerTooltipHandler;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+
+import java.awt.*;
+import java.util.List;
 
 public class MystTooltipHandler implements IContainerInputHandler, IContainerTooltipHandler {
 
@@ -30,11 +28,6 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
     }
 
     @Override
-    public List<String> handleItemDisplayName(GuiContainer gui, ItemStack stack, List<String> currenttip) {
-        return currenttip;
-    }
-
-    @Override
     public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
         if (this.recipes && this.recipesWritingDesk && NEIConfig.guiWritingDeskClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
@@ -45,8 +38,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
             if (currenttip.isEmpty() && GuiContainerManager.shouldShowTooltip(gui) && rect.contains(relMouse)) {
                 currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
             }
-        }
-        else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
+        } else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -56,6 +48,11 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
             }
         }
+        return currenttip;
+    }
+
+    @Override
+    public List<String> handleItemDisplayName(GuiContainer gui, ItemStack stack, List<String> currenttip) {
         return currenttip;
     }
 
@@ -73,8 +70,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                     if (rect.contains(relMouse)) {
                         currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
                     }
-                }
-                else if (this.recipes && this.recipesInkMixer && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof InkMixerRecipeHandler) {
+                } else if (this.recipes && this.recipesInkMixer && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof InkMixerRecipeHandler) {
                     Point center = new Point(87, 49);
                     if (center.distance(relMouse) < 34.0D) {
                         currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
@@ -97,14 +93,12 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 if (keyCode == NEIClientConfig.getKeyBinding("gui.recipe")) {
                     GuiCraftingRecipe.openRecipeGui("writingdesk");
                     return true;
-                }
-                else if (keyCode == NEIClientConfig.getKeyBinding("gui.usage")) {
+                } else if (keyCode == NEIClientConfig.getKeyBinding("gui.usage")) {
                     GuiUsageRecipe.openRecipeGui("writingdesk");
                     return true;
                 }
             }
-        }
-        else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
+        } else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -114,8 +108,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 if (keyCode == NEIClientConfig.getKeyBinding("gui.recipe")) {
                     GuiCraftingRecipe.openRecipeGui("inkmixer");
                     return true;
-                }
-                else if (keyCode == NEIClientConfig.getKeyBinding("gui.usage")) {
+                } else if (keyCode == NEIClientConfig.getKeyBinding("gui.usage")) {
                     GuiUsageRecipe.openRecipeGui("inkmixer");
                     return true;
                 }
@@ -126,7 +119,8 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
     }
 
     @Override
-    public void onKeyTyped(GuiContainer gui, char keyChar, int keyID) {}
+    public void onKeyTyped(GuiContainer gui, char keyChar, int keyID) {
+    }
 
     @Override
     public boolean lastKeyTyped(GuiContainer gui, char keyChar, int keyID) {
@@ -145,14 +139,12 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 if (button == 0) {
                     GuiCraftingRecipe.openRecipeGui("writingdesk");
                     return true;
-                }
-                else if (button == 1) {
+                } else if (button == 1) {
                     GuiUsageRecipe.openRecipeGui("writingdesk");
                     return true;
                 }
             }
-        }
-        else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
+        } else if (this.recipes && this.recipesInkMixer && NEIConfig.guiInkMixerClass.isAssignableFrom(gui.getClass())) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -162,14 +154,12 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                 if (button == 0) {
                     GuiCraftingRecipe.openRecipeGui("inkmixer");
                     return true;
-                }
-                else if (button == 1) {
+                } else if (button == 1) {
                     GuiUsageRecipe.openRecipeGui("inkmixer");
                     return true;
                 }
             }
-        }
-        else if (gui instanceof GuiRecipe) {
+        } else if (gui instanceof GuiRecipe) {
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
@@ -182,8 +172,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
                     if (button == 0) {
                         GuiCraftingRecipe.openRecipeGui("writingdesk");
                         return true;
-                    }
-                    else if (button == 1) {
+                    } else if (button == 1) {
                         GuiUsageRecipe.openRecipeGui("writingdesk");
                         return true;
                     }
@@ -194,10 +183,12 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
     }
 
     @Override
-    public void onMouseClicked(GuiContainer gui, int mousex, int mousey, int button) {}
+    public void onMouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
+    }
 
     @Override
-    public void onMouseUp(GuiContainer gui, int mousex, int mousey, int button) {}
+    public void onMouseUp(GuiContainer gui, int mousex, int mousey, int button) {
+    }
 
     @Override
     public boolean mouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {
@@ -205,9 +196,11 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
     }
 
     @Override
-    public void onMouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {}
+    public void onMouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {
+    }
 
     @Override
-    public void onMouseDragged(GuiContainer gui, int mousex, int mousey, int button, long heldTime) {}
+    public void onMouseDragged(GuiContainer gui, int mousex, int mousey, int button, long heldTime) {
+    }
 
 }

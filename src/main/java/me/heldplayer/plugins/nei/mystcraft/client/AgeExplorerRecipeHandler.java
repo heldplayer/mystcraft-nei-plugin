@@ -1,113 +1,28 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.GuiRecipe;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+import com.xcompwiz.mystcraft.core.InternalAPI;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.GuiRecipe;
-import codechicken.nei.recipe.TemplateRecipeHandler;
-
-import com.xcompwiz.mystcraft.core.InternalAPI;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
-
-    public class CachedBooksRecipe extends CachedRecipe {
-
-        protected AgeInfo ageInfo;
-        protected int mode; // 0 = Pages; 1 = Symbols
-        private ArrayList<PositionedStack> visibleStacks;
-        private PositionedStack[] allStacks;
-        private ArrayList<ItemStack> stacks;
-        protected float currentScroll;
-        protected boolean isScrolling;
-        protected boolean wasClicking;
-        protected boolean canScroll;
-
-        public CachedBooksRecipe(AgeInfo ageInfo, int mode) {
-            this.ageInfo = ageInfo;
-            this.mode = mode;
-
-            this.visibleStacks = new ArrayList<PositionedStack>();
-            this.allStacks = new PositionedStack[48];
-            this.stacks = new ArrayList<ItemStack>();
-
-            for (int i = 0; i < this.allStacks.length; i++) {
-                this.allStacks[i] = new PositionedStack(new ItemStack[0], (i % 8) * 18 + 4, i / 8 * 18 + 17);
-            }
-
-            if (mode == 0) {
-                for (int i = 0; i < ageInfo.pages.size(); i++) {
-                    this.stacks.add(ageInfo.pages.get(i));
-                }
-            }
-            if (mode == 1) {
-                for (int i = 0; i < ageInfo.symbols.size(); i++) {
-                    ItemStack stack = InternalAPI.itemFact.buildSymbolPage(ageInfo.symbols.get(i));
-                    this.stacks.add(stack);
-                }
-            }
-
-            if (this.stacks.size() >= 48) {
-                this.canScroll = true;
-            }
-
-            this.scroll();
-        }
-
-        @Override
-        public List<PositionedStack> getIngredients() {
-            return this.visibleStacks;
-        }
-
-        @Override
-        public PositionedStack getResult() {
-            return null;
-        }
-
-        public void scroll() {
-            int i = this.stacks.size() / 8 - 6 + 1;
-            int j = (int) ((double) (this.currentScroll * (float) i) + 0.5D);
-
-            if (j < 0) {
-                j = 0;
-            }
-
-            this.visibleStacks.clear();
-
-            for (int k = 0; k < 6; ++k) {
-                for (int l = 0; l < 8; ++l) {
-                    int i1 = l + (k + j) * 8;
-
-                    if (i1 >= 0 && i1 < this.stacks.size()) {
-                        this.allStacks[l + k * 8].item = this.stacks.get(i1);
-                        this.visibleStacks.add(this.allStacks[l + k * 8]);
-                    }
-                }
-            }
-        }
-    }
 
     @Override
     public String getRecipeName() {
         return StatCollector.translateToLocal("nei.mystcraft.recipe.ages");
-    }
-
-    @Override
-    public String getGuiTexture() {
-        return "neimystcraft:textures/gui/ages.png";
     }
 
     @Override
@@ -174,15 +89,8 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public int recipiesPerPage() {
-        return 1;
-    }
-
-    @Override
-    public void drawBackground(int recipe) {
-        GL11.glColor4f(1, 1, 1, 1);
-        GuiDraw.changeTexture(this.getGuiTexture());
-        GuiDraw.drawTexturedModalRect(0, 10, 5, 11, 166, 114);
+    public String getGuiTexture() {
+        return "neimystcraft:textures/gui/ages.png";
     }
 
     @Override
@@ -195,6 +103,18 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
         GuiDraw.drawString(recipe.ageInfo.ageName, 5, 2, 0x404040, false);
         GuiDraw.drawStringR(StatCollector.translateToLocal("nei.mystcraft.recipe.ages.modes." + recipe.mode), 160, 2, 0x404040, false);
+    }
+
+    @Override
+    public void drawBackground(int recipe) {
+        GL11.glColor4f(1, 1, 1, 1);
+        GuiDraw.changeTexture(this.getGuiTexture());
+        GuiDraw.drawTexturedModalRect(0, 10, 5, 11, 166, 114);
+    }
+
+    @Override
+    public int recipiesPerPage() {
+        return 1;
     }
 
     @Override
@@ -261,6 +181,82 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
         }
 
         return super.handleTooltip(gui, currenttip, recipeId);
+    }
+
+    public class CachedBooksRecipe extends CachedRecipe {
+
+        protected AgeInfo ageInfo;
+        protected int mode; // 0 = Pages; 1 = Symbols
+        protected float currentScroll;
+        protected boolean isScrolling;
+        protected boolean wasClicking;
+        protected boolean canScroll;
+        private ArrayList<PositionedStack> visibleStacks;
+        private PositionedStack[] allStacks;
+        private ArrayList<ItemStack> stacks;
+
+        public CachedBooksRecipe(AgeInfo ageInfo, int mode) {
+            this.ageInfo = ageInfo;
+            this.mode = mode;
+
+            this.visibleStacks = new ArrayList<PositionedStack>();
+            this.allStacks = new PositionedStack[48];
+            this.stacks = new ArrayList<ItemStack>();
+
+            for (int i = 0; i < this.allStacks.length; i++) {
+                this.allStacks[i] = new PositionedStack(new ItemStack[0], (i % 8) * 18 + 4, i / 8 * 18 + 17);
+            }
+
+            if (mode == 0) {
+                for (int i = 0; i < ageInfo.pages.size(); i++) {
+                    this.stacks.add(ageInfo.pages.get(i));
+                }
+            }
+            if (mode == 1) {
+                for (int i = 0; i < ageInfo.symbols.size(); i++) {
+                    ItemStack stack = InternalAPI.itemFact.buildSymbolPage(ageInfo.symbols.get(i));
+                    this.stacks.add(stack);
+                }
+            }
+
+            if (this.stacks.size() >= 48) {
+                this.canScroll = true;
+            }
+
+            this.scroll();
+        }
+
+        public void scroll() {
+            int i = this.stacks.size() / 8 - 6 + 1;
+            int j = (int) ((double) (this.currentScroll * (float) i) + 0.5D);
+
+            if (j < 0) {
+                j = 0;
+            }
+
+            this.visibleStacks.clear();
+
+            for (int k = 0; k < 6; ++k) {
+                for (int l = 0; l < 8; ++l) {
+                    int i1 = l + (k + j) * 8;
+
+                    if (i1 >= 0 && i1 < this.stacks.size()) {
+                        this.allStacks[l + k * 8].item = this.stacks.get(i1);
+                        this.visibleStacks.add(this.allStacks[l + k * 8]);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public PositionedStack getResult() {
+            return null;
+        }
+
+        @Override
+        public List<PositionedStack> getIngredients() {
+            return this.visibleStacks;
+        }
     }
 
 }

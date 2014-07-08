@@ -1,12 +1,7 @@
-
 package me.heldplayer.plugins.nei.mystcraft;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.*;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -14,15 +9,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.specialattack.forge.core.SpACoreProxy;
-
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CommonProxy extends SpACoreProxy {
 
@@ -30,13 +23,16 @@ public class CommonProxy extends SpACoreProxy {
     public static HashMap<Integer, AgeInfo> clientAgesMap = new HashMap<Integer, AgeInfo>();
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {}
+    public void preInit(FMLPreInitializationEvent event) {
+    }
 
     @Override
-    public void init(FMLInitializationEvent event) {}
+    public void init(FMLInitializationEvent event) {
+    }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {}
+    public void postInit(FMLPostInitializationEvent event) {
+    }
 
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
@@ -81,8 +77,7 @@ public class CommonProxy extends SpACoreProxy {
                     info.ageName = data.getString("AgeName");
 
                     serverAgesMap.put(Integer.valueOf(dimId), info);
-                }
-                catch (Throwable e) {
+                } catch (Throwable e) {
                     Objects.log.log(Level.ERROR, "Failed reading agedata file " + file.getName(), e);
                 }
             }

@@ -1,13 +1,11 @@
-
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import com.xcompwiz.mystcraft.symbol.ColorGradient;
 
 /**
  * Class used to store information for an ink mixer recipe
- * 
+ *
  * @author heldplayer
- * 
  */
 public class InkMixerRecipe {
 

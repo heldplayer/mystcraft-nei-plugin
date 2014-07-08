@@ -1,13 +1,9 @@
-
 package me.heldplayer.plugins.nei.mystcraft.packet;
 
+import codechicken.nei.api.API;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
@@ -15,10 +11,13 @@ import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.specialattack.forge.core.packet.SpACorePacket;
-import codechicken.nei.api.API;
-import cpw.mods.fml.relauncher.Side;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Packet2AgeInfo extends SpACorePacket {
 
@@ -75,7 +74,7 @@ public class Packet2AgeInfo extends SpACorePacket {
             for (int i = 0; i < pages; i++) {
                 byte[] data = new byte[in.readInt()];
                 in.readBytes(data);
-                NBTTagCompound tag = CompressedStreamTools.decompress(data);
+                NBTTagCompound tag = CompressedStreamTools.func_152457_a(data, NBTSizeTracker.field_152451_a);
                 ItemStack stack = ItemStack.loadItemStackFromNBT(tag);
                 this.pages.add(stack);
             }
@@ -93,8 +92,7 @@ public class Packet2AgeInfo extends SpACorePacket {
 
         if (this.symbols == null) {
             out.writeInt(-1);
-        }
-        else {
+        } else {
             out.writeInt(this.symbols.size());
             for (String symbol : this.symbols) {
                 byte[] bytes = symbol.getBytes();
@@ -105,8 +103,7 @@ public class Packet2AgeInfo extends SpACorePacket {
 
         if (this.pages == null) {
             out.writeInt(-1);
-        }
-        else {
+        } else {
             out.writeInt(this.pages.size());
             for (ItemStack page : this.pages) {
                 NBTTagCompound tag = new NBTTagCompound();
