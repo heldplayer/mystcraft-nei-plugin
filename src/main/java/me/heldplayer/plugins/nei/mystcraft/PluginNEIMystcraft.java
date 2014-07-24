@@ -125,18 +125,6 @@ public class PluginNEIMystcraft extends SpACoreMod {
         return proxy;
     }
 
-    @Override
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
-    }
-
-    @Override
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
-    }
-
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
