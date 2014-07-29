@@ -5,6 +5,7 @@
 *.log
 *.lck
 *.bin
+*.iml
 
 /.classpath
 /.project
