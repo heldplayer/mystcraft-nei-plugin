@@ -13,6 +13,8 @@ import com.xcompwiz.mystcraft.symbol.Color;
 import com.xcompwiz.mystcraft.symbol.ColorGradient;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleTooltips;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
@@ -21,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
+import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GuiHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -39,7 +42,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page == null || !ModuleRecipes.inkMixerEnabled) {
             return;
         }
 
@@ -62,7 +65,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page == null || !ModuleRecipes.inkMixerEnabled) {
             return;
         }
 
@@ -126,7 +129,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page == null || !ModuleRecipes.inkMixerEnabled) {
             return;
         }
 
@@ -161,7 +164,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return NEIConfig.guiInkMixerClass;
+        return Integrator.guiInkMixerClass;
     }
 
     @Override
@@ -209,14 +212,14 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
-        if (!NEIConfig.tooltipsInkMixer) {
+        currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
+
+        if (!ModuleTooltips.inkMixerTooltips || !ModuleRecipes.inkMixerEnabled) {
             return currenttip;
         }
 
-        currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
-
         Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
+        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui), mousepos.y - AccessHelper.getGuiTop(gui));
 
         Point center = new Point(87, 54);
 

@@ -12,12 +12,15 @@ import com.xcompwiz.mystcraft.core.InternalAPI;
 import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.WritingDeskOverlayRenderer;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleTooltips;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GuiHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -34,7 +37,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page == null || !ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
@@ -58,7 +61,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page == null || !ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
@@ -86,7 +89,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page == null || !ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
@@ -161,7 +164,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return NEIConfig.guiWritingDeskClass;
+        return Integrator.guiWritingDeskClass;
     }
 
     @Override
@@ -180,7 +183,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         if (!NEIClientUtils.shiftKey() && this.cycleticks % 20 == 0) {
             for (CachedRecipe cachedRecipe : this.arecipes) {
                 CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) cachedRecipe;
-                recipe.tank -= 100;
+                recipe.tank -= 50;
                 if (recipe.tank < 0) {
                     recipe.tank = 1000;
                 }
@@ -212,16 +215,12 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
-        if (!NEIConfig.tooltipsWritingDesk) {
-            return currenttip;
-        }
-
         CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) this.arecipes.get(recipeId);
 
         currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
 
         Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
+        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui), mousepos.y - AccessHelper.getGuiTop(gui));
 
         if (recipe.isNotebook) {
             if (currenttip.isEmpty() && stack == null && new Rectangle(42, 19, 33, 44).contains(relMouse)) {
@@ -241,6 +240,14 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             currenttip.add(MystObjs.black_ink.getLocalizedName() + ": " + recipe.tank + "/1000");
         }
 
+        if (ModuleTooltips.recipesTooltips && currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
+            currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
+        }
+
+        if (!ModuleTooltips.writingDeskTooltips) {
+            return currenttip;
+        }
+
         if (currenttip.isEmpty() && stack == null && new Rectangle(28, 70, 99, 14).contains(relMouse)) {
             if (recipe.isNotebook) {
                 currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook.name"));
@@ -249,10 +256,6 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                     currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page.name"));
                 }
             }
-        }
-
-        if (currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
-            currenttip.add(StatCollector.translateToLocal("nei.mystcraft.recipes"));
         }
 
         Point recipepos = gui.getRecipePosition(recipeId);

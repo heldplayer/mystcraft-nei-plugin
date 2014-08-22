@@ -8,7 +8,9 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.DimensionManager;
 import net.specialattack.forge.core.SpACoreProxy;
+import net.specialattack.forge.core.asm.AccessHelper;
 import org.apache.logging.log4j.Level;
 
 import java.io.DataInputStream;
@@ -36,7 +38,7 @@ public class CommonProxy extends SpACoreProxy {
 
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
-        File dataFolder = new File(MinecraftServer.getServer().anvilFile, MinecraftServer.getServer().worldServers[0].getSaveHandler().getWorldDirectoryName() + File.separator + "data");
+        File dataFolder = new File(DimensionManager.getCurrentSaveRootDirectory(), "data");
 
         if (!dataFolder.exists() || !dataFolder.isDirectory()) {
             return;

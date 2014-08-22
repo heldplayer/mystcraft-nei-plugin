@@ -53,7 +53,7 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void clientLoggedIn(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        ItemInfo.itemOverrides.removeAll(MystObjs.descriptive_book);
+        Integrator.reinitialize();
     }
 
     @SubscribeEvent

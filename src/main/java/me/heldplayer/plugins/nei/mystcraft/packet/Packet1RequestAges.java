@@ -6,13 +6,13 @@ import io.netty.channel.ChannelHandlerContext;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.specialattack.forge.core.packet.SpACorePacket;
 
 import java.io.IOException;
 
-public class Packet1RequestAges extends SpACorePacket {
+public class Packet1RequestAges extends MystNEIPacket {
 
     public Packet1RequestAges() {
         super(null);
@@ -33,7 +33,7 @@ public class Packet1RequestAges extends SpACorePacket {
 
     @Override
     public void onData(ChannelHandlerContext context, EntityPlayer player) {
-        boolean addToNEI = PluginNEIMystcraft.addAgeList.getValue();
+        boolean addToNEI = ModuleDescriptiveBooks.addAgeList.getValue();
         boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
         boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
 

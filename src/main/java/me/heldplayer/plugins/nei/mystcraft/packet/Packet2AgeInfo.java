@@ -6,20 +6,20 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
-import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
+import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
-import net.specialattack.forge.core.packet.SpACorePacket;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Packet2AgeInfo extends SpACorePacket {
+public class Packet2AgeInfo extends MystNEIPacket {
 
     public int dimId;
     public String ageName;
@@ -121,15 +121,18 @@ public class Packet2AgeInfo extends SpACorePacket {
         info.ageName = this.ageName;
         info.symbols = this.symbols;
         info.pages = this.pages;
-        CommonProxy.clientAgesMap.put(Integer.valueOf(this.dimId), info);
+        CommonProxy.clientAgesMap.put(this.dimId, info);
 
         ItemStack stack = new ItemStack(MystObjs.descriptive_book);
         NBTTagCompound tag = stack.stackTagCompound = new NBTTagCompound();
         tag.setInteger("Dimension", this.dimId);
         tag.setString("agename", this.ageName);
 
-        if (this.addToNEI && PluginNEIMystcraft.addAgeList.getValue()) {
-            API.addItemListEntry(stack);
+        if (this.addToNEI) {
+            Integrator.allAges.add(stack);
+            if (ModuleDescriptiveBooks.addAgeList.getValue()) {
+                API.addItemListEntry(stack);
+            }
         }
     }
 

@@ -7,10 +7,12 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.core.InternalAPI;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import net.specialattack.forge.core.asm.AccessHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -128,7 +130,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
         boolean clicking = Mouse.isButtonDown(0);
 
         Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - gui.guiLeft - 5, mousepos.y - gui.guiTop - 16);
+        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui) - 5, mousepos.y - AccessHelper.getGuiTop(gui) - 16);
 
         if (!recipe.wasClicking && clicking && relMouse.x >= 152 && relMouse.y >= 17 && relMouse.x < 164 && relMouse.y < 123) {
             recipe.isScrolling = true;
