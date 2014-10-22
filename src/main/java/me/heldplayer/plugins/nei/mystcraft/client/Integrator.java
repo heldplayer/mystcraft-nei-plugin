@@ -4,6 +4,7 @@ import codechicken.lib.gui.GuiDraw;
 import com.xcompwiz.mystcraft.core.InternalAPI;
 import com.xcompwiz.mystcraft.symbol.ColorGradient;
 import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import java.util.*;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.modules.*;
@@ -21,8 +22,6 @@ import net.specialattack.forge.core.reflection.RField;
 import net.specialattack.forge.core.reflection.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
-
-import java.util.*;
 
 /**
  * Class used for integrating into Mystcraft

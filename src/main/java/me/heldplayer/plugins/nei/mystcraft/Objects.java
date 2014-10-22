@@ -1,9 +1,8 @@
 package me.heldplayer.plugins.nei.mystcraft;
 
+import java.util.Random;
 import net.specialattack.forge.core.ModInfo;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Random;
 
 /**
  * MystNEIPlugin mod Objects

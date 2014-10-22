@@ -4,11 +4,10 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.guihook.GuiContainerManager;
-import net.minecraft.inventory.Slot;
-import org.lwjgl.opengl.GL11;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.inventory.Slot;
+import org.lwjgl.opengl.GL11;
 
 public class InkMixerOverlayRenderer implements IRecipeOverlayRenderer {
 

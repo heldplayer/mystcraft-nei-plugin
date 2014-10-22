@@ -1,11 +1,10 @@
 package me.heldplayer.plugins.nei.mystcraft.client.renderer;
 
+import java.awt.Color;
 import net.specialattack.util.MathHelper;
 import net.specialattack.util.Vector;
 import net.specialattack.util.VectorPool;
 import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 /**
  * @author heldplayer

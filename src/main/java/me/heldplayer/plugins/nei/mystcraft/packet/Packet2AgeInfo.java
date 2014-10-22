@@ -4,6 +4,9 @@ import codechicken.nei.api.API;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
@@ -14,10 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Packet2AgeInfo extends MystNEIPacket {
 

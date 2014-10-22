@@ -8,14 +8,14 @@ import codechicken.nei.guihook.IContainerTooltipHandler;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleTooltips;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.specialattack.forge.core.asm.AccessHelper;
-
-import java.awt.*;
-import java.util.List;
 
 public class MystTooltipHandler implements IContainerInputHandler, IContainerTooltipHandler {
 

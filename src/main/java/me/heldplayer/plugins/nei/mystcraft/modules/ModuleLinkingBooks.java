@@ -3,6 +3,7 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
 import cpw.mods.fml.relauncher.Side;
+import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
@@ -16,8 +17,6 @@ import net.specialattack.forge.core.crafting.FakeShapelessSpACoreRecipe;
 import net.specialattack.forge.core.crafting.ICraftingResultHandler;
 import net.specialattack.forge.core.crafting.ISpACoreRecipe;
 import org.apache.logging.log4j.Level;
-
-import java.util.List;
 
 public class ModuleLinkingBooks implements IModule {
 

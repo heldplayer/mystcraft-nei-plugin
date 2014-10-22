@@ -1,4 +1,3 @@
-
 version = minecraft_version + "-" + config.super_number + "." + config.major_number + "." + config.minor_number + "." + config.build_number
 group = "me.heldplayer.plugins.nei.mystcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MystNEI-Plugin"

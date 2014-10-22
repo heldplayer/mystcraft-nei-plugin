@@ -11,6 +11,10 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.core.InternalAPI;
 import com.xcompwiz.mystcraft.symbol.Color;
 import com.xcompwiz.mystcraft.symbol.ColorGradient;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
@@ -26,11 +30,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GuiHelper;
 import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class InkMixerRecipeHandler extends TemplateRecipeHandler {

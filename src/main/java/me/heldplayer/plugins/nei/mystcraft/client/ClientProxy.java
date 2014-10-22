@@ -1,6 +1,5 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import codechicken.nei.api.ItemInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

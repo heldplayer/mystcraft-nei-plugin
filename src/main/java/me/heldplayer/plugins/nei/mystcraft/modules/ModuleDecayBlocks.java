@@ -3,14 +3,13 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
 import cpw.mods.fml.relauncher.Side;
+import java.util.ArrayList;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
-
-import java.util.ArrayList;
 
 public class ModuleDecayBlocks implements IModule {
 
