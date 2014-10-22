@@ -10,6 +10,10 @@ import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.core.InternalAPI;
 import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.WritingDeskOverlayRenderer;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
@@ -20,13 +24,12 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GuiHelper;
 import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
@@ -37,7 +40,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page == null || !ModuleRecipes.writingDeskEnabled) {
+        if (MystObjs.page.getItem() == null || !ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
@@ -55,17 +58,16 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                     this.arecipes.add(recipe);
                 }
             }
-            return;
         }
     }
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page == null || !ModuleRecipes.writingDeskEnabled) {
+        if (MystObjs.page.getItem() == null || !ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
-        if (result.getItem() == MystObjs.page) {
+        if (result.getItem() == MystObjs.page.getItem()) {
             String symbol = InternalAPI.page.getPageSymbol(result);
 
             if (symbol == null || symbol.isEmpty()) {
@@ -89,11 +91,11 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page == null || !ModuleRecipes.writingDeskEnabled) {
+        if (MystObjs.page.getItem() == null || !ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
-        if (ingredient.getItem() == MystObjs.page) {
+        if (ingredient.getItem() == MystObjs.page.getItem()) {
             String symbol = InternalAPI.page.getPageSymbol(ingredient);
 
             if (symbol == null || symbol.isEmpty()) {
@@ -105,10 +107,10 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
             recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(symbol), false);
             this.arecipes.add(recipe);
-        } else if (ingredient.getItem() == MystObjs.notebook) {
+        } else if (ingredient.getItem() == MystObjs.notebook.getItem()) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
             this.arecipes.add(recipe);
-        } else if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial) {
+        } else if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial.getItem()) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
             this.arecipes.add(recipe);
 
@@ -153,13 +155,13 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         GuiDraw.drawGradientRect(left, top, width, height, 0x99000000, 0x99000000);
         GuiDraw.drawGradientRect(left + 1, top + 1, width - 2, height - 2, 0xFFCCCCEE, 0xFF666699);
 
-        float filled = (float) recipe.tank / 1000.0F;
+        float filled = (float) recipe.tank.getFluidAmount() / (float) recipe.tank.getCapacity();
         if (filled > 1.0F) {
             filled = 1.0F;
         }
         int ltop = top + height - 1;
         int lheight = (int) ((height - 2) * filled);
-        GuiHelper.drawFluid(MystObjs.black_ink, left + 1, ltop - lheight, width - 2, lheight);
+        GuiHelper.drawFluid(recipe.tank.getFluid().getFluid(), left + 1, ltop - lheight, width - 2, lheight);
     }
 
     @Override
@@ -183,9 +185,10 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         if (!NEIClientUtils.shiftKey() && this.cycleticks % 20 == 0) {
             for (CachedRecipe cachedRecipe : this.arecipes) {
                 CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) cachedRecipe;
-                recipe.tank -= 50;
-                if (recipe.tank < 0) {
-                    recipe.tank = 1000;
+                Fluid fluid = recipe.tank.getFluid().getFluid();
+                recipe.tank.drain(50, true);
+                if (recipe.tank.getFluidAmount() < 0) {
+                    recipe.tank.fill(new FluidStack(fluid, 1000), true);
                 }
 
                 if (recipe.isNotebook && recipe.nullSymbol) {
@@ -237,7 +240,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (currenttip.isEmpty() && stack == null && new Rectangle(131, 16, 16, 71).contains(relMouse)) {
-            currenttip.add(MystObjs.black_ink.getLocalizedName() + ": " + recipe.tank + "/1000");
+            currenttip.add(MystObjs.black_ink.getLocalizedName(recipe.tank.getFluid()) + ": " + recipe.tank + "/1000");
         }
 
         if (ModuleTooltips.recipesTooltips && currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
@@ -261,13 +264,11 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         Point recipepos = gui.getRecipePosition(recipeId);
 
         if (currenttip.isEmpty() && stack == null && new Rectangle(recipepos.x, recipepos.y, 166, 80).contains(relMouse)) {
-            if (recipe != null) {
-                if (recipe.isNotebook) {
-                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook"));
-                } else {
-                    if (recipe.symbol != null) {
-                        currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page"));
-                    }
+            if (recipe.isNotebook) {
+                currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.notebook"));
+            } else {
+                if (recipe.symbol != null) {
+                    currenttip.add(StatCollector.translateToLocal("nei.mystcraft.writingdesk.page"));
                 }
             }
         }
@@ -277,7 +278,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
     public class CachedWritingDeskRecipe extends CachedRecipe {
 
         protected IAgeSymbol symbol;
-        protected int tank;
+        protected FluidTank tank;
         protected boolean isNotebook;
         protected boolean nullSymbol;
         private PositionedStack leftOver;
@@ -288,12 +289,12 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         public CachedWritingDeskRecipe(IAgeSymbol symbol, boolean isNotebook) {
             this.symbol = symbol;
             this.ingredients = new ArrayList<PositionedStack>();
-            this.tank = 1000;
+            this.tank = new FluidTank(MystObjs.black_ink, 1000, 1000);
             this.isNotebook = isNotebook;
             this.nullSymbol = symbol == null;
             this.textField = new GuiTextField(GuiDraw.fontRenderer, 23, 54, 99, 14);
 
-            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial), 147, 1));
+            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial.getItem()), 147, 1));
             this.ingredients.add(new PositionedStack(new ItemStack(Items.paper), 3, 1));
             this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 53);
 

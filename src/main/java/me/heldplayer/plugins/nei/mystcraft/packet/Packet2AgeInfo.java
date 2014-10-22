@@ -123,7 +123,7 @@ public class Packet2AgeInfo extends MystNEIPacket {
         info.pages = this.pages;
         CommonProxy.clientAgesMap.put(this.dimId, info);
 
-        ItemStack stack = new ItemStack(MystObjs.descriptive_book);
+        ItemStack stack = new ItemStack(MystObjs.descriptive_book.getItem());
         NBTTagCompound tag = stack.stackTagCompound = new NBTTagCompound();
         tag.setInteger("Dimension", this.dimId);
         tag.setString("agename", this.ageName);

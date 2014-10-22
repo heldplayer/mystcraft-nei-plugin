@@ -5,9 +5,11 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.core.InternalAPI;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
-import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,10 +17,6 @@ import net.minecraft.util.StatCollector;
 import net.specialattack.forge.core.asm.AccessHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
@@ -29,7 +27,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page.getItem() == null) {
             return;
         }
 
@@ -42,11 +40,11 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page.getItem() == null) {
             return;
         }
 
-        if (result.getItem() == MystObjs.descriptive_book) {
+        if (result.getItem() == MystObjs.descriptive_book.getItem()) {
             NBTTagCompound tag = result.stackTagCompound;
             if (tag == null) {
                 return;
@@ -67,11 +65,11 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page == null) {
+        if (MystObjs.page.getItem() == null) {
             return;
         }
 
-        if (ingredient.getItem() == MystObjs.descriptive_book) {
+        if (ingredient.getItem() == MystObjs.descriptive_book.getItem()) {
             NBTTagCompound tag = ingredient.stackTagCompound;
             if (tag == null) {
                 return;

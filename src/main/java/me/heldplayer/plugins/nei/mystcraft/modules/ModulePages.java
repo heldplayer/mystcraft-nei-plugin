@@ -5,14 +5,15 @@ import codechicken.nei.api.ItemInfo;
 import com.xcompwiz.mystcraft.core.InternalAPI;
 import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
 import cpw.mods.fml.relauncher.Side;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
-
-import java.util.List;
 
 public class ModulePages implements IModule {
 
@@ -31,7 +32,15 @@ public class ModulePages implements IModule {
         if (addSymbolPages.getValue()) {
             Objects.log.log(Level.DEBUG, "Adding symbol pages to NEI view");
 
-            for (IAgeSymbol symbol : InternalAPI.symbol.getAllRegisteredSymbols()) {
+            Set<IAgeSymbol> symbols = new TreeSet<IAgeSymbol>(new Comparator<IAgeSymbol>() {
+                @Override
+                public int compare(IAgeSymbol o1, IAgeSymbol o2) {
+                    return o1.displayName().compareTo(o2.displayName());
+                }
+            });
+            symbols.addAll(InternalAPI.symbol.getAllRegisteredSymbols());
+
+            for (IAgeSymbol symbol : symbols) {
                 API.addItemListEntry(InternalAPI.itemFact.buildSymbolPage(symbol.identifier()));
             }
 
@@ -54,7 +63,7 @@ public class ModulePages implements IModule {
         if (symbolsEnabled || linkpanelsEnabled) {
             Objects.log.log(Level.DEBUG, "Removing symbol pages and link panels from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.page);
+            ItemInfo.itemOverrides.removeAll(MystObjs.page.getItem());
 
             symbolsEnabled = false;
             linkpanelsEnabled = false;

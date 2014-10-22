@@ -37,7 +37,7 @@ public class ModuleLinkingBooks implements IModule {
             Objects.log.log(Level.DEBUG, "Adding linking books to NEI view");
 
             for (ItemStack panel : Integrator.getAllLinkpanels()) {
-                ItemStack book = new ItemStack(MystObjs.linkbook_unlinked);
+                ItemStack book = new ItemStack(MystObjs.linkbook_unlinked.getItem());
 
                 book.stackTagCompound = (NBTTagCompound) panel.stackTagCompound.copy();
 
@@ -57,7 +57,7 @@ public class ModuleLinkingBooks implements IModule {
                     ItemStack result = recipe.getOutput();
 
                     for (ItemStack stack : input) {
-                        if (stack != null && stack.getItem() == MystObjs.page) {
+                        if (stack != null && stack.getItem() == MystObjs.page.getItem()) {
                             if (stack.stackTagCompound != null) {
                                 result.stackTagCompound = stack.stackTagCompound;
                                 break;
@@ -80,17 +80,14 @@ public class ModuleLinkingBooks implements IModule {
 
                 @Override
                 public boolean isValidRecipeInput(ItemStack input) {
-                    if (input != null && input.getItem() == MystObjs.page) {
+                    if (input != null && input.getItem() == MystObjs.page.getItem()) {
                         if (input.stackTagCompound == null) {
                             return false;
                         }
 
                         NBTTagCompound tag = input.stackTagCompound;
-                        if (!tag.hasKey("linkpanel")) {
-                            return false;
-                        }
+                        return tag.hasKey("linkpanel");
 
-                        return true;
                     }
                     return true;
                 }
@@ -106,7 +103,7 @@ public class ModuleLinkingBooks implements IModule {
             ItemStack[] stacks = new ItemStack[linkPanels.size()];
             stacks = linkPanels.toArray(stacks);
 
-            FakeShapelessSpACoreRecipe recipe = new FakeShapelessSpACoreRecipe(handler, new ItemStack(MystObjs.linkbook_unlinked), stacks, new ItemStack(Items.leather)) {
+            FakeShapelessSpACoreRecipe recipe = new FakeShapelessSpACoreRecipe(handler, new ItemStack(MystObjs.linkbook_unlinked.getItem()), stacks, new ItemStack(Items.leather)) {
 
                 @Override
                 public boolean isEnabled() {
@@ -126,7 +123,7 @@ public class ModuleLinkingBooks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Removing linking books from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.linkbook_unlinked);
+            ItemInfo.itemOverrides.removeAll(MystObjs.linkbook_unlinked.getItem());
 
             enabled = false;
         }

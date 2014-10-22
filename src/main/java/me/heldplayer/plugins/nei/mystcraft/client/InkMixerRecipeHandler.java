@@ -42,7 +42,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page == null || !ModuleRecipes.inkMixerEnabled) {
+        if (MystObjs.page.getItem() == null || !ModuleRecipes.inkMixerEnabled) {
             return;
         }
 
@@ -59,17 +59,16 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                     }
                 }
             }
-            return;
         }
     }
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page == null || !ModuleRecipes.inkMixerEnabled) {
+        if (MystObjs.page.getItem() == null || !ModuleRecipes.inkMixerEnabled) {
             return;
         }
 
-        if (result.getItem() == MystObjs.page) {
+        if (result.getItem() == MystObjs.page.getItem()) {
             NBTTagCompound compound = result.getTagCompound();
             if (compound == null) {
                 return;
@@ -129,11 +128,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page == null || !ModuleRecipes.inkMixerEnabled) {
+        if (MystObjs.page.getItem() == null || !ModuleRecipes.inkMixerEnabled) {
             return;
         }
 
-        if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial) {
+        if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial.getItem()) {
             ArrayList recipes = Integrator.getALlInkMixerRecipes();
 
             for (Object ingr : recipes) {
@@ -281,7 +280,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
                 this.stack = new PositionedStack(stack, 147, 37);
             }
 
-            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial), 3, 16));
+            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial.getItem()), 3, 16));
             this.ingredients.add(new PositionedStack(new ItemStack(Items.paper), 3, 37));
             this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 16);
         }

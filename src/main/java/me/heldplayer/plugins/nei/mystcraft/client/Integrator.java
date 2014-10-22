@@ -67,9 +67,7 @@ public final class Integrator {
         HashSet<ConfigValue<?>> result = new HashSet<ConfigValue<?>>();
 
         for (IModule module : modules) {
-            for (ConfigValue<?> value : module.getConfigEntries()) {
-                result.add(value);
-            }
+            Collections.addAll(result, module.getConfigEntries());
         }
 
         return result;
@@ -125,14 +123,14 @@ public final class Integrator {
             map.put("Following", null);
         }
 
-        Object[] keys = map.keySet().toArray(new Object[0]);
+        Object[] keys = map.keySet().toArray(new Object[map.size()]);
 
         int bin = binary(keys.length);
 
         allLinkpanels = new ArrayList<ItemStack>();
 
         for (int i = 0; i <= bin; i++) {
-            ItemStack is = new ItemStack(MystObjs.page, 1, 0);
+            ItemStack is = new ItemStack(MystObjs.page.getItem(), 1, 0);
 
             NBTTagCompound compound = new NBTTagCompound();
             NBTTagCompound linkPanelCompound = new NBTTagCompound();

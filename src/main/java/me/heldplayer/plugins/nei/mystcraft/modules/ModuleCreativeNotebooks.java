@@ -41,7 +41,7 @@ public class ModuleCreativeNotebooks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Removing creative notebooks from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.notebook);
+            ItemInfo.itemOverrides.removeAll(MystObjs.notebook.getItem());
 
             enabled = false;
         }
