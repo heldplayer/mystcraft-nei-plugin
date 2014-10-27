@@ -12,7 +12,6 @@ import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
@@ -115,7 +114,7 @@ public class Packet2AgeInfo extends MystNEIPacket {
     }
 
     @Override
-    public void onData(ChannelHandlerContext context, EntityPlayer player) {
+    public void onData(ChannelHandlerContext context) {
         AgeInfo info = new AgeInfo(this.dimId);
         info.ageName = this.ageName;
         info.symbols = this.symbols;

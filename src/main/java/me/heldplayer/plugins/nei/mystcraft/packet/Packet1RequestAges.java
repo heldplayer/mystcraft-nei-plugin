@@ -10,6 +10,7 @@ import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.specialattack.forge.core.packet.Attributes;
 
 public class Packet1RequestAges extends MystNEIPacket {
 
@@ -31,7 +32,11 @@ public class Packet1RequestAges extends MystNEIPacket {
     }
 
     @Override
-    public void onData(ChannelHandlerContext context, EntityPlayer player) {
+    public void onData(ChannelHandlerContext context) {
+        this.requireAttribute(Attributes.SENDING_PLAYER);
+
+        EntityPlayer player = this.attr(Attributes.SENDING_PLAYER).get();
+
         boolean addToNEI = ModuleDescriptiveBooks.addAgeList.getValue();
         boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
         boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
