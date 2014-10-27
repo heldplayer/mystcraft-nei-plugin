@@ -74,7 +74,12 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 return;
             }
 
-            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(symbol), false);
+            IAgeSymbol ageSymbol = InternalAPI.symbol.getSymbolForIdentifier(symbol);
+            if (ageSymbol == null) {
+                return;
+            }
+
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(ageSymbol, false);
             this.arecipes.add(recipe);
         } else if (result.getItem() == Items.glass_bottle) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
@@ -102,10 +107,15 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 return;
             }
 
-            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(symbol), true);
+            IAgeSymbol ageSymbol = InternalAPI.symbol.getSymbolForIdentifier(symbol);
+            if (ageSymbol == null) {
+                return;
+            }
+
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(ageSymbol, true);
             this.arecipes.add(recipe);
 
-            recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(symbol), false);
+            recipe = new CachedWritingDeskRecipe(ageSymbol, false);
             this.arecipes.add(recipe);
         } else if (ingredient.getItem() == MystObjs.notebook.getItem()) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(InternalAPI.symbol.getSymbolForIdentifier(null), true);
@@ -161,7 +171,9 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
         int ltop = top + height - 1;
         int lheight = (int) ((height - 2) * filled);
-        GuiHelper.drawFluid(recipe.tank.getFluid().getFluid(), left + 1, ltop - lheight, width - 2, lheight);
+        if (recipe.tank.getFluid() != null) {
+            GuiHelper.drawFluid(recipe.tank.getFluid().getFluid(), left + 1, ltop - lheight, width - 2, lheight);
+        }
     }
 
     @Override
@@ -187,7 +199,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) cachedRecipe;
                 Fluid fluid = recipe.tank.getFluid().getFluid();
                 recipe.tank.drain(50, true);
-                if (recipe.tank.getFluidAmount() < 0) {
+                if (recipe.tank.getFluidAmount() <= 0) {
                     recipe.tank.fill(new FluidStack(fluid, 1000), true);
                 }
 
@@ -240,7 +252,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (currenttip.isEmpty() && stack == null && new Rectangle(131, 16, 16, 71).contains(relMouse)) {
-            currenttip.add(MystObjs.black_ink.getLocalizedName(recipe.tank.getFluid()) + ": " + recipe.tank + "/1000");
+            currenttip.add(MystObjs.black_ink.getLocalizedName(recipe.tank.getFluid()) + ": " + recipe.tank.getFluidAmount() + "/1000");
         }
 
         if (ModuleTooltips.recipesTooltips && currenttip.isEmpty() && stack == null && new Rectangle(151, 34, 18, 34).contains(relMouse)) {
