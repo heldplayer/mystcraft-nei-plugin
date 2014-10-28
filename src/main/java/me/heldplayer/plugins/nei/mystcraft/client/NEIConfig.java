@@ -4,6 +4,7 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import org.apache.logging.log4j.Level;
@@ -36,7 +37,22 @@ public class NEIConfig implements IConfigureNEI {
 
     @Override
     public String getVersion() {
-        return "@VERSION@";
+        return Objects.MOD_INFO.modVersion;
+    }
+
+    public static void resetNEI() {
+        for (AgeInfo info : ClientProxy.clientAgesMap.values()) {
+            if (info.symbols != null) {
+                info.symbols.clear();
+                info.symbols = null;
+            }
+            if (info.pages != null) {
+                info.pages.clear();
+                info.pages = null;
+            }
+        }
+
+        ClientProxy.clientAgesMap.clear();
     }
 
 }

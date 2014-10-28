@@ -6,6 +6,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Map;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
@@ -18,6 +20,8 @@ import org.apache.logging.log4j.Level;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+
+    public static Map<Integer, AgeInfo> clientAgesMap = new HashMap<Integer, AgeInfo>();
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
@@ -36,18 +40,7 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onClientDisconnectedFromServer(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        for (AgeInfo info : clientAgesMap.values()) {
-            if (info.symbols != null) {
-                info.symbols.clear();
-                info.symbols = null;
-            }
-            if (info.pages != null) {
-                info.pages.clear();
-                info.pages = null;
-            }
-        }
-
-        clientAgesMap.clear();
+        NEIConfig.resetNEI();
     }
 
     @SubscribeEvent
@@ -57,6 +50,9 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onClientStartSyncing(SyncEvent.ClientStartSyncing event) {
+        Integrator.allAges.clear();
+        Integrator.reinitialize();
+        NEIConfig.resetNEI();
         PluginNEIMystcraft.packetHandler.sendPacketToServer(new Packet1RequestAges());
     }
 

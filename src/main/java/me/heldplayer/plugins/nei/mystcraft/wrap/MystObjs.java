@@ -22,49 +22,29 @@ public class MystObjs {
 
     public static List<ItemStack> creative_notebooks = null;
 
-    public static ObjectReference portal = null;
-    public static ObjectReference crystal = null;
-    public static ObjectReference crystal_receptacle = null;
-    public static ObjectReference decay = null;
-    public static ObjectReference bookstand = null;
-    public static ObjectReference book_lectern = null;
-    public static ObjectReference writing_desk_block = null;
-    public static ObjectReference bookbinder = null;
-    public static ObjectReference inkmixer = null;
-    public static ObjectReference star_fissure = null;
-    public static ObjectReference link_modifer = null;
+    public static ObjectReference portal = new ObjectReference(MystObjects.block_portal, true);
+    public static ObjectReference crystal = new ObjectReference(MystObjects.block_crystal, true);
+    public static ObjectReference crystal_receptacle = new ObjectReference(MystObjects.block_crystal_receptacle, true);
+    public static ObjectReference decay = new ObjectReference(MystObjects.block_decay, true);
+    public static ObjectReference bookstand = new ObjectReference(MystObjects.block_bookstand, true);
+    public static ObjectReference book_lectern = new ObjectReference(MystObjects.block_book_lectern, true);
+    public static ObjectReference writing_desk_block = new ObjectReference(MystObjects.block_writing_desk_block, true);
+    public static ObjectReference bookbinder = new ObjectReference(MystObjects.block_bookbinder, true);
+    public static ObjectReference inkmixer = new ObjectReference(MystObjects.block_inkmixer, true);
+    public static ObjectReference star_fissure = new ObjectReference(MystObjects.block_star_fissure, true);
+    public static ObjectReference link_modifer = new ObjectReference(MystObjects.block_link_modifer, true);
 
-    public static ObjectReference writing_desk = null;
-    public static ObjectReference page = null;
-    public static ObjectReference descriptive_book = null;
-    public static ObjectReference linkbook_unlinked = null;
-    public static ObjectReference linkbook = null;
-    public static ObjectReference notebook = null;
-    public static ObjectReference inkvial = null;
+    public static ObjectReference writing_desk = new ObjectReference(MystObjects.item_writing_desk, false);
+    public static ObjectReference page = new ObjectReference(MystObjects.item_page, false);
+    public static ObjectReference descriptive_book = new ObjectReference(MystObjects.item_descriptive_book, false);
+    public static ObjectReference linkbook_unlinked = new ObjectReference(MystObjects.item_linkbook_unlinked, false);
+    public static ObjectReference linkbook = new ObjectReference(MystObjects.item_linkbook, false);
+    public static ObjectReference notebook = new ObjectReference(MystObjects.item_notebook, false);
+    public static ObjectReference inkvial = new ObjectReference(MystObjects.item_inkvial, false);
 
     public static Fluid black_ink = null;
 
     public static void initialize() {
-        portal = new ObjectReference(MystObjects.block_portal, true);
-        crystal = new ObjectReference(MystObjects.block_crystal, true);
-        crystal_receptacle = new ObjectReference(MystObjects.block_crystal_receptacle, true);
-        decay = new ObjectReference(MystObjects.block_decay, true);
-        bookstand = new ObjectReference(MystObjects.block_bookstand, true);
-        book_lectern = new ObjectReference(MystObjects.block_book_lectern, true);
-        writing_desk_block = new ObjectReference(MystObjects.block_writing_desk_block, true);
-        bookbinder = new ObjectReference(MystObjects.block_bookbinder, true);
-        inkmixer = new ObjectReference(MystObjects.block_inkmixer, true);
-        star_fissure = new ObjectReference(MystObjects.block_star_fissure, true);
-        link_modifer = new ObjectReference(MystObjects.block_link_modifer, true);
-
-        writing_desk = new ObjectReference(MystObjects.item_writing_desk, false);
-        page = new ObjectReference(MystObjects.item_page, false);
-        descriptive_book = new ObjectReference(MystObjects.item_descriptive_book, false);
-        linkbook_unlinked = new ObjectReference(MystObjects.item_linkbook_unlinked, false);
-        linkbook = new ObjectReference(MystObjects.item_linkbook, false);
-        notebook = new ObjectReference(MystObjects.item_notebook, false);
-        inkvial = new ObjectReference(MystObjects.item_inkvial, false);
-
         black_ink = FluidRegistry.getFluid(MystObjects.fluid_black_ink);
 
         creative_notebooks = new ArrayList<ItemStack>();

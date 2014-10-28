@@ -9,7 +9,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
-import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,7 +51,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
             int dim = tag.getInteger("Dimension");
 
-            AgeInfo ageInfo = CommonProxy.clientAgesMap.get(Integer.valueOf(dim));
+            AgeInfo ageInfo = ClientProxy.clientAgesMap.get(dim);
 
             if (ageInfo == null || ageInfo.pages == null) {
                 return;
@@ -77,7 +76,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
             int dim = tag.getInteger("Dimension");
 
-            AgeInfo ageInfo = CommonProxy.clientAgesMap.get(Integer.valueOf(dim));
+            AgeInfo ageInfo = ClientProxy.clientAgesMap.get(dim);
 
             if (ageInfo == null || ageInfo.symbols == null) {
                 return;

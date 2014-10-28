@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -18,8 +19,7 @@ import org.apache.logging.log4j.Level;
 
 public class CommonProxy extends SpACoreProxy {
 
-    public static HashMap<Integer, AgeInfo> serverAgesMap = new HashMap<Integer, AgeInfo>();
-    public static HashMap<Integer, AgeInfo> clientAgesMap = new HashMap<Integer, AgeInfo>();
+    public static Map<Integer, AgeInfo> serverAgesMap = new HashMap<Integer, AgeInfo>();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

@@ -2,13 +2,14 @@ package me.heldplayer.plugins.nei.mystcraft.packet;
 
 import codechicken.nei.api.API;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
-import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.client.ClientProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
@@ -119,7 +120,7 @@ public class Packet2AgeInfo extends MystNEIPacket {
         info.ageName = this.ageName;
         info.symbols = this.symbols;
         info.pages = this.pages;
-        CommonProxy.clientAgesMap.put(this.dimId, info);
+        putClientInfo(this.dimId, info);
 
         ItemStack stack = new ItemStack(MystObjs.descriptive_book.getItem());
         NBTTagCompound tag = stack.stackTagCompound = new NBTTagCompound();
@@ -132,6 +133,11 @@ public class Packet2AgeInfo extends MystNEIPacket {
                 API.addItemListEntry(stack);
             }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void putClientInfo(int dimId, AgeInfo info) {
+        ClientProxy.clientAgesMap.put(this.dimId, info);
     }
 
 }
