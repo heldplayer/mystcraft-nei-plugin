@@ -1,6 +1,7 @@
 package me.heldplayer.plugins.nei.mystcraft.client.gui;
 
 import cpw.mods.fml.client.config.GuiConfig;
+import java.util.Collections;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import net.minecraft.client.gui.GuiScreen;

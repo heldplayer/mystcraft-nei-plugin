@@ -28,7 +28,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.specialattack.forge.core.asm.AccessHelper;
-import net.specialattack.forge.core.client.GuiHelper;
+import net.specialattack.forge.core.client.gui.GuiHelper;
 import org.lwjgl.opengl.GL11;
 
 public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
@@ -155,7 +155,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
             Integrator.renderPage(recipe.symbol, 37.0F, 3.0F, 0.0F, 33.0F, 44.0F);
         } else if (recipe.symbol != null) {
-            Integrator.renderPage(recipe.symbol, 27.0F, 0.0F, 0.0F, 36.0F, 48.0F);
+            Integrator.renderPage(recipe.symbol, 27.0F, -1.0F, 0.0F, 37.5F, 50.0F);
         }
 
         recipe.textField.drawTextBox();
@@ -172,7 +172,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         int ltop = top + height - 1;
         int lheight = (int) ((height - 2) * filled);
         if (recipe.tank.getFluid() != null) {
-            GuiHelper.drawFluid(recipe.tank.getFluid().getFluid(), left + 1, ltop - lheight, width - 2, lheight);
+            GuiHelper.drawFluid(recipe.tank.getFluid().getFluid(), left + 1, ltop - lheight, width - 2, lheight, 0.0F);
         }
     }
 
@@ -244,7 +244,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 }
             }
         } else if (recipe.symbol != null) {
-            if (currenttip.isEmpty() && stack == null && new Rectangle(32, 16, 36, 48).contains(relMouse)) {
+            if (currenttip.isEmpty() && stack == null && new Rectangle(32, 15, 37, 50).contains(relMouse)) {
                 if (recipe.symbol != null) {
                     currenttip.add(recipe.symbol.displayName());
                 }
@@ -336,7 +336,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
 
         @Override
-        public ArrayList<PositionedStack> getIngredients() {
+        public List<PositionedStack> getIngredients() {
             return this.ingredients;
         }
 

@@ -14,6 +14,7 @@ import com.xcompwiz.mystcraft.symbol.ColorGradient;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
@@ -28,7 +29,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 import net.specialattack.forge.core.asm.AccessHelper;
-import net.specialattack.forge.core.client.GuiHelper;
+import net.specialattack.forge.core.client.gui.GuiHelper;
 import org.lwjgl.opengl.GL11;
 
 @SuppressWarnings("rawtypes")
@@ -175,10 +176,12 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     }
 
     private void renderTank(int left, int top, int width, int height, CachedInkMixerRecipe recipe) {
-        GuiHelper.drawFluid(MystObjs.black_ink, left, top, width, height);
+        GuiHelper.drawFluid(MystObjs.black_ink, left, top, width, height, 0.0F);
 
         if (recipe != null && recipe.gradient != null && recipe.gradient.getColorCount() > 0) {
-            recipe.frame++;
+            if (!NEIClientUtils.shiftKey()) {
+                recipe.frame++;
+            }
             Color color = recipe.gradient.getColor((float) recipe.frame / 300.0F);
             int iColor = color.asInt();
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
@@ -290,7 +293,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         }
 
         @Override
-        public ArrayList<PositionedStack> getIngredients() {
+        public List<PositionedStack> getIngredients() {
             if (!NEIClientUtils.shiftKey() && InkMixerRecipeHandler.this.cycleticks % 20 == 0) {
                 this.ingredient.setPermutationToRender(Objects.rnd.nextInt(this.ingredient.items.length));
             }
