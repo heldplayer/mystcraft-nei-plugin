@@ -1,9 +1,11 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import codechicken.lib.gui.GuiDraw;
+import com.xcompwiz.mystcraft.api.MystAPI;
+import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.api.util.ColorGradient;
+import com.xcompwiz.mystcraft.client.gui.GuiUtils;
 import com.xcompwiz.mystcraft.core.InternalAPI;
-import com.xcompwiz.mystcraft.symbol.ColorGradient;
-import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
 import java.util.*;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.WorldProvider;
+import net.specialattack.forge.core.client.MC;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import net.specialattack.forge.core.config.ConfigValue;
 import net.specialattack.forge.core.reflection.RClass;
@@ -30,6 +33,8 @@ import org.lwjgl.opengl.GL11;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Integrator {
+
+    public static MystAPI mystAPI;
 
     public static List<ItemStack> allAges = new ArrayList<ItemStack>();
     public static Class<? extends GuiContainer> guiInkMixerClass;
@@ -60,6 +65,10 @@ public final class Integrator {
     }
 
     private Integrator() {
+    }
+
+    public static void setMystAPI(MystAPI api) {
+        Integrator.mystAPI = api;
     }
 
     public static Collection<ConfigValue<?>> getAllConfigValues() {
@@ -239,13 +248,13 @@ public final class Integrator {
                 return null;
             }
 
-            Map<String, Float> properties = InternalAPI.linkProperties.getPropertiesForItem(stack);
+            Map<String, Float> properties = InternalAPI.linkProperties.getPropertiesForItem(stack); // FIXME
 
             if (properties == null) {
                 return null;
             }
 
-            ColorGradient gradient = InternalAPI.linkProperties.getPropertiesGradient(properties);
+            ColorGradient gradient = InternalAPI.linkProperties.getPropertiesGradient(properties); // FIXME
 
             String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
 
@@ -273,7 +282,8 @@ public final class Integrator {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiHelper.drawTexturedModalRect(x, y, width, height, z, 0.609375F, 0.0F, 0.7265625F, 0.15625F);
 
-        InternalAPI.render.drawSymbol(x + 0.5F, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
+        //InternalAPI.render.drawSymbol(x + 0.5F, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
+        GuiUtils.drawSymbol(MC.getRenderEngine(), z, symbol, width - 1.0F, x + 0.5F, y + (height + 1.0F - width) / 2.0F);
     }
 
     public static List<String> getAgeSymbols(WorldProvider provider) {

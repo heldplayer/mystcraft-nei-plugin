@@ -4,7 +4,6 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.xcompwiz.mystcraft.core.InternalAPI;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -213,7 +212,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
             }
             if (mode == 1) {
                 for (int i = 0; i < ageInfo.symbols.size(); i++) {
-                    ItemStack stack = InternalAPI.itemFact.buildSymbolPage(ageInfo.symbols.get(i));
+                    ItemStack stack = Integrator.mystAPI.getItemFactory().buildSymbolPage(ageInfo.symbols.get(i));
                     this.stacks.add(stack);
                 }
             }

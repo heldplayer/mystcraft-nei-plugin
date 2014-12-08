@@ -2,8 +2,7 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
-import com.xcompwiz.mystcraft.core.InternalAPI;
-import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 import cpw.mods.fml.relauncher.Side;
 import java.util.Comparator;
 import java.util.Set;
@@ -38,10 +37,10 @@ public class ModulePages implements IModule {
                     return o1.displayName().compareTo(o2.displayName());
                 }
             });
-            symbols.addAll(InternalAPI.symbol.getAllRegisteredSymbols());
+            symbols.addAll(Integrator.mystAPI.getSymbolAPI().getAllRegisteredSymbols());
 
             for (IAgeSymbol symbol : symbols) {
-                API.addItemListEntry(InternalAPI.itemFact.buildSymbolPage(symbol.identifier()));
+                API.addItemListEntry(Integrator.mystAPI.getItemFactory().buildSymbolPage(symbol.identifier()));
             }
 
             symbolsEnabled = true;

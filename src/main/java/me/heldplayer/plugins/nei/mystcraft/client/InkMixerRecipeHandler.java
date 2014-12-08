@@ -8,13 +8,11 @@ import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.xcompwiz.mystcraft.core.InternalAPI;
-import com.xcompwiz.mystcraft.symbol.Color;
-import com.xcompwiz.mystcraft.symbol.ColorGradient;
+import com.xcompwiz.mystcraft.api.util.Color;
+import com.xcompwiz.mystcraft.api.util.ColorGradient;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
@@ -186,14 +184,14 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             int iColor = color.asInt();
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
 
-            InternalAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
+            Integrator.mystAPI.getRenderAPI().drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         } else {
             int iColor = Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000;
             Color color = new Color(iColor);
 
             GuiDraw.drawGradientRect(left, top, left + width, top + height, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000);
 
-            InternalAPI.render.drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
+            Integrator.mystAPI.getRenderAPI().drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
     }
 
@@ -273,11 +271,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             this.frame = 0;
 
             if (this.modifiers != null) {
-                ItemStack stack = InternalAPI.itemFact.buildLinkPage(this.modifiers);
+                ItemStack stack = Integrator.mystAPI.getItemFactory().buildLinkPage(this.modifiers);
 
                 this.stack = new PositionedStack(stack, 147, 37);
             } else {
-                ItemStack stack = InternalAPI.itemFact.buildLinkPage();
+                ItemStack stack = Integrator.mystAPI.getItemFactory().buildLinkPage();
 
                 this.stack = new PositionedStack(stack, 147, 37);
             }

@@ -1,10 +1,10 @@
 package me.heldplayer.plugins.nei.mystcraft.wrap;
 
 import com.xcompwiz.mystcraft.api.MystObjects;
-import com.xcompwiz.mystcraft.core.InternalAPI;
-import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 import java.util.ArrayList;
 import java.util.List;
+import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -22,30 +22,30 @@ public class MystObjs {
 
     public static List<ItemStack> creative_notebooks = null;
 
-    public static ObjectReference portal = new ObjectReference(MystObjects.block_portal, true);
-    public static ObjectReference crystal = new ObjectReference(MystObjects.block_crystal, true);
-    public static ObjectReference crystal_receptacle = new ObjectReference(MystObjects.block_crystal_receptacle, true);
-    public static ObjectReference decay = new ObjectReference(MystObjects.block_decay, true);
-    public static ObjectReference bookstand = new ObjectReference(MystObjects.block_bookstand, true);
-    public static ObjectReference book_lectern = new ObjectReference(MystObjects.block_book_lectern, true);
-    public static ObjectReference writing_desk_block = new ObjectReference(MystObjects.block_writing_desk_block, true);
-    public static ObjectReference bookbinder = new ObjectReference(MystObjects.block_bookbinder, true);
-    public static ObjectReference inkmixer = new ObjectReference(MystObjects.block_inkmixer, true);
-    public static ObjectReference star_fissure = new ObjectReference(MystObjects.block_star_fissure, true);
-    public static ObjectReference link_modifer = new ObjectReference(MystObjects.block_link_modifer, true);
+    public static ObjectReference portal = new ObjectReference(MystObjects.Blocks.portal, true);
+    public static ObjectReference crystal = new ObjectReference(MystObjects.Blocks.crystal, true);
+    public static ObjectReference crystal_receptacle = new ObjectReference(MystObjects.Blocks.crystal_receptacle, true);
+    public static ObjectReference decay = new ObjectReference(MystObjects.Blocks.decay, true);
+    public static ObjectReference bookstand = new ObjectReference(MystObjects.Blocks.bookstand, true);
+    public static ObjectReference book_lectern = new ObjectReference(MystObjects.Blocks.book_lectern, true);
+    public static ObjectReference writing_desk_block = new ObjectReference(MystObjects.Blocks.writing_desk_block, true);
+    public static ObjectReference bookbinder = new ObjectReference(MystObjects.Blocks.bookbinder, true);
+    public static ObjectReference inkmixer = new ObjectReference(MystObjects.Blocks.inkmixer, true);
+    public static ObjectReference star_fissure = new ObjectReference(MystObjects.Blocks.star_fissure, true);
+    public static ObjectReference link_modifer = new ObjectReference(MystObjects.Blocks.link_modifer, true);
 
-    public static ObjectReference writing_desk = new ObjectReference(MystObjects.item_writing_desk, false);
-    public static ObjectReference page = new ObjectReference(MystObjects.item_page, false);
-    public static ObjectReference descriptive_book = new ObjectReference(MystObjects.item_descriptive_book, false);
-    public static ObjectReference linkbook_unlinked = new ObjectReference(MystObjects.item_linkbook_unlinked, false);
-    public static ObjectReference linkbook = new ObjectReference(MystObjects.item_linkbook, false);
-    public static ObjectReference notebook = new ObjectReference(MystObjects.item_notebook, false);
-    public static ObjectReference inkvial = new ObjectReference(MystObjects.item_inkvial, false);
+    public static ObjectReference writing_desk = new ObjectReference(MystObjects.Items.writing_desk, false);
+    public static ObjectReference page = new ObjectReference(MystObjects.Items.page, false);
+    public static ObjectReference descriptive_book = new ObjectReference(MystObjects.Items.descriptive_book, false);
+    public static ObjectReference linkbook_unlinked = new ObjectReference(MystObjects.Items.linkbook_unlinked, false);
+    public static ObjectReference linkbook = new ObjectReference(MystObjects.Items.linkbook, false);
+    public static ObjectReference notebook = new ObjectReference(MystObjects.Items.portfolio, false);
+    public static ObjectReference inkvial = new ObjectReference(MystObjects.Items.inkvial, false);
 
     public static Fluid black_ink = null;
 
     public static void initialize() {
-        black_ink = FluidRegistry.getFluid(MystObjects.fluid_black_ink);
+        black_ink = FluidRegistry.getFluid(MystObjects.Fluids.black_ink);
 
         creative_notebooks = new ArrayList<ItemStack>();
 
@@ -69,7 +69,7 @@ public class MystObjs {
     }
 
     public static List<IAgeSymbol> getAllRegisteredSymbols() {
-        return InternalAPI.symbol.getAllRegisteredSymbols();
+        return Integrator.mystAPI.getSymbolAPI().getAllRegisteredSymbols();
     }
 
     public static class ObjectReference {

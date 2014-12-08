@@ -1,6 +1,6 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import com.xcompwiz.mystcraft.symbol.ColorGradient;
+import com.xcompwiz.mystcraft.api.util.ColorGradient;
 
 /**
  * Class used to store information for an ink mixer recipe

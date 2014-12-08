@@ -1,6 +1,8 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
@@ -22,6 +24,13 @@ import org.apache.logging.log4j.Level;
 public class ClientProxy extends CommonProxy {
 
     public static Map<Integer, AgeInfo> clientAgesMap = new HashMap<Integer, AgeInfo>();
+
+    @Override
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+
+        FMLInterModComms.sendMessage("Mystcraft", "register", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setMystAPI");
+    }
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {

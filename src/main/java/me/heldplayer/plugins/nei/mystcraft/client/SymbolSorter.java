@@ -1,6 +1,6 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
-import com.xcompwiz.mystcraft.symbol.IAgeSymbol;
+import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 import java.util.Comparator;
 
 /**
