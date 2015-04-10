@@ -1,6 +1,76 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+repositories {
+    ivy {
+        name 'Forge FS legacy'
+        artifactPattern "http://files.minecraftforge.net/[module]/[module]-dev-[revision].[ext]"
+    }
+    maven {
+        name 'CB Maven FS'
+        url "http://chickenbones.net/maven/"
+    }
+    maven {
+        name 'ForgeFS'
+        url 'http://files.minecraftforge.net/maven'
+    }
+    maven {
+        name 'MinecraftS3'
+        url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
+    }
+}
+
+apply plugin: 'idea'
+idea {
+    module {
+        outputDir = file('build/classes/main')
+    }
+}
+
+apply plugin: 'forge'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+ext.configFile = file "build.properties"
+ext.configFile.withReader {
+    // read config.  it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+ext.minecraft_version = config.minecraft_version
+ext.forge_version = config.forge_version
+ext.codechickenlib = "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
+ext.codechickencore = "codechicken:CodeChickenCore:${config.minecraft_version}-${config.CCC_version}:dev"
+ext.notenoughitems = "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
+
+println "$project.name for Forge: " + minecraft_version + "-" + forge_version
+
 version = minecraft_version + "-" + config.super_number + "." + config.major_number + "." + config.minor_number + "." + config.build_number
-group = "me.heldplayer.plugins.nei.mystcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "me.heldplayer.plugins.nei.mystcraft"
 archivesBaseName = "MystNEI-Plugin"
+
+dependencies {
+    compile codechickenlib
+    compile codechickencore
+    compile notenoughitems
+}
 
 minecraft {
     version = minecraft_version + "-" + forge_version
@@ -10,10 +80,26 @@ minecraft {
         replace "@FINGERPRINT@", project.signature
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':SpACoreForge')
-    compile codechickenlib
-    compile codechickencore
-    compile notenoughitems
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft.version
+    
+    // replace stuff in text files, not binary ones.
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        include '*.version'
+
+        // replace version and minecraft_version
+        expand([
+                version           : config.super_number + "." + config.major_number + "." + config.minor_number + "." + config.build_number,
+                minecraft_version : minecraft_version
+        ])
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+        exclude '*.version'
+    }
 }
