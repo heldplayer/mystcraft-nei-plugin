@@ -15,7 +15,7 @@ public class ModuleDescriptiveBooks implements IModule {
     private boolean enabled;
 
     public ModuleDescriptiveBooks() {
-        addAgeList = new ConfigValue<Boolean>("addAgeList", "config.nei.mystcraft.key.addAgeList", null, Boolean.TRUE, "Should there be a list of items in NEI?");
+        addAgeList = new ConfigValue<Boolean>("addAgeList", "myst-nei:config.general.addAgeList", null, Boolean.TRUE);
     }
 
     @Override

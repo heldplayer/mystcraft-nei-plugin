@@ -22,8 +22,8 @@ public class ModulePages implements IModule {
     private boolean linkpanelsEnabled;
 
     public ModulePages() {
-        addSymbolPages = new ConfigValue<Boolean>("addSymbolPages", "config.nei.mystcraft.key.addSymbolPages", Side.CLIENT, Boolean.TRUE, "Should symbol pages be added to NEI?");
-        addLinkPanels = new ConfigValue<Boolean>("addLinkPanels", "config.nei.mystcraft.key.addLinkPanels", Side.CLIENT, Boolean.TRUE, "Should link panels be added to NEI?");
+        addSymbolPages = new ConfigValue<Boolean>("addSymbolPages", "myst-nei:config.general.addSymbolPages", Side.CLIENT, Boolean.TRUE);
+        addLinkPanels = new ConfigValue<Boolean>("addLinkPanels", "myst-nei:config.general.addLinkPanels", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override

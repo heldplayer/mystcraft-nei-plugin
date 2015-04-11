@@ -17,7 +17,7 @@ public class ModuleDecayBlocks implements IModule {
     private boolean enabled;
 
     public ModuleDecayBlocks() {
-        addDecaySubTypes = new ConfigValue<Boolean>("addDecaySubTypes", "config.nei.mystcraft.key.addDecaySubTypes", Side.CLIENT, Boolean.TRUE, "Should all decay types be visible in NEI?");
+        addDecaySubTypes = new ConfigValue<Boolean>("addDecaySubTypes", "myst-nei:config.general.addDecaySubTypes", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override

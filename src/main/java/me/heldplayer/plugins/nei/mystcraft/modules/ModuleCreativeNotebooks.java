@@ -15,7 +15,7 @@ public class ModuleCreativeNotebooks implements IModule {
     private boolean enabled;
 
     public ModuleCreativeNotebooks() {
-        addCreativeNotebooks = new ConfigValue<Boolean>("addCreativeNotebooks", "config.nei.mystcraft.key.addCreativeNotebooks", Side.CLIENT, Boolean.TRUE, "Should creative notebooks be added to NEI?");
+        addCreativeNotebooks = new ConfigValue<Boolean>("addCreativeNotebooks", "myst-nei:config.general.addCreativeNotebooks", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override

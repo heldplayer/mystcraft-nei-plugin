@@ -37,7 +37,7 @@ repositories {
 apply plugin: 'idea'
 idea {
     module {
-        outputDir = file('build/classes/main')
+        inheritOutputDirs = true
     }
 }
 

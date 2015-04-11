@@ -13,9 +13,8 @@
             ],
             "url" : "http://binarymage.com/forum/viewtopic.php?f=13&t=696",
             "useDependencyInformation" : true,
-            "requiredMods" : [ "spacoreforge", "spacore" ],
-            "dependencies" : [ "spacore", "*" ],
-            "dependants" : []
+            "requiredMods" : [ "Forge", "spacore" ],
+            "dependencies" : [ "*" ],
         }
     ]
 }

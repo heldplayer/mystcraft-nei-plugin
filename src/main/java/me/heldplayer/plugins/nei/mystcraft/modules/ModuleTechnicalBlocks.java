@@ -15,7 +15,7 @@ public class ModuleTechnicalBlocks implements IModule {
     private boolean enabled;
 
     public ModuleTechnicalBlocks() {
-        hideTechnicalBlocks = new ConfigValue<Boolean>("hideTechnicalBlocks", "config.nei.mystcraft.key.hideTechnicalBlocks", Side.CLIENT, Boolean.TRUE, "Should technical blocks be hidden?");
+        hideTechnicalBlocks = new ConfigValue<Boolean>("hideTechnicalBlocks", "myst-nei:config.general.hideTechnicalBlocks", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override

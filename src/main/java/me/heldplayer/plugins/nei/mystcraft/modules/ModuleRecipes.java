@@ -19,8 +19,8 @@ public class ModuleRecipes implements IModule {
     private boolean enabled;
 
     public ModuleRecipes() {
-        addInkMixerRecipes = new ConfigValue<Boolean>("addInkMixerRecipes", "config.nei.mystcraft.key.addInkMixerRecipes", Side.CLIENT, Boolean.TRUE, "Should ink mixer recipes be added to NEI?");
-        addWritingDeskRecipes = new ConfigValue<Boolean>("addWritingDeskRecipes", "config.nei.mystcraft.key.addWritingDeskRecipes", Side.CLIENT, Boolean.TRUE, "Should writing desk recipes be added to NEI?");
+        addInkMixerRecipes = new ConfigValue<Boolean>("addInkMixerRecipes", "myst-nei:config.general.addInkMixerRecipes", Side.CLIENT, Boolean.TRUE);
+        addWritingDeskRecipes = new ConfigValue<Boolean>("addWritingDeskRecipes", "myst-nei:config.general.addWritingDeskRecipes", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override

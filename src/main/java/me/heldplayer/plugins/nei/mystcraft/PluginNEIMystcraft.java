@@ -59,14 +59,14 @@ public class PluginNEIMystcraft extends SpACoreMod {
         PluginNEIMystcraft.packetHandler = new PacketHandler<MystNEIPacket>("NEI-Mystcraft-Plugin", Packet1RequestAges.class, Packet2AgeInfo.class);
 
         // Config
-        ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "config.nei.mystcraft.category.general", null, "General mod settings");
+        ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "myst-nei:config.general", null);
 
-        addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", "config.nei.mystcraft.key.addAgeExplorer", null, Boolean.TRUE, "Should ages be explorable?");
-        allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", "config.nei.mystcraft.key.allowSymbolExploring", null, Boolean.FALSE, "Allow age symbols to be explored?");
-        allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", "config.nei.mystcraft.key.allowPageExploring", null, Boolean.TRUE, "Allow age pages to be explored?");
-        opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", "config.nei.mystcraft.key.opOnlyAgeList", null, Boolean.TRUE, "Only allow ops to see a list of ages in NEI?");
-        opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", "config.nei.mystcraft.key.opOnlySymbolExplorer", null, Boolean.TRUE, "Only allow ops to explore age symbols?");
-        opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", "config.nei.mystcraft.key.opOnlyPageExploring", null, Boolean.TRUE, "Only allow ops to explore age pages?");
+        addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.addAgeExplorer", null, Boolean.TRUE);
+        allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", "myst-nei:config.general.allowSymbolExploring", null, Boolean.FALSE);
+        allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", "myst-nei:config.general.allowPageExploring", null, Boolean.TRUE);
+        opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeList", null, Boolean.TRUE);
+        opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", "myst-nei:config.general.opOnlySymbolExplorer", null, Boolean.TRUE);
+        opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", "myst-nei:config.general.opOnlyPageExploring", null, Boolean.TRUE);
         this.config = new Config(event.getSuggestedConfigurationFile());
         this.config.addCategory(category);
         category.addValue(addAgeExplorer);

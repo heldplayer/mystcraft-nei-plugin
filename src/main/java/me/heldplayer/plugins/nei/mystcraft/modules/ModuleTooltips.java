@@ -18,9 +18,9 @@ public class ModuleTooltips implements IModule {
     private boolean enabled;
 
     public ModuleTooltips() {
-        addInkMixerTooltips = new ConfigValue<Boolean>("addInkMixerTooltips", "config.nei.mystcraft.key.addInkMixerTooltips", Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Ink Mixer?");
-        addWritingDeskTooltips = new ConfigValue<Boolean>("addWritingDeskTooltips", "config.nei.mystcraft.key.addWritingDeskTooltips", Side.CLIENT, Boolean.TRUE, "Should there be tooltips for the Writing Desk?");
-        addRecipesTooltips = new ConfigValue<Boolean>("addRecipesTooltips", "config.nei.mystcraft.key.addRecipesTooltips", Side.CLIENT, Boolean.TRUE, "Should there be clickable regions to show all recipes in a crafting station?");
+        addInkMixerTooltips = new ConfigValue<Boolean>("addInkMixerTooltips", "myst-nei:config.general.addInkMixerTooltips", Side.CLIENT, Boolean.TRUE);
+        addWritingDeskTooltips = new ConfigValue<Boolean>("addWritingDeskTooltips", "myst-nei:config.general.addWritingDeskTooltips", Side.CLIENT, Boolean.TRUE);
+        addRecipesTooltips = new ConfigValue<Boolean>("addRecipesTooltips", "myst-nei:config.general.addRecipesTooltips", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override

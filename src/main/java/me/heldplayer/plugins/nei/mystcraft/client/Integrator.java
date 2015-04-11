@@ -53,15 +53,15 @@ public final class Integrator {
     private static Set<IModule> modules = new HashSet<IModule>();
 
     static {
-        modules.add(new ModuleTechnicalBlocks());
-        modules.add(new ModuleDecayBlocks());
-        modules.add(new ModuleCreativeNotebooks());
-        modules.add(new ModulePages());
-        modules.add(new ModuleLinkingBooks());
-        modules.add(new ModuleDescriptiveBooks());
-        modules.add(new ModuleItemSubsets());
-        modules.add(new ModuleTooltips());
-        modules.add(new ModuleRecipes());
+        Integrator.modules.add(new ModuleTechnicalBlocks());
+        Integrator.modules.add(new ModuleDecayBlocks());
+        Integrator.modules.add(new ModuleCreativeNotebooks());
+        Integrator.modules.add(new ModulePages());
+        Integrator.modules.add(new ModuleLinkingBooks());
+        Integrator.modules.add(new ModuleDescriptiveBooks());
+        Integrator.modules.add(new ModuleItemSubsets());
+        Integrator.modules.add(new ModuleTooltips());
+        Integrator.modules.add(new ModuleRecipes());
     }
 
     private Integrator() {
@@ -74,7 +74,7 @@ public final class Integrator {
     public static Collection<ConfigValue<?>> getAllConfigValues() {
         HashSet<ConfigValue<?>> result = new HashSet<ConfigValue<?>>();
 
-        for (IModule module : modules) {
+        for (IModule module : Integrator.modules) {
             Collections.addAll(result, module.getConfigEntries());
         }
 
@@ -82,7 +82,7 @@ public final class Integrator {
     }
 
     public static void reinitialize() {
-        if (!initialized) {
+        if (!Integrator.initialized) {
             return;
         }
 
@@ -96,7 +96,7 @@ public final class Integrator {
             }
         }
 
-        initialized = false;
+        Integrator.initialized = false;
 
         try {
             Objects.log.log(Level.DEBUG, "Getting all link panels");
@@ -105,7 +105,7 @@ public final class Integrator {
             Objects.log.log(Level.ERROR, "Failed getting all link panels", ex);
         }
 
-        for (IModule module : modules) {
+        for (IModule module : Integrator.modules) {
             try {
                 Objects.log.log(Level.DEBUG, "Enabling module " + module.getClass().getName());
 
@@ -115,7 +115,7 @@ public final class Integrator {
             }
         }
 
-        initialized = true;
+        Integrator.initialized = true;
     }
 
     private static void prepareLinkPanels() {
@@ -135,7 +135,7 @@ public final class Integrator {
 
         int bin = binary(keys.length);
 
-        allLinkpanels = new ArrayList<ItemStack>();
+        Integrator.allLinkpanels = new ArrayList<ItemStack>();
 
         for (int i = 0; i <= bin; i++) {
             ItemStack is = new ItemStack(MystObjs.page.getItem(), 1, 0);
@@ -157,7 +157,7 @@ public final class Integrator {
 
             is.setTagCompound(compound);
 
-            allLinkpanels.add(is);
+            Integrator.allLinkpanels.add(is);
         }
     }
 
@@ -173,7 +173,7 @@ public final class Integrator {
      * Initialize all NEI features for Mystcraft
      */
     public static void initialize() {
-        if (initialized) {
+        if (Integrator.initialized) {
             return;
         }
 
@@ -201,7 +201,7 @@ public final class Integrator {
             Objects.log.log(Level.ERROR, "Failed getting GUI classes", ex);
         }
 
-        for (IModule module : modules) {
+        for (IModule module : Integrator.modules) {
             try {
                 Objects.log.log(Level.DEBUG, "Enabling module " + module.getClass().getName());
 
@@ -211,7 +211,7 @@ public final class Integrator {
             }
         }
 
-        initialized = true;
+        Integrator.initialized = true;
     }
 
     /**
@@ -222,24 +222,24 @@ public final class Integrator {
         RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
 
         RField<Object, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
-        itemstack_bindings = bindings.getStatic();
+        Integrator.itemstack_bindings = bindings.getStatic();
 
         bindings = inkEffectsClass.getField("oredict_bindings");
-        oredict_bindings = bindings.getStatic();
+        Integrator.oredict_bindings = bindings.getStatic();
 
         bindings = inkEffectsClass.getField("itemId_bindings");
-        itemId_bindings = bindings.getStatic();
+        Integrator.itemId_bindings = bindings.getStatic();
 
         RClass<Object> worldProviderMystClass = new RClass(Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst"));
-        agedataField = worldProviderMystClass.getField("agedata");
+        Integrator.agedataField = worldProviderMystClass.getField("agedata");
 
         RClass<Object> ageDataClass = new RClass(Class.forName("com.xcompwiz.mystcraft.world.agedata.AgeData"));
-        symbolsField = ageDataClass.getField("symbols");
-        pagesField = ageDataClass.getField("pages");
+        Integrator.symbolsField = ageDataClass.getField("symbols");
+        Integrator.pagesField = ageDataClass.getField("pages");
     }
 
     public static List<ItemStack> getAllLinkpanels() {
-        return allLinkpanels;
+        return Integrator.allLinkpanels;
     }
 
     public static InkMixerRecipe getInkMixerRecipe(ItemStack stack) {
@@ -270,9 +270,9 @@ public final class Integrator {
     public static ArrayList getALlInkMixerRecipes() {
         ArrayList result = new ArrayList();
 
-        result.addAll(itemstack_bindings.keySet());
-        result.addAll(oredict_bindings.keySet());
-        result.addAll(itemId_bindings.keySet());
+        result.addAll(Integrator.itemstack_bindings.keySet());
+        result.addAll(Integrator.oredict_bindings.keySet());
+        result.addAll(Integrator.itemId_bindings.keySet());
 
         return result;
     }
@@ -287,23 +287,23 @@ public final class Integrator {
     }
 
     public static List<String> getAgeSymbols(WorldProvider provider) {
-        if (!worldProviderMystClass.isAssignableFrom(provider.getClass())) {
+        if (!Integrator.worldProviderMystClass.isAssignableFrom(provider.getClass())) {
             return null;
         }
 
-        Object ageData = agedataField.get(provider);
+        Object ageData = Integrator.agedataField.get(provider);
 
-        return symbolsField.get(ageData);
+        return Integrator.symbolsField.get(ageData);
     }
 
     public static List<ItemStack> getAgePages(WorldProvider provider) {
-        if (!worldProviderMystClass.isAssignableFrom(provider.getClass())) {
+        if (!Integrator.worldProviderMystClass.isAssignableFrom(provider.getClass())) {
             return null;
         }
 
-        Object ageData = agedataField.get(provider);
+        Object ageData = Integrator.agedataField.get(provider);
 
-        return pagesField.get(ageData);
+        return Integrator.pagesField.get(ageData);
     }
 
 }

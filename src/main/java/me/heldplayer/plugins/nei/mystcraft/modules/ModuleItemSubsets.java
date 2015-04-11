@@ -19,7 +19,7 @@ public class ModuleItemSubsets implements IModule {
     private boolean enabled;
 
     public ModuleItemSubsets() {
-        addItemRanges = new ConfigValue<Boolean>("addItemRanges", "config.nei.mystcraft.key.addItemRanges", Side.CLIENT, Boolean.TRUE, "Should item ranges be added to NEI?");
+        addItemRanges = new ConfigValue<Boolean>("addItemRanges", "myst-nei:config.general.addItemRanges", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override
@@ -159,6 +159,7 @@ public class ModuleItemSubsets implements IModule {
         }
     }
 
+    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     @Override
     public void disable() {
         if (enabled) {

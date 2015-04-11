@@ -26,8 +26,8 @@ public class ModuleLinkingBooks implements IModule {
     private boolean recipeEnabled;
 
     public ModuleLinkingBooks() {
-        addLinkingBooks = new ConfigValue<Boolean>("addLinkingBooks", "config.nei.mystcraft.key.addLinkingBooks", Side.CLIENT, Boolean.TRUE, "Should unlinked linking books be added to NEI?");
-        showRecipeForLinkbooks = new ConfigValue<Boolean>("showRecipeForLinkbooks", "config.nei.mystcraft.key.showRecipeForLinkbooks", Side.CLIENT, Boolean.TRUE, "Should the recipe for linking books be added to NEI?");
+        addLinkingBooks = new ConfigValue<Boolean>("addLinkingBooks", "myst-nei:config.general.addLinkingBooks", Side.CLIENT, Boolean.TRUE);
+        showRecipeForLinkbooks = new ConfigValue<Boolean>("showRecipeForLinkbooks", "myst-nei:config.general.showRecipeForLinkbooks", Side.CLIENT, Boolean.TRUE);
     }
 
     @Override
