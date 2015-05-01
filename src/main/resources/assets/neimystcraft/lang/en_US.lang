@@ -56,3 +56,13 @@ myst-nei:config.general.opOnlySymbolExplorer=Op-only symbol exploring
 myst-nei:config.general.opOnlySymbolExplorer.comment=Only allow ops to explore age symbols?
 myst-nei:config.general.opOnlyPageExploring=Op-only page exploring
 myst-nei:config.general.opOnlyPageExploring.comment=Only allow ops to explore age pages?
+
+nei.subsets.Mystcraft=Mystcraft
+nei.subsets.Mystcraft.Blocks=Blocks
+nei.subsets.Mystcraft.Items=Items
+nei.subsets.Mystcraft.Items.Descriptive Books=Descriptive Books
+nei.subsets.Mystcraft.Items.Link Panels=Link Panels
+nei.subsets.Mystcraft.Items.Linking Books=Linking Books
+nei.subsets.Mystcraft.Items.Notebooks=Notebooks
+
+nei.subsets.Mystcraft.Items.Symbols=Symbols
