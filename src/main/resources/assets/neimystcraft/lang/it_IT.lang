@@ -1,0 +1,67 @@
+nei.mystcraft.writingdesk.page=Clic destro su una pagina sul tab alla tua destra per fabbricare
+nei.mystcraft.writingdesk.page.name=Le pagine non possono essere rinominate in una scrivania
+
+nei.mystcraft.writingdesk.notebook=Clic destro su una pagina sul tab alla tua destra per aggiungerlo al tuo taccuino
+nei.mystcraft.writingdesk.notebook.name=Rinomina il taccuino usando il textfield
+
+nei.mystcraft.inkmixer.drop=Butta oggetti nel Mescolatore d'inchiostro per aggiungere effetti
+
+nei.mystcraft.recipe.ages=Ere Mystcraft
+nei.mystcraft.recipe.ages.modes.0=Pagine
+nei.mystcraft.recipe.ages.modes.1=Simboli
+
+nei.mystcraft.linkbook.activate=Clic destro con il libro inn mano per creare un collegamento
+
+nei.mystcraft.recipes=Ricette
+
+myst-nei:config.general=Generale
+myst-nei:config.general.comment=Impostazioni generali della mod
+myst-nei:config.general.hideTechnicalBlocks=Nascondi blocchi tecnici
+myst-nei:config.general.hideTechnicalBlocks.comment=Dovrebbero essere nascosti i blocchi tecnici?
+myst-nei:config.general.addDecaySubTypes=Aggiungi sottotipi di Instabilità
+myst-nei:config.general.addDecaySubTypes.comment=Dovrebbero essere visibili tutti i tipi di instabilità in NEI?
+myst-nei:config.general.addCreativeNotebooks=Aggiungi Taccuini creativa
+myst-nei:config.general.addCreativeNotebooks.comment=Dovrebbe essere aggiunto i taccuini creativa in NEI?
+myst-nei:config.general.addSymbolPages=Aggiungi Pagine con simboli?
+myst-nei:config.general.addSymbolPages.comment=Dovrebbero essere aggiunte le pagine coi simboli in NEI?
+myst-nei:config.general.addLinkPanels=Aggiungi Pannello con collegamento
+myst-nei:config.general.addLinkPanels.comment=Dovrebbero essere aggiunte i pannelli di collegamento in NEI?
+myst-nei:config.general.addLinkingBooks=Aggiungi Libri colleganti
+myst-nei:config.general.addLinkingBooks.comment=Dovrebbero essere aggiunti i libri non ancora collegati in NEI?
+myst-nei:config.general.addItemRanges=Aggiungi raggi di oggetti
+myst-nei:config.general.addItemRanges.comment=Dovrebbero essere aggiunti raggi di oggetti in NEI?
+myst-nei:config.general.showRecipeForLinkbooks=Mostra la ricetta del Libro collegante
+myst-nei:config.general.showRecipeForLinkbooks.comment=Dovrebbero essere aggiunte le ricette del libro collegante in NEI?
+myst-nei:config.general.addInkMixerRecipes=Mostra le ricette del Mescolatore d'inchiostro
+myst-nei:config.general.addInkMixerRecipes.comment=Dovrebbero essere aggiunte le ricette del mescolatore d'inchiostro in NEI?
+myst-nei:config.general.addWritingDeskRecipes=Mostra le ricette della Scrivania
+myst-nei:config.general.addWritingDeskRecipes.comment=Dovrebbero essere aggiunte le ricette della scrivania in NEI?
+myst-nei:config.general.addInkMixerTooltips=Mostra i tooltip del Mescolatore d'inchiostro
+myst-nei:config.general.addInkMixerTooltips.comment=Dovrebbero esserci tooltip per il mescolatore d'inchiostro?
+myst-nei:config.general.addWritingDeskTooltips=Mostra i tooltip della Scrivania
+myst-nei:config.general.addWritingDeskTooltips.comment=Dovrebbero esserci tooltip per la scrivania?
+myst-nei:config.general.addRecipesTooltips=Mostra il tooltip 'Ricette'
+myst-nei:config.general.addRecipesTooltips.comment=Dovrebbero esserci regioni cliccabili per mostrare tutte le ricette nel luogo di fabbricazione?
+myst-nei:config.general.addAgeExplorer=Permetti esplorazione delle Ere
+myst-nei:config.general.addAgeExplorer.comment=Dovrebbero essere esplorabili le Ere?
+myst-nei:config.general.addAgeList=Aggiungi Libri descrittivi
+myst-nei:config.general.addAgeList.comment=Dovrebbe esserci una lista di oggettiin NEI?
+myst-nei:config.general.allowSymbolExploring=Permetti l'esplorazione dei simboli
+myst-nei:config.general.allowSymbolExploring.comment=Permetti ai simboli di essere esplorati?
+myst-nei:config.general.allowPageExploring=Permetti l'esplorazione delle pagine
+myst-nei:config.general.allowPageExploring.comment=Permetti alle pagine di essere esplorate?
+myst-nei:config.general.opOnlyAgeList=Solo-Op esplorazione delle Ere
+myst-nei:config.general.opOnlyAgeList.comment=Solo gli operatori possono vedere la lista di ere in NEI?
+myst-nei:config.general.opOnlySymbolExplorer=Solo-Op esplorazione dei simboli
+myst-nei:config.general.opOnlySymbolExplorer.comment=Solo gli operatori possono esplorare i simboli delle ere?
+myst-nei:config.general.opOnlyPageExploring=Solo-Op esplorazione delle pagine
+myst-nei:config.general.opOnlyPageExploring.comment=Solo gli operatori possono esplorare le pagine delle ere?
+
+nei.subsets.Mystcraft=Mystcraft
+nei.subsets.Mystcraft.Blocks=Blocchi
+nei.subsets.Mystcraft.Items=Oggetti
+nei.subsets.Mystcraft.Items.Descriptive Books=Libri descrittivi
+nei.subsets.Mystcraft.Items.Link Panels=Pannelli di collegamento
+nei.subsets.Mystcraft.Items.Linking Books=Libri colleganti
+nei.subsets.Mystcraft.Items.Notebooks=Taccuini
+nei.subsets.Mystcraft.Items.Symbols=Simboli
