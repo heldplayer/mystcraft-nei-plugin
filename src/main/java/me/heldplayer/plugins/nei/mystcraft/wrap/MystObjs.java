@@ -69,7 +69,7 @@ public class MystObjs {
     }
 
     public static List<IAgeSymbol> getAllRegisteredSymbols() {
-        return Integrator.mystAPI.getSymbolAPI().getAllRegisteredSymbols();
+        return Integrator.symbolAPI.getAllRegisteredSymbols();
     }
 
     public static class ObjectReference {

@@ -29,7 +29,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        FMLInterModComms.sendMessage("Mystcraft", "register", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setMystAPI");
+        FMLInterModComms.sendMessage("Mystcraft", "API", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setMystAPI");
     }
 
     @Override

@@ -9,7 +9,6 @@ import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
-import com.xcompwiz.mystcraft.core.InternalAPI;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             if (results.length > 0) {
                 this.loadCraftingRecipes((ItemStack) results[0]);
             } else {
-                CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.mystAPI.getSymbolAPI().getSymbol(null), true);
+                CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
                 this.arecipes.add(recipe);
 
                 List<IAgeSymbol> recipes = MystObjs.getAllRegisteredSymbols();
@@ -68,13 +67,13 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (result.getItem() == MystObjs.page.getItem()) {
-            String symbol = InternalAPI.page.getPageSymbol(result); // FIXME
+            String symbol = Integrator.pageAPI.getPageSymbol(result);
 
             if (symbol == null || symbol.isEmpty()) {
                 return;
             }
 
-            IAgeSymbol ageSymbol = Integrator.mystAPI.getSymbolAPI().getSymbol(symbol);
+            IAgeSymbol ageSymbol = Integrator.symbolAPI.getSymbol(symbol);
             if (ageSymbol == null) {
                 return;
             }
@@ -82,10 +81,10 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(ageSymbol, false);
             this.arecipes.add(recipe);
         } else if (result.getItem() == Items.glass_bottle) {
-            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.mystAPI.getSymbolAPI().getSymbol(null), true);
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
             this.arecipes.add(recipe);
 
-            List<IAgeSymbol> recipes = Integrator.mystAPI.getSymbolAPI().getAllRegisteredSymbols();
+            List<IAgeSymbol> recipes = Integrator.symbolAPI.getAllRegisteredSymbols();
 
             for (IAgeSymbol symbol : recipes) {
                 recipe = new CachedWritingDeskRecipe(symbol, false);
@@ -101,13 +100,13 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (ingredient.getItem() == MystObjs.page.getItem()) {
-            String symbol = InternalAPI.page.getPageSymbol(ingredient); // FIXME
+            String symbol = Integrator.pageAPI.getPageSymbol(ingredient);
 
             if (symbol == null || symbol.isEmpty()) {
                 return;
             }
 
-            IAgeSymbol ageSymbol = Integrator.mystAPI.getSymbolAPI().getSymbol(symbol);
+            IAgeSymbol ageSymbol = Integrator.symbolAPI.getSymbol(symbol);
             if (ageSymbol == null) {
                 return;
             }
@@ -118,13 +117,13 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             recipe = new CachedWritingDeskRecipe(ageSymbol, false);
             this.arecipes.add(recipe);
         } else if (ingredient.getItem() == MystObjs.notebook.getItem()) {
-            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.mystAPI.getSymbolAPI().getSymbol(null), true);
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
             this.arecipes.add(recipe);
         } else if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial.getItem()) {
-            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.mystAPI.getSymbolAPI().getSymbol(null), true);
+            CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
             this.arecipes.add(recipe);
 
-            List<IAgeSymbol> recipes = Integrator.mystAPI.getSymbolAPI().getAllRegisteredSymbols();
+            List<IAgeSymbol> recipes = Integrator.symbolAPI.getAllRegisteredSymbols();
 
             for (IAgeSymbol symbol : recipes) {
                 recipe = new CachedWritingDeskRecipe(symbol, false);
@@ -311,7 +310,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 53);
 
             if (isNotebook) {
-                this.result = new PositionedStack(Integrator.mystAPI.getItemFactory().buildCollectionItem("Named Notebook", new String[0]), 3, 53);
+                this.result = new PositionedStack(Integrator.itemFactory.buildCollectionItem("Named Notebook", new String[0]), 3, 53);
 
                 this.textField.setText("Named Notebook");
 
@@ -322,7 +321,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 }
             } else {
                 if (symbol != null) {
-                    this.result = new PositionedStack(Integrator.mystAPI.getItemFactory().buildSymbolPage(symbol.identifier()), 3, 53);
+                    this.result = new PositionedStack(Integrator.itemFactory.buildSymbolPage(symbol.identifier()), 3, 53);
 
                     this.textField.setText(symbol.displayName());
                     this.textField.setCursorPosition(0);

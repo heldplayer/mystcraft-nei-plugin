@@ -212,7 +212,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
             }
             if (mode == 1) {
                 for (int i = 0; i < ageInfo.symbols.size(); i++) {
-                    ItemStack stack = Integrator.mystAPI.getItemFactory().buildSymbolPage(ageInfo.symbols.get(i));
+                    ItemStack stack = Integrator.itemFactory.buildSymbolPage(ageInfo.symbols.get(i));
                     this.stacks.add(stack);
                 }
             }

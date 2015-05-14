@@ -37,10 +37,10 @@ public class ModulePages implements IModule {
                     return o1.displayName().compareTo(o2.displayName());
                 }
             });
-            symbols.addAll(Integrator.mystAPI.getSymbolAPI().getAllRegisteredSymbols());
+            symbols.addAll(Integrator.symbolAPI.getAllRegisteredSymbols());
 
             for (IAgeSymbol symbol : symbols) {
-                API.addItemListEntry(Integrator.mystAPI.getItemFactory().buildSymbolPage(symbol.identifier()));
+                API.addItemListEntry(Integrator.itemFactory.buildSymbolPage(symbol.identifier()));
             }
 
             symbolsEnabled = true;

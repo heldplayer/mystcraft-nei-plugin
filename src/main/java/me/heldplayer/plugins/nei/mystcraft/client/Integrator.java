@@ -1,11 +1,14 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import codechicken.lib.gui.GuiDraw;
-import com.xcompwiz.mystcraft.api.MystAPI;
+import com.xcompwiz.mystcraft.api.APIInstanceProvider;
+import com.xcompwiz.mystcraft.api.exception.APIUndefined;
+import com.xcompwiz.mystcraft.api.exception.APIVersionRemoved;
+import com.xcompwiz.mystcraft.api.exception.APIVersionUndefined;
+import com.xcompwiz.mystcraft.api.hook.*;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 import com.xcompwiz.mystcraft.api.util.ColorGradient;
 import com.xcompwiz.mystcraft.client.gui.GuiUtils;
-import com.xcompwiz.mystcraft.core.InternalAPI;
 import java.util.*;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
@@ -34,7 +37,11 @@ import org.lwjgl.opengl.GL11;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Integrator {
 
-    public static MystAPI mystAPI;
+    public static LinkPropertyAPI linkPropertyAPI;
+    public static SymbolAPI symbolAPI;
+    public static ItemFactory itemFactory;
+    public static RenderAPI renderAPI;
+    public static PageAPI pageAPI;
 
     public static List<ItemStack> allAges = new ArrayList<ItemStack>();
     public static Class<? extends GuiContainer> guiInkMixerClass;
@@ -67,8 +74,20 @@ public final class Integrator {
     private Integrator() {
     }
 
-    public static void setMystAPI(MystAPI api) {
-        Integrator.mystAPI = api;
+    public static void setMystAPI(APIInstanceProvider api) {
+        try {
+            Integrator.linkPropertyAPI = (LinkPropertyAPI) api.getAPIInstance("linkingprop-1");
+            Integrator.symbolAPI = (SymbolAPI) api.getAPIInstance("symbol-1");
+            Integrator.itemFactory = (ItemFactory) api.getAPIInstance("itemfact-1");
+            Integrator.renderAPI = (RenderAPI) api.getAPIInstance("render-1");
+            Integrator.pageAPI = (PageAPI) api.getAPIInstance("page-1");
+        } catch (APIUndefined e) {
+            e.printStackTrace();
+        } catch (APIVersionUndefined e) {
+            e.printStackTrace();
+        } catch (APIVersionRemoved e) {
+            e.printStackTrace();
+        }
     }
 
     public static Collection<ConfigValue<?>> getAllConfigValues() {
@@ -248,13 +267,13 @@ public final class Integrator {
                 return null;
             }
 
-            Map<String, Float> properties = InternalAPI.linkProperties.getPropertiesForItem(stack); // FIXME
+            Map<String, Float> properties = Integrator.linkPropertyAPI.getPropertiesForItem(stack);
 
             if (properties == null) {
                 return null;
             }
 
-            ColorGradient gradient = InternalAPI.linkProperties.getPropertiesGradient(properties); // FIXME
+            ColorGradient gradient = Integrator.linkPropertyAPI.getPropertiesGradient(properties);
 
             String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
 

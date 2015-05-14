@@ -184,14 +184,14 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             int iColor = color.asInt();
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
 
-            Integrator.mystAPI.getRenderAPI().drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
+            Integrator.renderAPI.drawColorEye(82.5F, 37.5F, 0.0F, 20.0F, color);
         } else {
             int iColor = Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000;
             Color color = new Color(iColor);
 
             GuiDraw.drawGradientRect(left, top, left + width, top + height, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000);
 
-            Integrator.mystAPI.getRenderAPI().drawColor(82.5F, 37.5F, 0.0F, 20.0F, color);
+            Integrator.renderAPI.drawColorEye(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
     }
 
@@ -271,11 +271,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             this.frame = 0;
 
             if (this.modifiers != null) {
-                ItemStack stack = Integrator.mystAPI.getItemFactory().buildLinkPage(this.modifiers);
+                ItemStack stack = Integrator.itemFactory.buildLinkPage(this.modifiers);
 
                 this.stack = new PositionedStack(stack, 147, 37);
             } else {
-                ItemStack stack = Integrator.mystAPI.getItemFactory().buildLinkPage();
+                ItemStack stack = Integrator.itemFactory.buildLinkPage();
 
                 this.stack = new PositionedStack(stack, 147, 37);
             }
