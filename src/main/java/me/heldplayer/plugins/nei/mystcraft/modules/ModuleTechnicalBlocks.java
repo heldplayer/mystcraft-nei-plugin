@@ -23,9 +23,10 @@ public class ModuleTechnicalBlocks implements IModule {
         if (hideTechnicalBlocks.getValue()) {
             Objects.log.log(Level.DEBUG, "Hiding technical blocks from NEI");
 
-            API.hideItem(new ItemStack(MystObjs.portal.getBlock()));
-            API.hideItem(new ItemStack(MystObjs.writing_desk_block.getBlock()));
-            API.hideItem(new ItemStack(MystObjs.star_fissure.getBlock()));
+            API.hideItem(new ItemStack(MystObjs.portal));
+            API.hideItem(new ItemStack(MystObjs.writingDeskBlock));
+            API.hideItem(new ItemStack(MystObjs.starFissure));
+            API.hideItem(new ItemStack(MystObjs.blackInkBlock));
 
             enabled = true;
         }
@@ -36,9 +37,10 @@ public class ModuleTechnicalBlocks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Unhiding technical blocks from NEI");
 
-            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.portal.getBlock()));
-            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.writing_desk_block.getBlock()));
-            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.star_fissure.getBlock()));
+            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.portal));
+            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.writingDeskBlock));
+            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.starFissure));
+            ItemInfo.hiddenItems.remove(new ItemStack(MystObjs.blackInkBlock));
 
             enabled = false;
         }

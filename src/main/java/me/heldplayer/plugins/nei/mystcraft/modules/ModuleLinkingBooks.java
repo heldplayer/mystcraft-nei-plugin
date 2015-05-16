@@ -36,7 +36,7 @@ public class ModuleLinkingBooks implements IModule {
             Objects.log.log(Level.DEBUG, "Adding linking books to NEI view");
 
             for (ItemStack panel : Integrator.getAllLinkpanels()) {
-                ItemStack book = new ItemStack(MystObjs.linkbook_unlinked.getItem());
+                ItemStack book = new ItemStack(MystObjs.linkingBookUnlinked);
 
                 book.stackTagCompound = (NBTTagCompound) panel.stackTagCompound.copy();
 
@@ -56,7 +56,7 @@ public class ModuleLinkingBooks implements IModule {
                     ItemStack result = recipe.getOutput();
 
                     for (ItemStack stack : input) {
-                        if (stack != null && stack.getItem() == MystObjs.page.getItem()) {
+                        if (stack != null && stack.getItem() == MystObjs.page) {
                             if (stack.stackTagCompound != null) {
                                 result.stackTagCompound = stack.stackTagCompound;
                                 break;
@@ -79,7 +79,7 @@ public class ModuleLinkingBooks implements IModule {
 
                 @Override
                 public boolean isValidRecipeInput(ItemStack input) {
-                    if (input != null && input.getItem() == MystObjs.page.getItem()) {
+                    if (input != null && input.getItem() == MystObjs.page) {
                         if (input.stackTagCompound == null) {
                             return false;
                         }
@@ -102,7 +102,7 @@ public class ModuleLinkingBooks implements IModule {
             ItemStack[] stacks = new ItemStack[linkPanels.size()];
             stacks = linkPanels.toArray(stacks);
 
-            FakeShapelessSpACoreRecipe recipe = new FakeShapelessSpACoreRecipe(handler, new ItemStack(MystObjs.linkbook_unlinked.getItem()), stacks, new ItemStack(Items.leather)) {
+            FakeShapelessSpACoreRecipe recipe = new FakeShapelessSpACoreRecipe(handler, new ItemStack(MystObjs.linkingBookUnlinked), stacks, new ItemStack(Items.leather)) {
 
                 @Override
                 public boolean isEnabled() {
@@ -122,7 +122,7 @@ public class ModuleLinkingBooks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Removing linking books from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.linkbook_unlinked.getItem());
+            ItemInfo.itemOverrides.removeAll(MystObjs.linkingBookUnlinked);
 
             enabled = false;
         }

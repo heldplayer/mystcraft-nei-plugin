@@ -62,7 +62,7 @@ public final class Integrator {
     static {
         Integrator.modules.add(new ModuleTechnicalBlocks());
         Integrator.modules.add(new ModuleDecayBlocks());
-        Integrator.modules.add(new ModuleCreativeNotebooks());
+        Integrator.modules.add(new ModuleCreativePortfolios());
         Integrator.modules.add(new ModulePages());
         Integrator.modules.add(new ModuleLinkingBooks());
         Integrator.modules.add(new ModuleDescriptiveBooks());
@@ -157,7 +157,7 @@ public final class Integrator {
         Integrator.allLinkpanels = new ArrayList<ItemStack>();
 
         for (int i = 0; i <= bin; i++) {
-            ItemStack is = new ItemStack(MystObjs.page.getItem(), 1, 0);
+            ItemStack is = new ItemStack(MystObjs.page, 1, 0);
 
             NBTTagCompound compound = new NBTTagCompound();
             NBTTagCompound linkPanelCompound = new NBTTagCompound();

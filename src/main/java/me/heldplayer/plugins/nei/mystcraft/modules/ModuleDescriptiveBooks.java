@@ -36,7 +36,7 @@ public class ModuleDescriptiveBooks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Removing descriptive books from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.descriptive_book.getItem());
+            ItemInfo.itemOverrides.removeAll(MystObjs.descriptiveBook);
 
             enabled = false;
         }

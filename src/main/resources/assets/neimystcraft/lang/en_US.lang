@@ -57,11 +57,13 @@ myst-nei:config.general.opOnlySymbolExplorer.comment=Only allow ops to explore a
 myst-nei:config.general.opOnlyPageExploring=Op-only page exploring
 myst-nei:config.general.opOnlyPageExploring.comment=Only allow ops to explore age pages?
 
-nei.subsets.Mystcraft=Mystcraft
-nei.subsets.Mystcraft.Blocks=Blocks
-nei.subsets.Mystcraft.Items=Items
-nei.subsets.Mystcraft.Items.Descriptive Books=Descriptive Books
-nei.subsets.Mystcraft.Items.Link Panels=Link Panels
-nei.subsets.Mystcraft.Items.Linking Books=Linking Books
-nei.subsets.Mystcraft.Items.Notebooks=Notebooks
-nei.subsets.Mystcraft.Items.Symbols=Symbols
+nei.subsets.Mod.Mystcraft=Mystcraft
+nei.subsets.Mod.Mystcraft.Blocks=Blocks
+nei.subsets.Mod.Mystcraft.Items=Items
+nei.subsets.Mod.Mystcraft.Items.Descriptive Books=Descriptive Books
+nei.subsets.Mod.Mystcraft.Items.Link Panels=Link Panels
+nei.subsets.Mod.Mystcraft.Items.Linking Books=Linking Books
+nei.subsets.Mod.Mystcraft.Items.Notebooks=Notebooks
+nei.subsets.Mod.Mystcraft.Items.Symbols=Symbols
+
+linkeffect.following.name=Following

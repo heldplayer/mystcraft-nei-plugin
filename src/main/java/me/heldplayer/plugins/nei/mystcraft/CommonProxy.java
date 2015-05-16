@@ -2,6 +2,7 @@ package me.heldplayer.plugins.nei.mystcraft;
 
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,7 +69,7 @@ public class CommonProxy extends SpACoreProxy {
                             info.pages = new ArrayList<ItemStack>(pages.tagCount());
                             for (int i = 0; i < pages.tagCount(); i++) {
                                 NBTTagCompound tag = pages.getCompoundTagAt(i);
-                                ItemStack stack = new ItemStack(MystObjs.page.getItem());
+                                ItemStack stack = new ItemStack(MystObjs.page);
                                 stack.stackTagCompound = tag;
                                 info.pages.add(stack);
                             }

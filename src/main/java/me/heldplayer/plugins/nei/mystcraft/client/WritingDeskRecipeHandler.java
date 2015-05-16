@@ -39,7 +39,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page.getItem() == null || !ModuleRecipes.writingDeskEnabled) {
+        if (!ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
@@ -50,7 +50,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
                 CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
                 this.arecipes.add(recipe);
 
-                List<IAgeSymbol> recipes = MystObjs.getAllRegisteredSymbols();
+                List<IAgeSymbol> recipes = Integrator.symbolAPI.getAllRegisteredSymbols();
 
                 for (IAgeSymbol symbol : recipes) {
                     recipe = new CachedWritingDeskRecipe(symbol, false);
@@ -62,11 +62,11 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page.getItem() == null || !ModuleRecipes.writingDeskEnabled) {
+        if (!ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
-        if (result.getItem() == MystObjs.page.getItem()) {
+        if (result.getItem() == MystObjs.page) {
             String symbol = Integrator.pageAPI.getPageSymbol(result);
 
             if (symbol == null || symbol.isEmpty()) {
@@ -95,11 +95,11 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page.getItem() == null || !ModuleRecipes.writingDeskEnabled) {
+        if (!ModuleRecipes.writingDeskEnabled) {
             return;
         }
 
-        if (ingredient.getItem() == MystObjs.page.getItem()) {
+        if (ingredient.getItem() == MystObjs.page) {
             String symbol = Integrator.pageAPI.getPageSymbol(ingredient);
 
             if (symbol == null || symbol.isEmpty()) {
@@ -116,10 +116,12 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
             recipe = new CachedWritingDeskRecipe(ageSymbol, false);
             this.arecipes.add(recipe);
-        } else if (ingredient.getItem() == MystObjs.notebook.getItem()) {
+        }
+        if (ingredient.getItem() == MystObjs.folder) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
             this.arecipes.add(recipe);
-        } else if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkvial.getItem()) {
+        }
+        if (ingredient.getItem() == Items.paper || ingredient.getItem() == MystObjs.inkVial) {
             CachedWritingDeskRecipe recipe = new CachedWritingDeskRecipe(Integrator.symbolAPI.getSymbol(null), true);
             this.arecipes.add(recipe);
 
@@ -204,7 +206,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
                 if (recipe.isNotebook && recipe.nullSymbol) {
                     if (symbols == null) {
-                        symbols = MystObjs.getAllRegisteredSymbols();
+                        symbols = Integrator.symbolAPI.getAllRegisteredSymbols();
                     }
 
                     recipe.symbol = symbols.get(Objects.rnd.nextInt(symbols.size()));
@@ -305,17 +307,18 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             this.nullSymbol = symbol == null;
             this.textField = new GuiTextField(GuiDraw.fontRenderer, 23, 54, 99, 14);
 
-            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkvial.getItem()), 147, 1));
+            this.ingredients.add(new PositionedStack(new ItemStack(MystObjs.inkVial), 147, 1));
             this.ingredients.add(new PositionedStack(new ItemStack(Items.paper), 3, 1));
             this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 53);
 
             if (isNotebook) {
-                this.result = new PositionedStack(Integrator.itemFactory.buildCollectionItem("Named Notebook", new String[0]), 3, 53);
+                //this.result = new PositionedStack(Integrator.itemFactory.buildCollectionItem("Named Folder", new String[0]), 3, 53); TODO
+                this.result = new PositionedStack(new ItemStack(MystObjs.folder), 3, 53);
 
-                this.textField.setText("Named Notebook");
+                this.textField.setText("Named Folder");
 
                 if (this.nullSymbol) {
-                    List<IAgeSymbol> symbols = MystObjs.getAllRegisteredSymbols();
+                    List<IAgeSymbol> symbols = Integrator.symbolAPI.getAllRegisteredSymbols();
 
                     this.symbol = symbols.get(Objects.rnd.nextInt(symbols.size()));
                 }

@@ -35,7 +35,7 @@ public class ModuleDecayBlocks implements IModule {
             damageVariants.add(6);
 
             for (Integer damage : damageVariants) {
-                API.addItemListEntry(new ItemStack(MystObjs.decay.getBlock(), 1, damage));
+                API.addItemListEntry(new ItemStack(MystObjs.decay, 1, damage));
             }
 
             enabled = true;
@@ -47,7 +47,7 @@ public class ModuleDecayBlocks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Removing decay types from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(Item.getItemFromBlock(MystObjs.decay.getBlock()));
+            ItemInfo.itemOverrides.removeAll(Item.getItemFromBlock(MystObjs.decay));
 
             enabled = false;
         }

@@ -25,10 +25,6 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (MystObjs.page.getItem() == null) {
-            return;
-        }
-
         if (outputId.equals("item")) {
             if (results.length > 0) {
                 this.loadCraftingRecipes((ItemStack) results[0]);
@@ -38,11 +34,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        if (MystObjs.page.getItem() == null) {
-            return;
-        }
-
-        if (result.getItem() == MystObjs.descriptive_book.getItem()) {
+        if (result.getItem() == MystObjs.descriptiveBook) {
             NBTTagCompound tag = result.stackTagCompound;
             if (tag == null) {
                 return;
@@ -63,11 +55,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (MystObjs.page.getItem() == null) {
-            return;
-        }
-
-        if (ingredient.getItem() == MystObjs.descriptive_book.getItem()) {
+        if (ingredient.getItem() == MystObjs.descriptiveBook) {
             NBTTagCompound tag = ingredient.stackTagCompound;
             if (tag == null) {
                 return;

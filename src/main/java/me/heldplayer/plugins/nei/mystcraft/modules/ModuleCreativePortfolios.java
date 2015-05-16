@@ -9,12 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
-public class ModuleCreativeNotebooks implements IModule {
+public class ModuleCreativePortfolios implements IModule {
 
     public static ConfigValue<Boolean> addCreativeNotebooks;
     private boolean enabled;
 
-    public ModuleCreativeNotebooks() {
+    public ModuleCreativePortfolios() {
         addCreativeNotebooks = new ConfigValue<Boolean>("addCreativeNotebooks", "myst-nei:config.general.addCreativeNotebooks", Side.CLIENT, Boolean.TRUE);
     }
 
@@ -41,7 +41,7 @@ public class ModuleCreativeNotebooks implements IModule {
         if (enabled) {
             Objects.log.log(Level.DEBUG, "Removing creative notebooks from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.notebook.getItem());
+            ItemInfo.itemOverrides.removeAll(MystObjs.portfolio);
 
             enabled = false;
         }

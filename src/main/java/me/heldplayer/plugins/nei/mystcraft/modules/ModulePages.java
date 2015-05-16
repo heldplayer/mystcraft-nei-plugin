@@ -62,7 +62,7 @@ public class ModulePages implements IModule {
         if (symbolsEnabled || linkpanelsEnabled) {
             Objects.log.log(Level.DEBUG, "Removing symbol pages and link panels from NEI view");
 
-            ItemInfo.itemOverrides.removeAll(MystObjs.page.getItem());
+            ItemInfo.itemOverrides.removeAll(MystObjs.page);
 
             symbolsEnabled = false;
             linkpanelsEnabled = false;
