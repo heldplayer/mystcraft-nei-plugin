@@ -29,7 +29,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        FMLInterModComms.sendMessage("Mystcraft", "API", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setMystAPI");
+        FMLInterModComms.sendMessage("Mystcraft", "API", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setMystcraftAPI");
     }
 
     @Override
@@ -40,10 +40,10 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(this);
 
         try {
-            Objects.log.log(Level.DEBUG, "Initializing temporary wrappers for 1.7");
+            Objects.log.log(Level.DEBUG, "Initializing temporary wrappers");
             MystObjs.initialize();
         } catch (Throwable ex) {
-            Objects.log.log(Level.ERROR, "Failed initializing temporary wrappers for 1.7", ex);
+            Objects.log.log(Level.ERROR, "Failed initializing temporary wrappers", ex);
         }
     }
 

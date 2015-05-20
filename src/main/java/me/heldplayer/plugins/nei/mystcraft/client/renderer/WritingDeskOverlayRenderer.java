@@ -7,6 +7,7 @@ import codechicken.nei.guihook.GuiContainerManager;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.inventory.Slot;
+import net.specialattack.forge.core.client.GLState;
 import org.lwjgl.opengl.GL11;
 
 public class WritingDeskOverlayRenderer implements IRecipeOverlayRenderer {
@@ -26,23 +27,23 @@ public class WritingDeskOverlayRenderer implements IRecipeOverlayRenderer {
 
     @Override
     public void renderOverlay(GuiContainerManager gui, Slot slot) {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GLState.glEnable(GL11.GL_BLEND);
+        GLState.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
         GuiContainerManager.setColouredItemRender(true);
 
         for (PositionedStack stack : this.ingreds) {
             if (stack.relx + 233 == slot.xDisplayPosition && stack.rely + 16 == slot.yDisplayPosition) {
-                GL11.glColor4d(0.6F, 0.6F, 0.6F, 0.7F);
+                GLState.glColor4d(0.6F, 0.6F, 0.6F, 0.7F);
                 GuiContainerManager.drawItem(stack.relx + 233, stack.rely + 16, stack.item);
             }
         }
 
         GuiContainerManager.setColouredItemRender(false);
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GLState.glDisable(GL11.GL_BLEND);
+        GLState.glEnable(GL11.GL_LIGHTING);
     }
 
 }

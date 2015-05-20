@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.specialattack.forge.core.asm.AccessHelper;
+import net.specialattack.forge.core.client.GLState;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -93,7 +94,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void drawBackground(int recipe) {
-        GL11.glColor4f(1, 1, 1, 1);
+        GLState.glColor4f(1, 1, 1, 1);
         GuiDraw.changeTexture(this.getGuiTexture());
         GuiDraw.drawTexturedModalRect(0, 10, 5, 11, 166, 114);
     }

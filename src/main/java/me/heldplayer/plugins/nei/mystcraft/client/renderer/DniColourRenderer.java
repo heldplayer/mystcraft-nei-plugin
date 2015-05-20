@@ -1,6 +1,7 @@
 package me.heldplayer.plugins.nei.mystcraft.client.renderer;
 
 import java.awt.Color;
+import net.specialattack.forge.core.client.GLState;
 import net.specialattack.util.MathHelper;
 import net.specialattack.util.Vector;
 import net.specialattack.util.VectorPool;
@@ -14,10 +15,10 @@ import org.lwjgl.opengl.GL11;
 public class DniColourRenderer {
 
     public static void render(Color color, Vector center, double radius) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glLineWidth(3.0F);
+        GLState.glDisable(GL11.GL_TEXTURE_2D);
+        GLState.glLineWidth(3.0F);
 
-        GL11.glColor3f((float) color.getRed() / 255.0F, (float) color.getGreen() / 255.0F, (float) color.getBlue() / 255.0F);
+        GLState.glColor3f((float) color.getRed() / 255.0F, (float) color.getGreen() / 255.0F, (float) color.getBlue() / 255.0F);
 
         float[] HSB = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         int H = (int) (HSB[0] * 360.0F);
@@ -85,12 +86,12 @@ public class DniColourRenderer {
         Vector right = VectorPool.getFreeVector(center.posX + radius, center.posY, center.posZ);
 
         if (eye) {
-            GL11.glBegin(GL11.GL_LINE_LOOP);
+            GLState.glBegin(GL11.GL_LINE_LOOP);
             for (int i = 0; i <= max; i++) {
                 float pos = (float) i / (float) max * 4.0F;
-                GL11.glVertex3d(center.posX + eyeRadius * MathHelper.cos(pos), center.posY + eyeRadius * MathHelper.sin(pos), center.posZ);
+                GLState.glVertex3d(center.posX + eyeRadius * MathHelper.cos(pos), center.posY + eyeRadius * MathHelper.sin(pos), center.posZ);
             }
-            GL11.glEnd();
+            GLState.glEnd();
         }
 
         if (outerEyelid) {
@@ -103,13 +104,13 @@ public class DniColourRenderer {
             points[2] = vec2;
             points[3] = right;
 
-            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GLState.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
                 double pos = (double) i / (double) max;
                 Vector point = MathHelper.bezier(points, pos);
-                GL11.glVertex3d(point.posX, point.posY, point.posZ);
+                GLState.glVertex3d(point.posX, point.posY, point.posZ);
             }
-            GL11.glEnd();
+            GLState.glEnd();
 
             top = MathHelper.bezier(points, 0.5D);
 
@@ -122,13 +123,13 @@ public class DniColourRenderer {
             points[2] = vec2;
             points[3] = right;
 
-            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GLState.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
                 double pos = (double) i / (double) max;
                 Vector point = MathHelper.bezier(points, pos);
-                GL11.glVertex3d(point.posX, point.posY, point.posZ);
+                GLState.glVertex3d(point.posX, point.posY, point.posZ);
             }
-            GL11.glEnd();
+            GLState.glEnd();
 
             bottom = MathHelper.bezier(points, 0.5D);
         }
@@ -143,13 +144,13 @@ public class DniColourRenderer {
             points[2] = vec2;
             points[3] = bottom;
 
-            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GLState.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
                 double pos = (double) i / (double) max;
                 Vector point = MathHelper.bezier(points, pos);
-                GL11.glVertex3d(point.posX, point.posY, point.posZ);
+                GLState.glVertex3d(point.posX, point.posY, point.posZ);
             }
-            GL11.glEnd();
+            GLState.glEnd();
 
             vec1 = VectorPool.getFreeVector(top.posX + eyelidRadius, center.posY - radius * 0.95D, top.posZ);
             vec2 = VectorPool.getFreeVector(bottom.posX + eyelidRadius, center.posY + radius * 0.95D, bottom.posZ);
@@ -160,28 +161,28 @@ public class DniColourRenderer {
             points[2] = vec2;
             points[3] = bottom;
 
-            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GLState.glBegin(GL11.GL_LINE_STRIP);
             for (int i = 0; i <= max; i++) {
                 double pos = (double) i / (double) max;
                 Vector point = MathHelper.bezier(points, pos);
-                GL11.glVertex3d(point.posX, point.posY, point.posZ);
+                GLState.glVertex3d(point.posX, point.posY, point.posZ);
             }
-            GL11.glEnd();
+            GLState.glEnd();
         } else if (innerEyelid) {
-            GL11.glBegin(GL11.GL_LINES);
-            GL11.glVertex3d(top.posX, top.posY, top.posZ);
-            GL11.glVertex3d(bottom.posX, bottom.posY, bottom.posZ);
-            GL11.glEnd();
+            GLState.glBegin(GL11.GL_LINES);
+            GLState.glVertex3d(top.posX, top.posY, top.posZ);
+            GLState.glVertex3d(bottom.posX, bottom.posY, bottom.posZ);
+            GLState.glEnd();
         }
 
-        GL11.glBegin(GL11.GL_LINE_LOOP);
+        GLState.glBegin(GL11.GL_LINE_LOOP);
         for (int i = 0; i <= max; i++) {
             float pos = (float) i / (float) max * 4.0F;
-            GL11.glVertex3d(center.posX + radius * MathHelper.cos(pos), center.posY + radius * MathHelper.sin(pos), center.posZ);
+            GLState.glVertex3d(center.posX + radius * MathHelper.cos(pos), center.posY + radius * MathHelper.sin(pos), center.posZ);
         }
-        GL11.glEnd();
+        GLState.glEnd();
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GLState.glEnable(GL11.GL_TEXTURE_2D);
 
         VectorPool.unuseVectors();
     }

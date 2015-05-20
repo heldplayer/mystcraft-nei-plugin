@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.specialattack.forge.core.asm.AccessHelper;
+import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -184,7 +185,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void drawBackground(int recipe) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiDraw.changeTexture(this.getGuiTexture());
         GuiDraw.drawTexturedModalRect(0, 0, 5, 7, 166, 70);
     }
@@ -312,7 +313,8 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
             this.leftOver = new PositionedStack(new ItemStack(Items.glass_bottle), 147, 53);
 
             if (isNotebook) {
-                //this.result = new PositionedStack(Integrator.itemFactory.buildCollectionItem("Named Folder", new String[0]), 3, 53); TODO
+                // FIXME:
+                // this.result = new PositionedStack(Integrator.itemFactory.buildCollectionItem("Named Folder", new String[0]), 3, 53);
                 this.result = new PositionedStack(new ItemStack(MystObjs.folder), 3, 53);
 
                 this.textField.setText("Named Folder");

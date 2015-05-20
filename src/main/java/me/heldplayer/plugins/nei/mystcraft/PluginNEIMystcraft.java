@@ -44,9 +44,11 @@ public class PluginNEIMystcraft extends SpACoreMod {
     // NEI Config references
 
     public static ConfigValue<Boolean> addAgeExplorer;
+    public static ConfigValue<Boolean> allowAgeViewer;
     public static ConfigValue<Boolean> allowSymbolExploring;
     public static ConfigValue<Boolean> allowPageExploring;
     public static ConfigValue<Boolean> opOnlyAgeList;
+    public static ConfigValue<Boolean> opOnlyAgeViewer;
     public static ConfigValue<Boolean> opOnlySymbolExplorer;
     public static ConfigValue<Boolean> opOnlyPageExploring;
 
@@ -62,9 +64,11 @@ public class PluginNEIMystcraft extends SpACoreMod {
         ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "myst-nei:config.general", null);
 
         addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.addAgeExplorer", null, Boolean.TRUE);
+        allowAgeViewer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.allowAgeViewer", null, Boolean.TRUE);
         allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", "myst-nei:config.general.allowSymbolExploring", null, Boolean.FALSE);
         allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", "myst-nei:config.general.allowPageExploring", null, Boolean.TRUE);
         opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeList", null, Boolean.TRUE);
+        opOnlyAgeViewer = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeViewer", null, Boolean.TRUE);
         opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", "myst-nei:config.general.opOnlySymbolExplorer", null, Boolean.TRUE);
         opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", "myst-nei:config.general.opOnlyPageExploring", null, Boolean.TRUE);
         this.config = new Config(event.getSuggestedConfigurationFile());

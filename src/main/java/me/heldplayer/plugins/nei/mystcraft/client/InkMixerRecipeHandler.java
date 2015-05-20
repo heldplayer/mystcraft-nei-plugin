@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 import net.specialattack.forge.core.asm.AccessHelper;
+import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -168,7 +169,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
     public void drawBackground(int recipe) {
         this.renderTank(49, 5, 66, 65, (CachedInkMixerRecipe) this.arecipes.get(recipe));
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiDraw.changeTexture(this.getGuiTexture());
         GuiDraw.drawTexturedModalRect(0, 0, 5, 11, 166, 76);
     }

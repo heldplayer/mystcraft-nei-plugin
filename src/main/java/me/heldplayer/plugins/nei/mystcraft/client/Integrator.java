@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.WorldProvider;
+import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.MC;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import net.specialattack.forge.core.config.ConfigValue;
@@ -74,7 +75,7 @@ public final class Integrator {
     private Integrator() {
     }
 
-    public static void setMystAPI(APIInstanceProvider api) {
+    public static void setMystcraftAPI(APIInstanceProvider api) {
         try {
             Integrator.linkPropertyAPI = (LinkPropertyAPI) api.getAPIInstance("linkingprop-1");
             Integrator.symbolAPI = (SymbolAPI) api.getAPIInstance("symbol-1");
@@ -298,7 +299,7 @@ public final class Integrator {
 
     public static void renderPage(IAgeSymbol symbol, float x, float y, float z, float width, float height) {
         GuiDraw.changeTexture(Assets.bookPageLeft);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiHelper.drawTexturedModalRect(x, y, width, height, z, 0.609375F, 0.0F, 0.7265625F, 0.15625F);
 
         //InternalAPI.render.drawSymbol(x + 0.5F, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
