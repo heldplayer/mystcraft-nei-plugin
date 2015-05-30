@@ -8,6 +8,7 @@ import com.xcompwiz.mystcraft.api.util.ColorGradient;
 import com.xcompwiz.mystcraft.client.gui.GuiUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.lang.reflect.Field;
 import java.util.*;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
@@ -23,9 +24,6 @@ import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.MC;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import net.specialattack.forge.core.config.ConfigValue;
-import net.specialattack.forge.core.reflection.RClass;
-import net.specialattack.forge.core.reflection.RField;
-import net.specialattack.forge.core.reflection.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 
 /**
@@ -49,9 +47,9 @@ public final class Integrator {
     public static Class<? extends GuiContainer> guiWritingDeskClass;
 
     private static List<ItemStack> allLinkpanels;
-    private static RField<Object, Object> agedataField;
-    private static RField<Object, List<String>> symbolsField;
-    private static RField<Object, List<ItemStack>> pagesField;
+    private static Field agedataField;
+    private static Field symbolsField;
+    private static Field pagesField;
     private static Class worldProviderMystClass;
     private static Map itemstack_bindings;
     private static Map oredict_bindings;
@@ -152,45 +150,51 @@ public final class Integrator {
     }
 
     private static void prepareLinkPanels() {
-        RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
-        RField<Object, HashMap> colormapField = inkEffectsClass.getField("colormap");
+        try {
+            Class<?> inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects", false, null);
+            Field colormapField = inkEffectsClass.getDeclaredField("colormap");
+            // Add all modifiers known to have a colour, this includes mod added modifiers
+            HashMap colormap = (HashMap) colormapField.get(null);
 
-        // Add all modifiers known to have a colour, this includes mod added modifiers
-        HashMap colormap = colormapField.getStatic();
-
-        TreeMap map = new TreeMap(new LinkPanelSorter());
-        map.putAll(colormap);
-        if (!map.containsKey("Following")) {
-            map.put("Following", null);
-        }
-
-        Object[] keys = map.keySet().toArray(new Object[map.size()]);
-
-        int bin = binary(keys.length);
-
-        Integrator.allLinkpanels = new ArrayList<ItemStack>();
-
-        for (int i = 0; i <= bin; i++) {
-            ItemStack is = new ItemStack(MystObjs.page, 1, 0);
-
-            NBTTagCompound compound = new NBTTagCompound();
-            NBTTagCompound linkPanelCompound = new NBTTagCompound();
-
-            NBTTagList list = new NBTTagList();
-
-            for (int j = 0; j < keys.length; j++) {
-                if (((i >> j) & 0x1) == 1) {
-                    list.appendTag(new NBTTagString((String) keys[j]));
-                }
+            TreeMap map = new TreeMap(new LinkPanelSorter());
+            map.putAll(colormap);
+            if (!map.containsKey("Following")) {
+                map.put("Following", null);
             }
 
-            linkPanelCompound.setTag("properties", list);
+            Object[] keys = map.keySet().toArray(new Object[map.size()]);
+            int bin = binary(keys.length);
 
-            compound.setTag("linkpanel", linkPanelCompound);
+            Integrator.allLinkpanels = new ArrayList<ItemStack>();
 
-            is.setTagCompound(compound);
+            for (int i = 0; i <= bin; i++) {
+                ItemStack is = new ItemStack(MystObjs.page, 1, 0);
 
-            Integrator.allLinkpanels.add(is);
+                NBTTagCompound compound = new NBTTagCompound();
+                NBTTagCompound linkPanelCompound = new NBTTagCompound();
+
+                NBTTagList list = new NBTTagList();
+
+                for (int j = 0; j < keys.length; j++) {
+                    if (((i >> j) & 0x1) == 1) {
+                        list.appendTag(new NBTTagString((String) keys[j]));
+                    }
+                }
+
+                linkPanelCompound.setTag("properties", list);
+
+                compound.setTag("linkpanel", linkPanelCompound);
+
+                is.setTagCompound(compound);
+
+                Integrator.allLinkpanels.add(is);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
     }
 
@@ -251,24 +255,24 @@ public final class Integrator {
      * Gets all methods and fields required by recipe handlers and such to
      * function
      */
-    private static void getMethodsAndFields() throws ClassNotFoundException {
-        RClass<Object> inkEffectsClass = (RClass<Object>) ReflectionHelper.getClass("com.xcompwiz.mystcraft.data.InkEffects");
+    private static void getMethodsAndFields() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        Class<?> inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects", false, null);
 
-        RField<Object, Map> bindings = inkEffectsClass.getField("itemstack_bindings");
-        Integrator.itemstack_bindings = bindings.getStatic();
+        Field bindings = inkEffectsClass.getDeclaredField("itemstack_bindings");
+        Integrator.itemstack_bindings = (Map) bindings.get(null);
 
-        bindings = inkEffectsClass.getField("oredict_bindings");
-        Integrator.oredict_bindings = bindings.getStatic();
+        bindings = inkEffectsClass.getDeclaredField("oredict_bindings");
+        Integrator.oredict_bindings = (Map) bindings.get(null);
 
-        bindings = inkEffectsClass.getField("itemId_bindings");
-        Integrator.itemId_bindings = bindings.getStatic();
+        bindings = inkEffectsClass.getDeclaredField("itemId_bindings");
+        Integrator.itemId_bindings = (Map) bindings.get(null);
 
-        RClass<Object> worldProviderMystClass = new RClass(Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst"));
-        Integrator.agedataField = worldProviderMystClass.getField("agedata");
+        Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst", false, null);
+        Integrator.agedataField = Integrator.worldProviderMystClass.getDeclaredField("agedata");
 
-        RClass<Object> ageDataClass = new RClass(Class.forName("com.xcompwiz.mystcraft.world.agedata.AgeData"));
-        Integrator.symbolsField = ageDataClass.getField("symbols");
-        Integrator.pagesField = ageDataClass.getField("pages");
+        Class<?> ageDataClass = Class.forName("com.xcompwiz.mystcraft.world.agedata.AgeData", false, null);
+        Integrator.symbolsField = ageDataClass.getDeclaredField("symbols");
+        Integrator.pagesField = ageDataClass.getDeclaredField("pages");
     }
 
     public static List<ItemStack> getAllLinkpanels() {
@@ -320,24 +324,24 @@ public final class Integrator {
         GuiUtils.drawSymbol(MC.getRenderEngine(), z, symbol, width - 1.0F, x + 0.5F, y + (height + 1.0F - width) / 2.0F);
     }
 
-    public static List<String> getAgeSymbols(WorldProvider provider) {
+    public static List<String> getAgeSymbols(WorldProvider provider) throws IllegalAccessException {
         if (!Integrator.worldProviderMystClass.isAssignableFrom(provider.getClass())) {
             return null;
         }
 
         Object ageData = Integrator.agedataField.get(provider);
 
-        return Integrator.symbolsField.get(ageData);
+        return (List<String>) Integrator.symbolsField.get(ageData);
     }
 
-    public static List<ItemStack> getAgePages(WorldProvider provider) {
+    public static List<ItemStack> getAgePages(WorldProvider provider) throws IllegalAccessException {
         if (!Integrator.worldProviderMystClass.isAssignableFrom(provider.getClass())) {
             return null;
         }
 
         Object ageData = Integrator.agedataField.get(provider);
 
-        return Integrator.pagesField.get(ageData);
+        return (List<ItemStack>) Integrator.pagesField.get(ageData);
     }
 
 }
