@@ -40,6 +40,7 @@ public class Packet1RequestAges extends MystNEIPacket {
         boolean addToNEI = ModuleDescriptiveBooks.addAgeList.getValue();
         boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
         boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
+        boolean allowRendering = CommonProxy.lookingGlassLoaded && PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowAgeViewer.getValue();
 
         boolean playerOpped = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 
@@ -52,9 +53,12 @@ public class Packet1RequestAges extends MystNEIPacket {
         if (listPages && PluginNEIMystcraft.opOnlyPageExploring.getValue()) {
             listPages = playerOpped;
         }
+        if (allowRendering && PluginNEIMystcraft.opOnlyAgeViewer.getValue()) {
+            allowRendering = playerOpped;
+        }
 
         for (AgeInfo info : CommonProxy.serverAgesMap.values()) {
-            PluginNEIMystcraft.packetHandler.sendPacketToPlayer(new Packet2AgeInfo(info, addToNEI, listSymbols, listPages), player);
+            PluginNEIMystcraft.packetHandler.sendPacketToPlayer(new Packet2AgeInfo(info, addToNEI, listSymbols, listPages, allowRendering), player);
         }
     }
 

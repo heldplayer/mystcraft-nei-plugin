@@ -6,4 +6,6 @@ public class Assets {
 
     public static final ResourceLocation bookPageLeft = new ResourceLocation("mystcraft:gui/bookui_pageL.png");
 
+    public static final String DOMAIN = "neimystcraft:";
+
 }

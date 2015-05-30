@@ -4,6 +4,7 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import com.xcompwiz.lookingglass.api.view.IWorldView;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,10 @@ import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import net.specialattack.forge.core.Assets;
 import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GLState;
+import net.specialattack.forge.core.client.gui.GuiHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -86,17 +89,53 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
         //recipe.currentScroll = (float) ((this.cycleticks % 42) / 2) / 20.0F;
 
-        GuiDraw.drawTexturedModalRect(152, 17 + (int) (91 * recipe.currentScroll), recipe.canScroll ? 232 : 244, 0, 12, 15);
+        if (recipe.ageInfo.allowRendering && recipe.viewingTimer >= CachedBooksRecipe.TIMER_MAX) {
+            GLState.glDisable(GL11.GL_TEXTURE_2D);
+            GuiHelper.drawGradientRect(3, 16, 165, 124, 0xFF000000, 0xFF000000, 5.0F);
+            GLState.glEnable(GL11.GL_TEXTURE_2D);
+            if (recipe.view == null) {
+                recipe.view = Integrator.lookingGlassAPI.createWorldView(recipe.ageInfo.dimId, recipe.ageInfo.spawn, 384, 216);
+                Integrator.lookingGlassAPI.setPivotAnimation(recipe.view);
+                if (ClientProxy.views == null) {
+                    ClientProxy.views = new ArrayList<IWorldView>();
+                }
+                ClientProxy.views.add(recipe.view);
+            }
+            IWorldView view = recipe.view;
+            view.grab();
+            if (view.isReady()) {
+                view.markDirty();
+                GL11.glBindTexture(GL11.GL_TEXTURE_2D, view.getTexture());
+                GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GLState.glDisable(GL11.GL_ALPHA_TEST);
+                GuiHelper.drawTexturedModalRect(3, 16, 162, 108, 10.0F, 0.0F, 1.0F, 1.0F, 0.0F);
+                GLState.glEnable(GL11.GL_ALPHA_TEST);
+            }
+        } else {
+            GuiDraw.drawTexturedModalRect(152, 17 + (int) (91 * recipe.currentScroll), recipe.canScroll ? 232 : 244, 0, 12, 15);
+        }
 
-        GuiDraw.drawString(recipe.ageInfo.ageName, 5, 2, 0x404040, false);
         GuiDraw.drawStringR(StatCollector.translateToLocal("nei.mystcraft.recipe.ages.modes." + recipe.mode), 160, 2, 0x404040, false);
+
+        if (recipe.ageInfo.allowRendering) {
+            GuiDraw.drawString(recipe.ageInfo.ageName, 21, 2, 0x404040, false);
+            GuiDraw.changeTexture(Assets.TEXTURE_MAP);
+            GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GuiHelper.drawTexturedModalRect(4, 0, ClientProxy.iconViewAge, 16, 16);
+        } else {
+            GuiDraw.drawString(recipe.ageInfo.ageName, 5, 2, 0x404040, false);
+        }
     }
 
     @Override
-    public void drawBackground(int recipe) {
-        GLState.glColor4f(1, 1, 1, 1);
-        GuiDraw.changeTexture(this.getGuiTexture());
-        GuiDraw.drawTexturedModalRect(0, 10, 5, 11, 166, 114);
+    public void drawBackground(int recipeId) {
+        CachedBooksRecipe recipe = (CachedBooksRecipe) this.arecipes.get(recipeId);
+
+        if (!recipe.ageInfo.allowRendering || recipe.viewingTimer < CachedBooksRecipe.TIMER_MAX) {
+            GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GuiDraw.changeTexture(this.getGuiTexture());
+            GuiDraw.drawTexturedModalRect(0, 10, 5, 11, 166, 114);
+        }
     }
 
     @Override
@@ -108,14 +147,24 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
     public List<String> handleTooltip(GuiRecipe gui, List<String> currenttip, int recipeId) {
         CachedBooksRecipe recipe = (CachedBooksRecipe) this.arecipes.get(recipeId);
 
+        Point mousepos = GuiDraw.getMousePosition();
+        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui) - 5, mousepos.y - AccessHelper.getGuiTop(gui) - 16);
+
+        if (recipe.ageInfo.allowRendering) {
+            if (relMouse.x >= 4 && relMouse.y >= 0 && relMouse.x < 20 && relMouse.y < 16) {
+                if (recipe.viewingTimer < CachedBooksRecipe.TIMER_MAX) {
+                    recipe.viewingTimer++;
+                }
+            } else {
+                recipe.viewingTimer = 0;
+            }
+        }
+
         if (!recipe.canScroll) {
             return super.handleTooltip(gui, currenttip, recipeId);
         }
 
         boolean clicking = Mouse.isButtonDown(0);
-
-        Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui) - 5, mousepos.y - AccessHelper.getGuiTop(gui) - 16);
 
         if (!recipe.wasClicking && clicking && relMouse.x >= 152 && relMouse.y >= 17 && relMouse.x < 164 && relMouse.y < 123) {
             recipe.isScrolling = true;
@@ -182,6 +231,10 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
         private PositionedStack[] allStacks;
         private ArrayList<ItemStack> stacks;
 
+        public static final int TIMER_MAX = 20;
+        protected int viewingTimer;
+        protected IWorldView view;
+
         public CachedBooksRecipe(AgeInfo ageInfo, int mode) {
             this.ageInfo = ageInfo;
             this.mode = mode;
@@ -242,7 +295,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public List<PositionedStack> getIngredients() {
-            return this.visibleStacks;
+            return this.viewingTimer >= TIMER_MAX ? super.getIngredients() : this.visibleStacks;
         }
     }
 

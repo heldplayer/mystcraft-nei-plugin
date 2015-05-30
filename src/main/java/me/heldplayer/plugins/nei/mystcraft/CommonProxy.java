@@ -1,8 +1,9 @@
 package me.heldplayer.plugins.nei.mystcraft;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,13 +15,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.specialattack.forge.core.SpACoreProxy;
 import org.apache.logging.log4j.Level;
 
 public class CommonProxy extends SpACoreProxy {
 
     public static Map<Integer, AgeInfo> serverAgesMap = new HashMap<Integer, AgeInfo>();
+    public static boolean lookingGlassLoaded;
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -28,6 +32,7 @@ public class CommonProxy extends SpACoreProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
+        CommonProxy.lookingGlassLoaded = Loader.isModLoaded("LookingGlass");
     }
 
     @Override
@@ -53,8 +58,10 @@ public class CommonProxy extends SpACoreProxy {
                         NBTTagCompound compound = CompressedStreamTools.readCompressed(input);
                         NBTTagCompound data = compound.getCompoundTag("data");
 
+                        ChunkCoordinates spawn = new ChunkCoordinates(data.getInteger("SpawnX"), data.getInteger("SpawnY"), data.getInteger("SpawnZ"));
+
                         int dimId = Integer.parseInt(name.substring(8, name.indexOf(".dat")));
-                        AgeInfo info = new AgeInfo(dimId);
+                        AgeInfo info = new AgeInfo(dimId, spawn);
 
                         if (PluginNEIMystcraft.allowSymbolExploring.getValue()) {
                             NBTTagList symbols = data.getTagList("Symbols", 8);

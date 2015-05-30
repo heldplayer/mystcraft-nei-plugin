@@ -11,10 +11,7 @@
             "authorList": [
                 "heldplayer"
             ],
-            "url" : "http://binarymage.com/forum/viewtopic.php?f=13&t=696",
-            "useDependencyInformation" : true,
-            "requiredMods" : [ "Forge", "spacore" ],
-            "dependencies" : [ "*" ]
+            "url" : "http://binarymage.com/forum/viewtopic.php?f=13&t=696"
         }
     ]
 }

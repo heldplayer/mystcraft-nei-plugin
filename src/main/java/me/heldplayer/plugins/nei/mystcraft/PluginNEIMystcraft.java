@@ -64,19 +64,21 @@ public class PluginNEIMystcraft extends SpACoreMod {
         ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "myst-nei:config.general", null);
 
         addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.addAgeExplorer", null, Boolean.TRUE);
-        allowAgeViewer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.allowAgeViewer", null, Boolean.TRUE);
+        allowAgeViewer = new ConfigValue<Boolean>("allowAgeViewer", "myst-nei:config.general.allowAgeViewer", null, Boolean.TRUE);
         allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", "myst-nei:config.general.allowSymbolExploring", null, Boolean.FALSE);
         allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", "myst-nei:config.general.allowPageExploring", null, Boolean.TRUE);
         opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeList", null, Boolean.TRUE);
-        opOnlyAgeViewer = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeViewer", null, Boolean.TRUE);
+        opOnlyAgeViewer = new ConfigValue<Boolean>("opOnlyAgeViewer", "myst-nei:config.general.opOnlyAgeViewer", null, Boolean.TRUE);
         opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", "myst-nei:config.general.opOnlySymbolExplorer", null, Boolean.TRUE);
         opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", "myst-nei:config.general.opOnlyPageExploring", null, Boolean.TRUE);
         this.config = new Config(event.getSuggestedConfigurationFile());
         this.config.addCategory(category);
         category.addValue(addAgeExplorer);
+        category.addValue(allowAgeViewer);
         category.addValue(allowSymbolExploring);
         category.addValue(allowPageExploring);
         category.addValue(opOnlyAgeList);
+        category.addValue(opOnlyAgeViewer);
         category.addValue(opOnlySymbolExplorer);
         category.addValue(opOnlyPageExploring);
         Collection<ConfigValue<?>> values = Integrator.getAllConfigValues();

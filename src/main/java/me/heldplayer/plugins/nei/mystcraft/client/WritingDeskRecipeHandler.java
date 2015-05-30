@@ -330,6 +330,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
 
                     this.textField.setText(symbol.displayName());
                     this.textField.setCursorPosition(0);
+                    this.textField.setEnabled(false);
                 }
             }
         }

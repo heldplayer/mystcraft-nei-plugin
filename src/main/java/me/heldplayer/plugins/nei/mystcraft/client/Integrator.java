@@ -1,14 +1,13 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import codechicken.lib.gui.GuiDraw;
-import com.xcompwiz.mystcraft.api.APIInstanceProvider;
-import com.xcompwiz.mystcraft.api.exception.APIUndefined;
-import com.xcompwiz.mystcraft.api.exception.APIVersionRemoved;
-import com.xcompwiz.mystcraft.api.exception.APIVersionUndefined;
+import com.xcompwiz.lookingglass.api.ILookingGlassAPI;
 import com.xcompwiz.mystcraft.api.hook.*;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 import com.xcompwiz.mystcraft.api.util.ColorGradient;
 import com.xcompwiz.mystcraft.client.gui.GuiUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.*;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
@@ -28,7 +27,6 @@ import net.specialattack.forge.core.reflection.RClass;
 import net.specialattack.forge.core.reflection.RField;
 import net.specialattack.forge.core.reflection.ReflectionHelper;
 import org.apache.logging.log4j.Level;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Class used for integrating into Mystcraft
@@ -38,11 +36,13 @@ import org.lwjgl.opengl.GL11;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Integrator {
 
+    public static LinkingAPI linkingAPI;
     public static LinkPropertyAPI linkPropertyAPI;
     public static SymbolAPI symbolAPI;
     public static ItemFactory itemFactory;
     public static RenderAPI renderAPI;
     public static PageAPI pageAPI;
+    public static ILookingGlassAPI lookingGlassAPI;
 
     public static List<ItemStack> allAges = new ArrayList<ItemStack>();
     public static Class<? extends GuiContainer> guiInkMixerClass;
@@ -75,19 +75,32 @@ public final class Integrator {
     private Integrator() {
     }
 
-    public static void setMystcraftAPI(APIInstanceProvider api) {
+    public static void setMystcraftAPI(com.xcompwiz.mystcraft.api.APIInstanceProvider api) {
         try {
+            Integrator.linkingAPI = (LinkingAPI) api.getAPIInstance("linking-1");
             Integrator.linkPropertyAPI = (LinkPropertyAPI) api.getAPIInstance("linkingprop-1");
             Integrator.symbolAPI = (SymbolAPI) api.getAPIInstance("symbol-1");
             Integrator.itemFactory = (ItemFactory) api.getAPIInstance("itemfact-1");
             Integrator.renderAPI = (RenderAPI) api.getAPIInstance("render-1");
             Integrator.pageAPI = (PageAPI) api.getAPIInstance("page-1");
-        } catch (APIUndefined e) {
-            e.printStackTrace();
-        } catch (APIVersionUndefined e) {
-            e.printStackTrace();
-        } catch (APIVersionRemoved e) {
-            e.printStackTrace();
+        } catch (com.xcompwiz.mystcraft.api.exception.APIUndefined e) {
+            Objects.log.error("We're missing a Mystcraft API, uh-oh", e);
+        } catch (com.xcompwiz.mystcraft.api.exception.APIVersionUndefined e) {
+            Objects.log.error("We're missing an essential Mystcraft API, try updating Mystcraft", e);
+        } catch (com.xcompwiz.mystcraft.api.exception.APIVersionRemoved e) {
+            Objects.log.error("Mystcraft removed an essential API, try updating " + Objects.MOD_NAME, e);
+        }
+    }
+
+    public static void setLookingGlassAPI(com.xcompwiz.lookingglass.api.APIInstanceProvider api) {
+        try {
+            Integrator.lookingGlassAPI = (ILookingGlassAPI) api.getAPIInstance("alpha-1");
+        } catch (com.xcompwiz.lookingglass.api.APIUndefined e) {
+            Objects.log.error("We're missing a LookingGlass API, uh-oh", e);
+        } catch (com.xcompwiz.lookingglass.api.APIVersionUndefined e) {
+            Objects.log.error("We're missing an essential LookingGlass API, try updating LookingGlass", e);
+        } catch (com.xcompwiz.lookingglass.api.APIVersionRemoved e) {
+            Objects.log.error("LookingGlass removed an essential API, try updating " + Objects.MOD_NAME, e);
         }
     }
 
@@ -297,6 +310,7 @@ public final class Integrator {
         return result;
     }
 
+    @SideOnly(Side.CLIENT)
     public static void renderPage(IAgeSymbol symbol, float x, float y, float z, float width, float height) {
         GuiDraw.changeTexture(Assets.bookPageLeft);
         GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

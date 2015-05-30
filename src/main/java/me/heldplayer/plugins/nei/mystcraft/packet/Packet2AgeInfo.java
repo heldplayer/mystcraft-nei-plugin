@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
+import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.ClientProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
@@ -17,22 +18,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChunkCoordinates;
 
 public class Packet2AgeInfo extends MystNEIPacket {
 
     public int dimId;
+    public ChunkCoordinates spawn;
     public String ageName;
     public List<String> symbols;
     public List<ItemStack> pages;
     public boolean addToNEI;
+    public boolean allowRendering;
 
     public Packet2AgeInfo() {
         super(null);
     }
 
-    public Packet2AgeInfo(AgeInfo info, boolean addToNEI, boolean listSymbols, boolean listPages) {
+    public Packet2AgeInfo(AgeInfo info, boolean addToNEI, boolean listSymbols, boolean listPages, boolean allowRendering) {
         super(null);
         this.dimId = info.dimId;
+        this.spawn = info.spawn;
         this.ageName = info.ageName;
         if (listSymbols) {
             this.symbols = info.symbols;
@@ -41,6 +46,7 @@ public class Packet2AgeInfo extends MystNEIPacket {
             this.pages = info.pages;
         }
         this.addToNEI = addToNEI;
+        this.allowRendering = allowRendering;
     }
 
     @Override
@@ -51,7 +57,9 @@ public class Packet2AgeInfo extends MystNEIPacket {
     @Override
     public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {
         this.dimId = in.readInt();
+        this.spawn = new ChunkCoordinates(in.readInt(), in.readInt(), in.readInt());
         this.addToNEI = in.readBoolean();
+        this.allowRendering = in.readBoolean();
 
         byte[] ageName = new byte[in.readInt()];
         in.readBytes(ageName);
@@ -83,7 +91,11 @@ public class Packet2AgeInfo extends MystNEIPacket {
     @Override
     public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {
         out.writeInt(this.dimId);
+        out.writeInt(this.spawn.posX);
+        out.writeInt(this.spawn.posY);
+        out.writeInt(this.spawn.posZ);
         out.writeBoolean(this.addToNEI);
+        out.writeBoolean(this.allowRendering);
 
         byte[] ageName = this.ageName.getBytes();
         out.writeInt(ageName.length);
@@ -116,10 +128,11 @@ public class Packet2AgeInfo extends MystNEIPacket {
 
     @Override
     public void onData(ChannelHandlerContext context) {
-        AgeInfo info = new AgeInfo(this.dimId);
+        AgeInfo info = new AgeInfo(this.dimId, this.spawn);
         info.ageName = this.ageName;
         info.symbols = this.symbols;
         info.pages = this.pages;
+        info.allowRendering = this.allowRendering && CommonProxy.lookingGlassLoaded;
         putClientInfo(this.dimId, info);
 
         ItemStack stack = new ItemStack(MystObjs.descriptiveBook);
