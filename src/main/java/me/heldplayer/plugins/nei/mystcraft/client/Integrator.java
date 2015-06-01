@@ -1,17 +1,16 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import codechicken.lib.gui.GuiDraw;
-import com.xcompwiz.lookingglass.api.ILookingGlassAPI;
-import com.xcompwiz.mystcraft.api.hook.*;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
 import com.xcompwiz.mystcraft.api.util.ColorGradient;
-import com.xcompwiz.mystcraft.client.gui.GuiUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.lang.reflect.Field;
 import java.util.*;
 import me.heldplayer.plugins.nei.mystcraft.Assets;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystLinkProperty;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystRender;
 import me.heldplayer.plugins.nei.mystcraft.modules.*;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -21,7 +20,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.WorldProvider;
 import net.specialattack.forge.core.client.GLState;
-import net.specialattack.forge.core.client.MC;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
@@ -33,14 +31,6 @@ import org.apache.logging.log4j.Level;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Integrator {
-
-    public static LinkingAPI linkingAPI;
-    public static LinkPropertyAPI linkPropertyAPI;
-    public static SymbolAPI symbolAPI;
-    public static ItemFactory itemFactory;
-    public static RenderAPI renderAPI;
-    public static PageAPI pageAPI;
-    public static ILookingGlassAPI lookingGlassAPI;
 
     public static List<ItemStack> allAges = new ArrayList<ItemStack>();
     public static Class<? extends GuiContainer> guiInkMixerClass;
@@ -71,35 +61,6 @@ public final class Integrator {
     }
 
     private Integrator() {
-    }
-
-    public static void setMystcraftAPI(com.xcompwiz.mystcraft.api.APIInstanceProvider api) {
-        try {
-            Integrator.linkingAPI = (LinkingAPI) api.getAPIInstance("linking-1");
-            Integrator.linkPropertyAPI = (LinkPropertyAPI) api.getAPIInstance("linkingprop-1");
-            Integrator.symbolAPI = (SymbolAPI) api.getAPIInstance("symbol-1");
-            Integrator.itemFactory = (ItemFactory) api.getAPIInstance("itemfact-1");
-            Integrator.renderAPI = (RenderAPI) api.getAPIInstance("render-1");
-            Integrator.pageAPI = (PageAPI) api.getAPIInstance("page-1");
-        } catch (com.xcompwiz.mystcraft.api.exception.APIUndefined e) {
-            Objects.log.error("We're missing a Mystcraft API, uh-oh", e);
-        } catch (com.xcompwiz.mystcraft.api.exception.APIVersionUndefined e) {
-            Objects.log.error("We're missing an essential Mystcraft API, try updating Mystcraft", e);
-        } catch (com.xcompwiz.mystcraft.api.exception.APIVersionRemoved e) {
-            Objects.log.error("Mystcraft removed an essential API, try updating " + Objects.MOD_NAME, e);
-        }
-    }
-
-    public static void setLookingGlassAPI(com.xcompwiz.lookingglass.api.APIInstanceProvider api) {
-        try {
-            Integrator.lookingGlassAPI = (ILookingGlassAPI) api.getAPIInstance("alpha-1");
-        } catch (com.xcompwiz.lookingglass.api.APIUndefined e) {
-            Objects.log.error("We're missing a LookingGlass API, uh-oh", e);
-        } catch (com.xcompwiz.lookingglass.api.APIVersionUndefined e) {
-            Objects.log.error("We're missing an essential LookingGlass API, try updating LookingGlass", e);
-        } catch (com.xcompwiz.lookingglass.api.APIVersionRemoved e) {
-            Objects.log.error("LookingGlass removed an essential API, try updating " + Objects.MOD_NAME, e);
-        }
     }
 
     public static Collection<ConfigValue<?>> getAllConfigValues() {
@@ -149,52 +110,45 @@ public final class Integrator {
         Integrator.initialized = true;
     }
 
-    private static void prepareLinkPanels() {
-        try {
-            Class<?> inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects", false, null);
-            Field colormapField = inkEffectsClass.getDeclaredField("colormap");
-            // Add all modifiers known to have a colour, this includes mod added modifiers
-            HashMap colormap = (HashMap) colormapField.get(null);
+    private static void prepareLinkPanels() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        Class<?> inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
+        Field colormapField = inkEffectsClass.getDeclaredField("colormap");
+        colormapField.setAccessible(true);
+        // Add all modifiers known to have a colour, this includes mod added modifiers
+        HashMap colormap = (HashMap) colormapField.get(null);
 
-            TreeMap map = new TreeMap(new LinkPanelSorter());
-            map.putAll(colormap);
-            if (!map.containsKey("Following")) {
-                map.put("Following", null);
-            }
+        TreeMap map = new TreeMap(new LinkPanelSorter());
+        map.putAll(colormap);
+        if (!map.containsKey("Following")) {
+            map.put("Following", null);
+        }
 
-            Object[] keys = map.keySet().toArray(new Object[map.size()]);
-            int bin = binary(keys.length);
+        Object[] keys = map.keySet().toArray(new Object[map.size()]);
+        int bin = binary(keys.length);
 
-            Integrator.allLinkpanels = new ArrayList<ItemStack>();
+        Integrator.allLinkpanels = new ArrayList<ItemStack>();
 
-            for (int i = 0; i <= bin; i++) {
-                ItemStack is = new ItemStack(MystObjs.page, 1, 0);
+        for (int i = 0; i <= bin; i++) {
+            ItemStack is = new ItemStack(MystObjs.page, 1, 0);
 
-                NBTTagCompound compound = new NBTTagCompound();
-                NBTTagCompound linkPanelCompound = new NBTTagCompound();
+            NBTTagCompound compound = new NBTTagCompound();
+            NBTTagCompound linkPanelCompound = new NBTTagCompound();
 
-                NBTTagList list = new NBTTagList();
+            NBTTagList list = new NBTTagList();
 
-                for (int j = 0; j < keys.length; j++) {
-                    if (((i >> j) & 0x1) == 1) {
-                        list.appendTag(new NBTTagString((String) keys[j]));
-                    }
+            for (int j = 0; j < keys.length; j++) {
+                if (((i >> j) & 0x1) == 1) {
+                    list.appendTag(new NBTTagString((String) keys[j]));
                 }
-
-                linkPanelCompound.setTag("properties", list);
-
-                compound.setTag("linkpanel", linkPanelCompound);
-
-                is.setTagCompound(compound);
-
-                Integrator.allLinkpanels.add(is);
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+
+            linkPanelCompound.setTag("properties", list);
+
+            compound.setTag("linkpanel", linkPanelCompound);
+
+            is.setTagCompound(compound);
+
+            Integrator.allLinkpanels.add(is);
         }
     }
 
@@ -256,23 +210,29 @@ public final class Integrator {
      * function
      */
     private static void getMethodsAndFields() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        Class<?> inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects", false, null);
+        Class<?> inkEffectsClass = Class.forName("com.xcompwiz.mystcraft.data.InkEffects");
 
         Field bindings = inkEffectsClass.getDeclaredField("itemstack_bindings");
+        bindings.setAccessible(true);
         Integrator.itemstack_bindings = (Map) bindings.get(null);
 
         bindings = inkEffectsClass.getDeclaredField("oredict_bindings");
+        bindings.setAccessible(true);
         Integrator.oredict_bindings = (Map) bindings.get(null);
 
         bindings = inkEffectsClass.getDeclaredField("itemId_bindings");
+        bindings.setAccessible(true);
         Integrator.itemId_bindings = (Map) bindings.get(null);
 
-        Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst", false, null);
+        Integrator.worldProviderMystClass = Class.forName("com.xcompwiz.mystcraft.world.WorldProviderMyst");
         Integrator.agedataField = Integrator.worldProviderMystClass.getDeclaredField("agedata");
+        Integrator.agedataField.setAccessible(true);
 
-        Class<?> ageDataClass = Class.forName("com.xcompwiz.mystcraft.world.agedata.AgeData", false, null);
+        Class<?> ageDataClass = Class.forName("com.xcompwiz.mystcraft.world.agedata.AgeData");
         Integrator.symbolsField = ageDataClass.getDeclaredField("symbols");
+        Integrator.symbolsField.setAccessible(true);
         Integrator.pagesField = ageDataClass.getDeclaredField("pages");
+        Integrator.pagesField.setAccessible(true);
     }
 
     public static List<ItemStack> getAllLinkpanels() {
@@ -285,13 +245,13 @@ public final class Integrator {
                 return null;
             }
 
-            Map<String, Float> properties = Integrator.linkPropertyAPI.getPropertiesForItem(stack);
+            Map<String, Float> properties = MystLinkProperty.api.getPropertiesForItem(stack);
 
             if (properties == null) {
                 return null;
             }
 
-            ColorGradient gradient = Integrator.linkPropertyAPI.getPropertiesGradient(properties);
+            ColorGradient gradient = MystLinkProperty.api.getPropertiesGradient(properties);
 
             String[] modifiers = properties.keySet().toArray(new String[properties.size()]);
 
@@ -320,8 +280,8 @@ public final class Integrator {
         GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiHelper.drawTexturedModalRect(x, y, width, height, z, 0.609375F, 0.0F, 0.7265625F, 0.15625F);
 
-        //InternalAPI.render.drawSymbol(x + 0.5F, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol);
-        GuiUtils.drawSymbol(MC.getRenderEngine(), z, symbol, width - 1.0F, x + 0.5F, y + (height + 1.0F - width) / 2.0F);
+        MystRender.api.drawSymbol(x + 0.5F, y + (height + 1.0F - width) / 2.0F, z, width - 1.0F, symbol.identifier());
+        //GuiUtils.drawSymbol(MC.getRenderEngine(), z, symbol, width - 1.0F, x + 0.5F, y + (height + 1.0F - width) / 2.0F);
     }
 
     public static List<String> getAgeSymbols(WorldProvider provider) throws IllegalAccessException {

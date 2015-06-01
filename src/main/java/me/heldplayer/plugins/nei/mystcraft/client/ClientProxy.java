@@ -43,8 +43,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        FMLInterModComms.sendMessage("Mystcraft", "API", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setMystcraftAPI");
-        FMLInterModComms.sendMessage("LookingGlass", "API", "me.heldplayer.plugins.nei.mystcraft.client.Integrator.setLookingGlassAPI");
+        FMLInterModComms.sendMessage("Mystcraft", "API", "me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystcraftIntegration.register");
     }
 
     @Override

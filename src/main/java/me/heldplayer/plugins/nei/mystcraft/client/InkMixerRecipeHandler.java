@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.renderer.InkMixerOverlayRenderer;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystItemFactory;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystRender;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleRecipes;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleTooltips;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
@@ -29,7 +31,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
-import org.lwjgl.opengl.GL11;
 
 @SuppressWarnings("rawtypes")
 public class InkMixerRecipeHandler extends TemplateRecipeHandler {
@@ -185,14 +186,14 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             int iColor = color.asInt();
             GuiDraw.drawGradientRect(left, top, left + width, top + height, 0x40000000 + iColor, 0xB0000000 + iColor);
 
-            Integrator.renderAPI.drawColorEye(82.5F, 37.5F, 0.0F, 20.0F, color);
+            MystRender.api.drawColorEye(82.5F, 37.5F, 0.0F, 20.0F, color);
         } else {
             int iColor = Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000;
             Color color = new Color(iColor);
 
             GuiDraw.drawGradientRect(left, top, left + width, top + height, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000, Objects.rnd.nextInt(0xFFFFFF) & 0xFFFFFF | 0xFF000000);
 
-            Integrator.renderAPI.drawColorEye(82.5F, 37.5F, 0.0F, 20.0F, color);
+            MystRender.api.drawColorEye(82.5F, 37.5F, 0.0F, 20.0F, color);
         }
     }
 
@@ -272,11 +273,11 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
             this.frame = 0;
 
             if (this.modifiers != null) {
-                ItemStack stack = Integrator.itemFactory.buildLinkPage(this.modifiers);
+                ItemStack stack = MystItemFactory.api.buildLinkPage(this.modifiers);
 
                 this.stack = new PositionedStack(stack, 147, 37);
             } else {
-                ItemStack stack = Integrator.itemFactory.buildLinkPage();
+                ItemStack stack = MystItemFactory.api.buildLinkPage();
 
                 this.stack = new PositionedStack(stack, 147, 37);
             }

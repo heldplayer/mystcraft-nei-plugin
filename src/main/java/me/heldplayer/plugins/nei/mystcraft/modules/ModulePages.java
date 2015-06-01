@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystItemFactory;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystSymbol;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.specialattack.forge.core.config.ConfigValue;
@@ -37,10 +39,10 @@ public class ModulePages implements IModule {
                     return o1.displayName().compareTo(o2.displayName());
                 }
             });
-            symbols.addAll(Integrator.symbolAPI.getAllRegisteredSymbols());
+            symbols.addAll(MystSymbol.api.getAllRegisteredSymbols());
 
             for (IAgeSymbol symbol : symbols) {
-                API.addItemListEntry(Integrator.itemFactory.buildSymbolPage(symbol.identifier()));
+                API.addItemListEntry(MystItemFactory.api.buildSymbolPage(symbol.identifier()));
             }
 
             symbolsEnabled = true;

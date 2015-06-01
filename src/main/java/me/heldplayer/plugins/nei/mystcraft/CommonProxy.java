@@ -1,9 +1,10 @@
 package me.heldplayer.plugins.nei.mystcraft;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.specialattack.forge.core.SpACoreProxy;
 import org.apache.logging.log4j.Level;
 
@@ -27,16 +27,8 @@ public class CommonProxy extends SpACoreProxy {
     public static boolean lookingGlassLoaded;
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-    }
-
-    @Override
     public void init(FMLInitializationEvent event) {
-        CommonProxy.lookingGlassLoaded = Loader.isModLoaded("LookingGlass");
-    }
-
-    @Override
-    public void postInit(FMLPostInitializationEvent event) {
+        FMLInterModComms.sendMessage("LookingGlass", "API", "me.heldplayer.plugins.nei.mystcraft.integration.lookingglass.LookingGlassIntegration.register");
     }
 
     @EventHandler

@@ -1,14 +1,18 @@
 package me.heldplayer.plugins.nei.mystcraft.client;
 
 import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import com.xcompwiz.lookingglass.api.animator.CameraAnimatorPivot;
 import com.xcompwiz.lookingglass.api.view.IWorldView;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
+import me.heldplayer.plugins.nei.mystcraft.integration.lookingglass.LGView;
+import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystItemFactory;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -94,8 +98,15 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
             GuiHelper.drawGradientRect(3, 16, 165, 124, 0xFF000000, 0xFF000000, 5.0F);
             GLState.glEnable(GL11.GL_TEXTURE_2D);
             if (recipe.view == null) {
-                recipe.view = Integrator.lookingGlassAPI.createWorldView(recipe.ageInfo.dimId, recipe.ageInfo.spawn, 384, 216);
-                Integrator.lookingGlassAPI.setPivotAnimation(recipe.view);
+                recipe.view = LGView.api.createWorldView(recipe.ageInfo.dimId, recipe.ageInfo.spawn, 384, 216);
+                recipe.view.setAnimator(new CameraAnimatorPivot(recipe.view.getCamera()) {
+                    @Override
+                    public void update(float dt) {
+                        if (!NEIClientUtils.shiftKey()) {
+                            super.update(dt);
+                        }
+                    }
+                });
                 if (ClientProxy.views == null) {
                     ClientProxy.views = new ArrayList<IWorldView>();
                 }
@@ -254,7 +265,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
             }
             if (mode == 1) {
                 for (int i = 0; i < ageInfo.symbols.size(); i++) {
-                    ItemStack stack = Integrator.itemFactory.buildSymbolPage(ageInfo.symbols.get(i));
+                    ItemStack stack = MystItemFactory.api.buildSymbolPage(ageInfo.symbols.get(i));
                     this.stacks.add(stack);
                 }
             }
