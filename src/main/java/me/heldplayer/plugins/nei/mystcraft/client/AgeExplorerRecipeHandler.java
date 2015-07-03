@@ -7,6 +7,7 @@ import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.xcompwiz.lookingglass.api.animator.CameraAnimatorPivot;
 import com.xcompwiz.lookingglass.api.view.IWorldView;
+import cpw.mods.fml.common.Optional;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,34 +95,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
         //recipe.currentScroll = (float) ((this.cycleticks % 42) / 2) / 20.0F;
 
         if (recipe.ageInfo.allowRendering && recipe.viewingTimer >= CachedBooksRecipe.TIMER_MAX) {
-            GLState.glDisable(GL11.GL_TEXTURE_2D);
-            GuiHelper.drawGradientRect(3, 16, 165, 124, 0xFF000000, 0xFF000000, 5.0F);
-            GLState.glEnable(GL11.GL_TEXTURE_2D);
-            if (recipe.view == null) {
-                recipe.view = LGView.api.createWorldView(recipe.ageInfo.dimId, recipe.ageInfo.spawn, 384, 216);
-                recipe.view.setAnimator(new CameraAnimatorPivot(recipe.view.getCamera()) {
-                    @Override
-                    public void update(float dt) {
-                        if (!NEIClientUtils.shiftKey()) {
-                            super.update(dt);
-                        }
-                    }
-                });
-                if (ClientProxy.views == null) {
-                    ClientProxy.views = new ArrayList<IWorldView>();
-                }
-                ClientProxy.views.add(recipe.view);
-            }
-            IWorldView view = recipe.view;
-            view.grab();
-            if (view.isReady()) {
-                view.markDirty();
-                GL11.glBindTexture(GL11.GL_TEXTURE_2D, view.getTexture());
-                GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                GLState.glDisable(GL11.GL_ALPHA_TEST);
-                GuiHelper.drawTexturedModalRect(3, 16, 162, 108, 10.0F, 0.0F, 1.0F, 1.0F, 0.0F);
-                GLState.glEnable(GL11.GL_ALPHA_TEST);
-            }
+            this.doLookingGlassRendering(recipe);
         } else {
             GuiDraw.drawTexturedModalRect(152, 17 + (int) (91 * recipe.currentScroll), recipe.canScroll ? 232 : 244, 0, 12, 15);
         }
@@ -135,6 +109,38 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
             GuiHelper.drawTexturedModalRect(4, 0, ClientProxy.iconViewAge, 16, 16);
         } else {
             GuiDraw.drawString(recipe.ageInfo.ageName, 5, 2, 0x404040, false);
+        }
+    }
+
+    @Optional.Method(modid = "LookingGlass")
+    private void doLookingGlassRendering(CachedBooksRecipe recipe) {
+        GLState.glDisable(GL11.GL_TEXTURE_2D);
+        GuiHelper.drawGradientRect(3, 16, 165, 124, 0xFF000000, 0xFF000000, 5.0F);
+        GLState.glEnable(GL11.GL_TEXTURE_2D);
+        if (recipe.view == null) {
+            recipe.view = LGView.api.createWorldView(recipe.ageInfo.dimId, recipe.ageInfo.spawn, 384, 216);
+            recipe.view.setAnimator(new CameraAnimatorPivot(recipe.view.getCamera()) {
+                @Override
+                public void update(float dt) {
+                    if (!NEIClientUtils.shiftKey()) {
+                        super.update(dt);
+                    }
+                }
+            });
+            if (ClientProxy.views == null) {
+                ClientProxy.views = new ArrayList<IWorldView>();
+            }
+            ClientProxy.views.add(recipe.view);
+        }
+        IWorldView view = recipe.view;
+        view.grab();
+        if (view.isReady()) {
+            view.markDirty();
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, view.getTexture());
+            GLState.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GLState.glDisable(GL11.GL_ALPHA_TEST);
+            GuiHelper.drawTexturedModalRect(3, 16, 162, 108, 10.0F, 0.0F, 1.0F, 1.0F, 0.0F);
+            GLState.glEnable(GL11.GL_ALPHA_TEST);
         }
     }
 
