@@ -8,7 +8,7 @@
             "credits" : "ChickenBones for NEI, xCompWiz for Mystcraft",
             "version" : "${version}",
             "mcversion" : "${minecraft_version}",
-            "authorList": [
+            "authorList" : [
                 "heldplayer"
             ],
             "url" : "http://binarymage.com/forum/viewtopic.php?f=13&t=696"

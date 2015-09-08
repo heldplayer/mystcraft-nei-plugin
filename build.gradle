@@ -62,7 +62,7 @@ ext.notenoughitems = "codechicken:NotEnoughItems:${config.minecraft_version}-${c
 
 println "$project.name for Forge: " + minecraft_version + "-" + forge_version
 
-version = minecraft_version + "-" + config.super_number + "." + config.major_number + "." + config.minor_number + "." + config.build_number
+version = minecraft_version + "-" + config.super_number + "." + config.major_number + "." + config.minor_number
 group = "me.heldplayer.plugins.nei.mystcraft"
 archivesBaseName = "MystNEI-Plugin"
 
@@ -73,7 +73,7 @@ dependencies {
 }
 
 minecraft {
-    version = minecraft_version + "-" + forge_version
+    version = minecraft_version + "-" + forge_version + "-" + minecraft_version
     runDir = "../../jar"
 
     if (project.hasProperty("signature"))
@@ -92,7 +92,7 @@ processResources {
 
         // replace version and minecraft_version
         expand([
-                version           : config.super_number + "." + config.major_number + "." + config.minor_number + "." + config.build_number,
+                version: config.super_number + "." + config.major_number + "." + config.minor_number,
                 minecraft_version : minecraft_version
         ])
     }
