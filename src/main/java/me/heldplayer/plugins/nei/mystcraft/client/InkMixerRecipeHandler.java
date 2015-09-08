@@ -28,7 +28,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
-import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 
@@ -220,7 +219,7 @@ public class InkMixerRecipeHandler extends TemplateRecipeHandler {
         }
 
         Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui), mousepos.y - AccessHelper.getGuiTop(gui));
+        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
         Point center = new Point(87, 54);
 

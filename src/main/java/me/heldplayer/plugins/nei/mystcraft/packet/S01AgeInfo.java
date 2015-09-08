@@ -1,10 +1,10 @@
 package me.heldplayer.plugins.nei.mystcraft.packet;
 
 import codechicken.nei.api.API;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,16 @@ import me.heldplayer.plugins.nei.mystcraft.client.ClientProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ReportedException;
 
-public class Packet2AgeInfo extends MystNEIPacket {
+public class S01AgeInfo extends MystNEIPacket {
 
     public int dimId;
     public ChunkCoordinates spawn;
@@ -30,12 +33,10 @@ public class Packet2AgeInfo extends MystNEIPacket {
     public boolean addToNEI;
     public boolean allowRendering;
 
-    public Packet2AgeInfo() {
-        super(null);
+    public S01AgeInfo() {
     }
 
-    public Packet2AgeInfo(AgeInfo info, boolean addToNEI, boolean listSymbols, boolean listPages, boolean allowRendering) {
-        super(null);
+    public S01AgeInfo(AgeInfo info, boolean addToNEI, boolean listSymbols, boolean listPages, boolean allowRendering) {
         this.dimId = info.dimId;
         this.spawn = info.spawn;
         this.ageName = info.ageName;
@@ -55,33 +56,43 @@ public class Packet2AgeInfo extends MystNEIPacket {
     }
 
     @Override
-    public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {
-        this.dimId = in.readInt();
-        this.spawn = new ChunkCoordinates(in.readInt(), in.readInt(), in.readInt());
-        this.addToNEI = in.readBoolean();
-        this.allowRendering = in.readBoolean();
+    public Side getReceivingSide() {
+        return Side.SERVER;
+    }
 
-        byte[] ageName = new byte[in.readInt()];
-        in.readBytes(ageName);
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        this.dimId = buf.readInt();
+        this.spawn = new ChunkCoordinates(buf.readInt(), buf.readInt(), buf.readInt());
+        this.addToNEI = buf.readBoolean();
+        this.allowRendering = buf.readBoolean();
+
+        byte[] ageName = new byte[buf.readInt()];
+        buf.readBytes(ageName);
         this.ageName = new String(ageName);
 
-        int symbols = in.readInt();
+        int symbols = buf.readInt();
         if (symbols >= 0) {
             this.symbols = new ArrayList<String>(symbols);
             for (int i = 0; i < symbols; i++) {
-                byte[] bytes = new byte[in.readInt()];
-                in.readBytes(bytes);
+                byte[] bytes = new byte[buf.readInt()];
+                buf.readBytes(bytes);
                 this.symbols.add(new String(bytes));
             }
         }
 
-        int pages = in.readInt();
+        int pages = buf.readInt();
         if (pages >= 0) {
             this.pages = new ArrayList<ItemStack>(pages);
             for (int i = 0; i < pages; i++) {
-                byte[] data = new byte[in.readInt()];
-                in.readBytes(data);
-                NBTTagCompound tag = CompressedStreamTools.func_152457_a(data, NBTSizeTracker.field_152451_a);
+                byte[] data = new byte[buf.readInt()];
+                buf.readBytes(data);
+                NBTTagCompound tag;
+                try {
+                    tag = CompressedStreamTools.func_152457_a(data, NBTSizeTracker.field_152451_a);
+                } catch (IOException e) {
+                    throw new ReportedException(new CrashReport("Exception trying to write packet", e));
+                }
                 ItemStack stack = ItemStack.loadItemStackFromNBT(tag);
                 this.pages.add(stack);
             }
@@ -89,45 +100,50 @@ public class Packet2AgeInfo extends MystNEIPacket {
     }
 
     @Override
-    public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {
-        out.writeInt(this.dimId);
-        out.writeInt(this.spawn.posX);
-        out.writeInt(this.spawn.posY);
-        out.writeInt(this.spawn.posZ);
-        out.writeBoolean(this.addToNEI);
-        out.writeBoolean(this.allowRendering);
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(this.dimId);
+        buf.writeInt(this.spawn.posX);
+        buf.writeInt(this.spawn.posY);
+        buf.writeInt(this.spawn.posZ);
+        buf.writeBoolean(this.addToNEI);
+        buf.writeBoolean(this.allowRendering);
 
         byte[] ageName = this.ageName.getBytes();
-        out.writeInt(ageName.length);
-        out.writeBytes(ageName);
+        buf.writeInt(ageName.length);
+        buf.writeBytes(ageName);
 
         if (this.symbols == null) {
-            out.writeInt(-1);
+            buf.writeInt(-1);
         } else {
-            out.writeInt(this.symbols.size());
+            buf.writeInt(this.symbols.size());
             for (String symbol : this.symbols) {
                 byte[] bytes = symbol.getBytes();
-                out.writeInt(bytes.length);
-                out.writeBytes(bytes);
+                buf.writeInt(bytes.length);
+                buf.writeBytes(bytes);
             }
         }
 
         if (this.pages == null) {
-            out.writeInt(-1);
+            buf.writeInt(-1);
         } else {
-            out.writeInt(this.pages.size());
+            buf.writeInt(this.pages.size());
             for (ItemStack page : this.pages) {
                 NBTTagCompound tag = new NBTTagCompound();
                 page.writeToNBT(tag);
-                byte[] data = CompressedStreamTools.compress(tag);
-                out.writeInt(data.length);
-                out.writeBytes(data);
+                byte[] data;
+                try {
+                    data = CompressedStreamTools.compress(tag);
+                } catch (IOException e) {
+                    throw new ReportedException(new CrashReport("Exception trying to read packet", e));
+                }
+                buf.writeInt(data.length);
+                buf.writeBytes(data);
             }
         }
     }
 
     @Override
-    public void onData(ChannelHandlerContext context) {
+    public void handle(MessageContext context, EntityPlayer player) {
         AgeInfo info = new AgeInfo(this.dimId, this.spawn);
         info.ageName = this.ageName;
         info.symbols = this.symbols;

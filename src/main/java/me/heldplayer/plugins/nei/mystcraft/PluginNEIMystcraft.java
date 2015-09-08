@@ -10,9 +10,9 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import java.util.Collection;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
+import me.heldplayer.plugins.nei.mystcraft.packet.C01RequestAges;
 import me.heldplayer.plugins.nei.mystcraft.packet.MystNEIPacket;
-import me.heldplayer.plugins.nei.mystcraft.packet.Packet1RequestAges;
-import me.heldplayer.plugins.nei.mystcraft.packet.Packet2AgeInfo;
+import me.heldplayer.plugins.nei.mystcraft.packet.S01AgeInfo;
 import net.minecraftforge.common.config.Configuration;
 import net.specialattack.forge.core.ModInfo;
 import net.specialattack.forge.core.SpACoreMod;
@@ -20,7 +20,7 @@ import net.specialattack.forge.core.SpACoreProxy;
 import net.specialattack.forge.core.config.Config;
 import net.specialattack.forge.core.config.ConfigCategory;
 import net.specialattack.forge.core.config.ConfigValue;
-import net.specialattack.forge.core.packet.PacketHandler;
+import net.specialattack.forge.core.packet.SpAPacketHandler;
 
 /**
  * Main mod class
@@ -37,7 +37,7 @@ public class PluginNEIMystcraft extends SpACoreMod {
 
     @Instance("Mystcraft")
     public static Object mystcraft;
-    public static PacketHandler<MystNEIPacket> packetHandler;
+    public static SpAPacketHandler<MystNEIPacket> packetHandler;
 
     //// SpACore Objects
     // Integrator references
@@ -58,29 +58,29 @@ public class PluginNEIMystcraft extends SpACoreMod {
     public void preInit(FMLPreInitializationEvent event) {
         Objects.log = event.getModLog();
 
-        PluginNEIMystcraft.packetHandler = new PacketHandler<MystNEIPacket>("NEI-Mystcraft-Plugin", Packet1RequestAges.class, Packet2AgeInfo.class);
+        PluginNEIMystcraft.packetHandler = new SpAPacketHandler<MystNEIPacket>("NEI-Mystcraft-Plugin", C01RequestAges.class, S01AgeInfo.class);
 
         // Config
         ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "myst-nei:config.general", null);
 
-        addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.addAgeExplorer", null, Boolean.TRUE);
-        allowAgeViewer = new ConfigValue<Boolean>("allowAgeViewer", "myst-nei:config.general.allowAgeViewer", null, Boolean.TRUE);
-        allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", "myst-nei:config.general.allowSymbolExploring", null, Boolean.FALSE);
-        allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", "myst-nei:config.general.allowPageExploring", null, Boolean.TRUE);
-        opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeList", null, Boolean.TRUE);
-        opOnlyAgeViewer = new ConfigValue<Boolean>("opOnlyAgeViewer", "myst-nei:config.general.opOnlyAgeViewer", null, Boolean.TRUE);
-        opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", "myst-nei:config.general.opOnlySymbolExplorer", null, Boolean.TRUE);
-        opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", "myst-nei:config.general.opOnlyPageExploring", null, Boolean.TRUE);
+        PluginNEIMystcraft.addAgeExplorer = new ConfigValue<Boolean>("addAgeExplorer", "myst-nei:config.general.addAgeExplorer", null, Boolean.TRUE);
+        PluginNEIMystcraft.allowAgeViewer = new ConfigValue<Boolean>("allowAgeViewer", "myst-nei:config.general.allowAgeViewer", null, Boolean.TRUE);
+        PluginNEIMystcraft.allowSymbolExploring = new ConfigValue<Boolean>("allowSymbolExploring", "myst-nei:config.general.allowSymbolExploring", null, Boolean.FALSE);
+        PluginNEIMystcraft.allowPageExploring = new ConfigValue<Boolean>("allowPageExploring", "myst-nei:config.general.allowPageExploring", null, Boolean.TRUE);
+        PluginNEIMystcraft.opOnlyAgeList = new ConfigValue<Boolean>("opOnlyAgeList", "myst-nei:config.general.opOnlyAgeList", null, Boolean.TRUE);
+        PluginNEIMystcraft.opOnlyAgeViewer = new ConfigValue<Boolean>("opOnlyAgeViewer", "myst-nei:config.general.opOnlyAgeViewer", null, Boolean.TRUE);
+        PluginNEIMystcraft.opOnlySymbolExplorer = new ConfigValue<Boolean>("opOnlySymbolExplorer", "myst-nei:config.general.opOnlySymbolExplorer", null, Boolean.TRUE);
+        PluginNEIMystcraft.opOnlyPageExploring = new ConfigValue<Boolean>("opOnlyPageExploring", "myst-nei:config.general.opOnlyPageExploring", null, Boolean.TRUE);
         this.config = new Config(event.getSuggestedConfigurationFile());
         this.config.addCategory(category);
-        category.addValue(addAgeExplorer);
-        category.addValue(allowAgeViewer);
-        category.addValue(allowSymbolExploring);
-        category.addValue(allowPageExploring);
-        category.addValue(opOnlyAgeList);
-        category.addValue(opOnlyAgeViewer);
-        category.addValue(opOnlySymbolExplorer);
-        category.addValue(opOnlyPageExploring);
+        category.addValue(PluginNEIMystcraft.addAgeExplorer);
+        category.addValue(PluginNEIMystcraft.allowAgeViewer);
+        category.addValue(PluginNEIMystcraft.allowSymbolExploring);
+        category.addValue(PluginNEIMystcraft.allowPageExploring);
+        category.addValue(PluginNEIMystcraft.opOnlyAgeList);
+        category.addValue(PluginNEIMystcraft.opOnlyAgeViewer);
+        category.addValue(PluginNEIMystcraft.opOnlySymbolExplorer);
+        category.addValue(PluginNEIMystcraft.opOnlyPageExploring);
         Collection<ConfigValue<?>> values = Integrator.getAllConfigValues();
         for (ConfigValue<?> value : values) {
             category.addValue(value);
@@ -96,7 +96,7 @@ public class PluginNEIMystcraft extends SpACoreMod {
 
     @Override
     public SpACoreProxy getProxy() {
-        return proxy;
+        return PluginNEIMystcraft.proxy;
     }
 
     @Override
@@ -108,11 +108,11 @@ public class PluginNEIMystcraft extends SpACoreMod {
 
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
-        proxy.serverStarted(event);
+        PluginNEIMystcraft.proxy.serverStarted(event);
     }
 
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
-        proxy.serverStopped(event);
+        PluginNEIMystcraft.proxy.serverStopped(event);
     }
 }

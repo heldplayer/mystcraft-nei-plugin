@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import me.heldplayer.plugins.nei.mystcraft.*;
-import me.heldplayer.plugins.nei.mystcraft.packet.Packet1RequestAges;
+import me.heldplayer.plugins.nei.mystcraft.packet.C01RequestAges;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -72,11 +72,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public void onClientStartSyncing(SyncEvent.ClientStartSyncing event) {
+    public void onClientStartSyncing(SyncEvent.ClientServerInfoReceived event) {
         Integrator.allAges.clear();
         Integrator.reinitialize();
         NEIConfig.resetNEI();
-        PluginNEIMystcraft.packetHandler.sendPacketToServer(new Packet1RequestAges());
+        PluginNEIMystcraft.packetHandler.sendToServer(new C01RequestAges());
     }
 
     /**

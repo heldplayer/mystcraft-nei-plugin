@@ -1,21 +1,19 @@
 package me.heldplayer.plugins.nei.mystcraft.packet;
 
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import java.io.IOException;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.specialattack.forge.core.packet.Attributes;
 
-public class Packet1RequestAges extends MystNEIPacket {
+public class C01RequestAges extends MystNEIPacket {
 
-    public Packet1RequestAges() {
-        super(null);
+    public C01RequestAges() {
     }
 
     @Override
@@ -24,19 +22,20 @@ public class Packet1RequestAges extends MystNEIPacket {
     }
 
     @Override
-    public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {
+    public Side getReceivingSide() {
+        return Side.SERVER;
     }
 
     @Override
-    public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {
+    public void fromBytes(ByteBuf buf) {
     }
 
     @Override
-    public void onData(ChannelHandlerContext context) {
-        this.requireAttribute(Attributes.SENDING_PLAYER);
+    public void toBytes(ByteBuf buf) {
+    }
 
-        EntityPlayer player = this.attr(Attributes.SENDING_PLAYER).get();
-
+    @Override
+    public void handle(MessageContext context, EntityPlayer player) {
         boolean addToNEI = ModuleDescriptiveBooks.addAgeList.getValue();
         boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
         boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
@@ -58,8 +57,7 @@ public class Packet1RequestAges extends MystNEIPacket {
         }
 
         for (AgeInfo info : CommonProxy.serverAgesMap.values()) {
-            PluginNEIMystcraft.packetHandler.sendPacketToPlayer(new Packet2AgeInfo(info, addToNEI, listSymbols, listPages, allowRendering), player);
+            PluginNEIMystcraft.packetHandler.sendTo(new S01AgeInfo(info, addToNEI, listSymbols, listPages, allowRendering), (EntityPlayerMP) player);
         }
     }
-
 }

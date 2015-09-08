@@ -29,7 +29,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 
@@ -239,7 +238,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
         currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);
 
         Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui), mousepos.y - AccessHelper.getGuiTop(gui));
+        Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
         if (recipe.isNotebook) {
             if (currenttip.isEmpty() && stack == null && new Rectangle(42, 19, 33, 44).contains(relMouse)) {

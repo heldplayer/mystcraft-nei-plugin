@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.specialattack.forge.core.Assets;
-import net.specialattack.forge.core.asm.AccessHelper;
 import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
 import org.lwjgl.input.Mouse;
@@ -165,7 +164,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
         CachedBooksRecipe recipe = (CachedBooksRecipe) this.arecipes.get(recipeId);
 
         Point mousepos = GuiDraw.getMousePosition();
-        Point relMouse = new Point(mousepos.x - AccessHelper.getGuiLeft(gui) - 5, mousepos.y - AccessHelper.getGuiTop(gui) - 16);
+        Point relMouse = new Point(mousepos.x - gui.guiLeft - 5, mousepos.y - gui.guiTop - 16);
 
         if (recipe.ageInfo.allowRendering) {
             if (relMouse.x >= 4 && relMouse.y >= 0 && relMouse.x < 20 && relMouse.y < 16) {
@@ -312,7 +311,7 @@ public class AgeExplorerRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public List<PositionedStack> getIngredients() {
-            return this.viewingTimer >= TIMER_MAX ? super.getIngredients() : this.visibleStacks;
+            return this.viewingTimer >= CachedBooksRecipe.TIMER_MAX ? super.getIngredients() : this.visibleStacks;
         }
     }
 
