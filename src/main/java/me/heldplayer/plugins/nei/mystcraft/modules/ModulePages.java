@@ -3,34 +3,26 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
 import com.xcompwiz.mystcraft.api.symbol.IAgeSymbol;
-import cpw.mods.fml.relauncher.Side;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystItemFactory;
 import me.heldplayer.plugins.nei.mystcraft.integration.mystcraft.MystSymbol;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
-import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
 public class ModulePages implements IModule {
 
-    public static ConfigValue<Boolean> addSymbolPages;
-    public static ConfigValue<Boolean> addLinkPanels;
     private boolean symbolsEnabled;
     private boolean linkpanelsEnabled;
 
-    public ModulePages() {
-        addSymbolPages = new ConfigValue<Boolean>("addSymbolPages", "myst-nei:config.general.addSymbolPages", Side.CLIENT, Boolean.TRUE);
-        addLinkPanels = new ConfigValue<Boolean>("addLinkPanels", "myst-nei:config.general.addLinkPanels", Side.CLIENT, Boolean.TRUE);
-    }
-
     @Override
     public void enable() {
-        if (addSymbolPages.getValue()) {
+        if (PluginNEIMystcraft.config.addSymbolPages) {
             Objects.log.log(Level.DEBUG, "Adding symbol pages to NEI view");
 
             Set<IAgeSymbol> symbols = new TreeSet<IAgeSymbol>(new Comparator<IAgeSymbol>() {
@@ -45,40 +37,34 @@ public class ModulePages implements IModule {
                 API.addItemListEntry(MystItemFactory.api.buildSymbolPage(symbol.identifier()));
             }
 
-            symbolsEnabled = true;
+            this.symbolsEnabled = true;
         }
 
-        if (addLinkPanels.getValue()) {
+        if (PluginNEIMystcraft.config.addLinkPanels) {
             Objects.log.log(Level.DEBUG, "Adding link panels to NEI view");
 
             for (ItemStack stack : Integrator.getAllLinkpanels()) {
                 API.addItemListEntry(stack);
             }
 
-            symbolsEnabled = true;
+            this.symbolsEnabled = true;
         }
     }
 
     @Override
     public void disable() {
-        if (symbolsEnabled || linkpanelsEnabled) {
+        if (this.symbolsEnabled || this.linkpanelsEnabled) {
             Objects.log.log(Level.DEBUG, "Removing symbol pages and link panels from NEI view");
 
             ItemInfo.itemOverrides.removeAll(MystObjs.page);
 
-            symbolsEnabled = false;
-            linkpanelsEnabled = false;
+            this.symbolsEnabled = false;
+            this.linkpanelsEnabled = false;
         }
     }
 
     @Override
     public boolean isEnabled() {
-        return symbolsEnabled || linkpanelsEnabled;
+        return this.symbolsEnabled || this.linkpanelsEnabled;
     }
-
-    @Override
-    public ConfigValue<?>[] getConfigEntries() {
-        return new ConfigValue<?>[] { addSymbolPages, addLinkPanels };
-    }
-
 }

@@ -52,6 +52,7 @@ public class ClientProxy extends CommonProxy {
 
         FMLCommonHandler.instance().bus().register(this);
         MinecraftForge.EVENT_BUS.register(this);
+        net.specialattack.forge.core.Objects.SYNC_EVENT_BUS.register(this);
 
         try {
             Objects.log.log(Level.DEBUG, "Initializing temporary wrappers");

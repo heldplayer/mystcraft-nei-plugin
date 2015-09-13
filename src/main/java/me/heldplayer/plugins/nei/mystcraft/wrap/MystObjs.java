@@ -91,9 +91,9 @@ public class MystObjs {
     public static Fluid black_ink = null;
 
     public static void initialize() {
-        black_ink = FluidRegistry.getFluid(MystObjects.Fluids.black_ink);
+        MystObjs.black_ink = FluidRegistry.getFluid(MystObjects.Fluids.black_ink);
 
-        creative_notebooks = new ArrayList<ItemStack>();
+        MystObjs.creative_notebooks = new ArrayList<ItemStack>();
 
         for (CreativeTabs tab : CreativeTabs.creativeTabArray) {
             if (tab == null) {
@@ -107,7 +107,7 @@ public class MystObjs {
                         continue;
                     }
                     if (stack.getItem() == MystObjs.portfolio) {
-                        creative_notebooks.add(stack);
+                        MystObjs.creative_notebooks.add(stack);
                     }
                 }
             }

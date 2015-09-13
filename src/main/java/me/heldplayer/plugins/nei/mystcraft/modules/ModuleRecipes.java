@@ -2,30 +2,22 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 
 import codechicken.nei.api.API;
 import codechicken.nei.recipe.DefaultOverlayHandler;
-import cpw.mods.fml.relauncher.Side;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.client.InkMixerRecipeHandler;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.client.WritingDeskRecipeHandler;
-import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
 public class ModuleRecipes implements IModule {
 
-    public static ConfigValue<Boolean> addInkMixerRecipes;
-    public static ConfigValue<Boolean> addWritingDeskRecipes;
     public static boolean inkMixerEnabled;
     public static boolean writingDeskEnabled;
     private boolean enabled;
 
-    public ModuleRecipes() {
-        addInkMixerRecipes = new ConfigValue<Boolean>("addInkMixerRecipes", "myst-nei:config.general.addInkMixerRecipes", Side.CLIENT, Boolean.TRUE);
-        addWritingDeskRecipes = new ConfigValue<Boolean>("addWritingDeskRecipes", "myst-nei:config.general.addWritingDeskRecipes", Side.CLIENT, Boolean.TRUE);
-    }
-
     @Override
     public void enable() {
-        if (!enabled) {
+        if (!this.enabled) {
             {
                 Objects.log.log(Level.DEBUG, "Adding Ink Mixer recipe handler");
 
@@ -51,27 +43,21 @@ public class ModuleRecipes implements IModule {
                 API.registerGuiOverlayHandler(Integrator.guiWritingDeskClass, new DefaultOverlayHandler(), "writingdesk");
             }
 
-            enabled = true;
+            this.enabled = true;
         }
 
-        inkMixerEnabled = addInkMixerRecipes.getValue();
-        writingDeskEnabled = addWritingDeskRecipes.getValue();
+        ModuleRecipes.inkMixerEnabled = PluginNEIMystcraft.config.addInkMixerRecipes;
+        ModuleRecipes.writingDeskEnabled = PluginNEIMystcraft.config.addWritingDeskRecipes;
     }
 
     @Override
     public void disable() {
-        inkMixerEnabled = false;
-        writingDeskEnabled = false;
+        ModuleRecipes.inkMixerEnabled = false;
+        ModuleRecipes.writingDeskEnabled = false;
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
-
-    @Override
-    public ConfigValue<?>[] getConfigEntries() {
-        return new ConfigValue<?>[] { addInkMixerRecipes, addWritingDeskRecipes };
-    }
-
 }

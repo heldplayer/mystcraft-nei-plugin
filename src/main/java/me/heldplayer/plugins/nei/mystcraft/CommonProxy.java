@@ -55,7 +55,7 @@ public class CommonProxy extends SpACoreProxy {
                         int dimId = Integer.parseInt(name.substring(8, name.indexOf(".dat")));
                         AgeInfo info = new AgeInfo(dimId, spawn);
 
-                        if (PluginNEIMystcraft.allowSymbolExploring.getValue()) {
+                        if (PluginNEIMystcraft.config.allowSymbolExploring) {
                             NBTTagList symbols = data.getTagList("Symbols", 8);
                             info.symbols = new ArrayList<String>(symbols.tagCount());
                             for (int i = 0; i < symbols.tagCount(); i++) {
@@ -63,7 +63,7 @@ public class CommonProxy extends SpACoreProxy {
                             }
                         }
 
-                        if (PluginNEIMystcraft.allowPageExploring.getValue()) {
+                        if (PluginNEIMystcraft.config.allowPageExploring) {
                             NBTTagList pages = data.getTagList("Pages", 10);
                             info.pages = new ArrayList<ItemStack>(pages.tagCount());
                             for (int i = 0; i < pages.tagCount(); i++) {
@@ -76,7 +76,7 @@ public class CommonProxy extends SpACoreProxy {
 
                         info.ageName = data.getString("AgeName");
 
-                        serverAgesMap.put(dimId, info);
+                        CommonProxy.serverAgesMap.put(dimId, info);
                     } catch (Throwable e) {
                         Objects.log.log(Level.ERROR, "Failed reading agedata file " + file.getName(), e);
                     }
@@ -87,7 +87,7 @@ public class CommonProxy extends SpACoreProxy {
 
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
-        for (AgeInfo info : serverAgesMap.values()) {
+        for (AgeInfo info : CommonProxy.serverAgesMap.values()) {
             if (info.symbols != null) {
                 info.symbols.clear();
                 info.symbols = null;
@@ -98,7 +98,7 @@ public class CommonProxy extends SpACoreProxy {
             }
         }
 
-        serverAgesMap.clear();
+        CommonProxy.serverAgesMap.clear();
     }
 
 }

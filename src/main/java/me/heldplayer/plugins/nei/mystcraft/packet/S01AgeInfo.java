@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.client.ClientProxy;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
-import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +57,7 @@ public class S01AgeInfo extends MystNEIPacket {
 
     @Override
     public Side getReceivingSide() {
-        return Side.SERVER;
+        return Side.CLIENT;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class S01AgeInfo extends MystNEIPacket {
         info.symbols = this.symbols;
         info.pages = this.pages;
         info.allowRendering = this.allowRendering && CommonProxy.lookingGlassLoaded;
-        putClientInfo(this.dimId, info);
+        this.putClientInfo(this.dimId, info);
 
         ItemStack stack = new ItemStack(MystObjs.descriptiveBook);
         NBTTagCompound tag = stack.stackTagCompound = new NBTTagCompound();
@@ -158,7 +158,7 @@ public class S01AgeInfo extends MystNEIPacket {
 
         if (this.addToNEI) {
             Integrator.allAges.add(stack);
-            if (ModuleDescriptiveBooks.addAgeList.getValue()) {
+            if (PluginNEIMystcraft.config.addAgeList) {
                 API.addItemListEntry(stack);
             }
         }
@@ -168,5 +168,4 @@ public class S01AgeInfo extends MystNEIPacket {
     private void putClientInfo(int dimId, AgeInfo info) {
         ClientProxy.clientAgesMap.put(this.dimId, info);
     }
-
 }

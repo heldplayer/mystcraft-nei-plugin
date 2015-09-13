@@ -23,7 +23,7 @@ public class NEIConfig implements IConfigureNEI {
 
         Integrator.initialize();
 
-        if (PluginNEIMystcraft.addAgeExplorer.getValue()) {
+        if (PluginNEIMystcraft.config.addAgeExplorer) {
             AgeExplorerRecipeHandler ageExplorer = new AgeExplorerRecipeHandler();
             API.registerRecipeHandler(ageExplorer);
             API.registerUsageHandler(ageExplorer);

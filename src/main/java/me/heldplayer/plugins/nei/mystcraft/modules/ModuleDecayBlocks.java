@@ -2,27 +2,21 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
 public class ModuleDecayBlocks implements IModule {
 
-    public static ConfigValue<Boolean> addDecaySubTypes;
     private boolean enabled;
-
-    public ModuleDecayBlocks() {
-        addDecaySubTypes = new ConfigValue<Boolean>("addDecaySubTypes", "myst-nei:config.general.addDecaySubTypes", Side.CLIENT, Boolean.TRUE);
-    }
 
     @Override
     public void enable() {
-        if (addDecaySubTypes.getValue()) {
+        if (PluginNEIMystcraft.config.addDecaySubTypes) {
             Objects.log.log(Level.DEBUG, "Adding decay types to NEI view");
 
             ArrayList<Integer> damageVariants = new ArrayList<Integer>();
@@ -38,29 +32,23 @@ public class ModuleDecayBlocks implements IModule {
                 API.addItemListEntry(new ItemStack(MystObjs.decay, 1, damage));
             }
 
-            enabled = true;
+            this.enabled = true;
         }
     }
 
     @Override
     public void disable() {
-        if (enabled) {
+        if (this.enabled) {
             Objects.log.log(Level.DEBUG, "Removing decay types from NEI view");
 
             ItemInfo.itemOverrides.removeAll(Item.getItemFromBlock(MystObjs.decay));
 
-            enabled = false;
+            this.enabled = false;
         }
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
-
-    @Override
-    public ConfigValue<?>[] getConfigEntries() {
-        return new ConfigValue<?>[] { addDecaySubTypes };
-    }
-
 }

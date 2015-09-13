@@ -2,25 +2,19 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
-import cpw.mods.fml.relauncher.Side;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
-import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
 public class ModuleCreativePortfolios implements IModule {
 
-    public static ConfigValue<Boolean> addCreativeNotebooks;
     private boolean enabled;
-
-    public ModuleCreativePortfolios() {
-        addCreativeNotebooks = new ConfigValue<Boolean>("addCreativeNotebooks", "myst-nei:config.general.addCreativeNotebooks", Side.CLIENT, Boolean.TRUE);
-    }
 
     @Override
     public void enable() {
-        if (addCreativeNotebooks.getValue()) {
+        if (PluginNEIMystcraft.config.addCreativeNotebooks) {
             Objects.log.log(Level.DEBUG, "Adding creative notebooks to NEI view");
 
             // ItemStack notebook = new ItemStack(MystObjs.notebook, 1, 0);
@@ -32,29 +26,23 @@ public class ModuleCreativePortfolios implements IModule {
                 API.addItemListEntry(stack);
             }
 
-            enabled = true;
+            this.enabled = true;
         }
     }
 
     @Override
     public void disable() {
-        if (enabled) {
+        if (this.enabled) {
             Objects.log.log(Level.DEBUG, "Removing creative notebooks from NEI view");
 
             ItemInfo.itemOverrides.removeAll(MystObjs.portfolio);
 
-            enabled = false;
+            this.enabled = false;
         }
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
-
-    @Override
-    public ConfigValue<?>[] getConfigEntries() {
-        return new ConfigValue<?>[] { addCreativeNotebooks };
-    }
-
 }

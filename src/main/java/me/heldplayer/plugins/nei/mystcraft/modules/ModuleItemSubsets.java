@@ -4,29 +4,23 @@ import codechicken.nei.SubsetWidget;
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemFilter;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.item.ItemStack;
-import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
 @SuppressWarnings("ConstantConditions")
 public class ModuleItemSubsets implements IModule {
 
-    public static ConfigValue<Boolean> addItemRanges;
     private boolean enabled;
-
-    public ModuleItemSubsets() {
-        addItemRanges = new ConfigValue<Boolean>("addItemRanges", "myst-nei:config.general.addItemRanges", Side.CLIENT, Boolean.TRUE);
-    }
 
     @Override
     public void enable() {
-        if (addItemRanges.getValue()) {
+        if (PluginNEIMystcraft.config.addItemRanges) {
             Objects.log.log(Level.DEBUG, "Adding item ranges to NEI");
 
             API.addSubset("Mod.Mystcraft", Collections.<ItemStack>emptySet());
@@ -64,8 +58,8 @@ public class ModuleItemSubsets implements IModule {
 
             API.addSubset("Mod.Mystcraft.Items", items);
 
-            if (ModulePages.addSymbolPages.getValue() || ModulePages.addLinkPanels.getValue()) {
-                if (ModulePages.addSymbolPages.getValue()) {
+            if (PluginNEIMystcraft.config.addSymbolPages || PluginNEIMystcraft.config.addLinkPanels) {
+                if (PluginNEIMystcraft.config.addSymbolPages) {
                     delayedTasks.add(new Runnable() {
                         @Override
                         public void run() {
@@ -79,7 +73,7 @@ public class ModuleItemSubsets implements IModule {
                         }
                     });
                 }
-                if (ModulePages.addLinkPanels.getValue()) {
+                if (PluginNEIMystcraft.config.addLinkPanels) {
                     delayedTasks.add(new Runnable() {
                         @Override
                         public void run() {
@@ -97,7 +91,7 @@ public class ModuleItemSubsets implements IModule {
                 items.add(new ItemStack(MystObjs.page));
             }
 
-            if (ModuleCreativePortfolios.addCreativeNotebooks.getValue()) {
+            if (PluginNEIMystcraft.config.addCreativeNotebooks) {
                 delayedTasks.add(new Runnable() {
                     @Override
                     public void run() {
@@ -114,7 +108,7 @@ public class ModuleItemSubsets implements IModule {
                 items.add(new ItemStack(MystObjs.portfolio));
             }
 
-            if (ModuleLinkingBooks.addLinkingBooks.getValue()) {
+            if (PluginNEIMystcraft.config.addLinkingBooks) {
                 delayedTasks.add(new Runnable() {
                     @Override
                     public void run() {
@@ -132,7 +126,7 @@ public class ModuleItemSubsets implements IModule {
                 items.add(new ItemStack(MystObjs.linkingBookUnlinked));
             }
 
-            if (ModuleDescriptiveBooks.addAgeList.getValue()) {
+            if (PluginNEIMystcraft.config.addAgeList) {
                 delayedTasks.add(new Runnable() {
                     @Override
                     public void run() {
@@ -162,31 +156,25 @@ public class ModuleItemSubsets implements IModule {
 
             delayedTasks.clear();
 
-            enabled = true;
+            this.enabled = true;
         }
     }
 
     @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     @Override
     public void disable() {
-        if (enabled) {
+        if (this.enabled) {
             SubsetWidget.SubsetTag root = ReflectionHelper.getPrivateValue(SubsetWidget.class, null, "root");
             synchronized (root) {
                 root.children.remove("mystcraft");
             }
 
-            enabled = false;
+            this.enabled = false;
         }
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
-
-    @Override
-    public ConfigValue<?>[] getConfigEntries() {
-        return new ConfigValue<?>[] { addItemRanges };
-    }
-
 }

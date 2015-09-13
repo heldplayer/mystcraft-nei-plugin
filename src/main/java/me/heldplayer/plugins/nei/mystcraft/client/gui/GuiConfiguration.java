@@ -1,7 +1,8 @@
 package me.heldplayer.plugins.nei.mystcraft.client.gui;
 
 import cpw.mods.fml.client.config.GuiConfig;
-import java.util.Collections;
+import cpw.mods.fml.client.config.IConfigElement;
+import java.util.ArrayList;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -9,7 +10,7 @@ import net.minecraft.client.gui.GuiScreen;
 public class GuiConfiguration extends GuiConfig {
 
     public GuiConfiguration(GuiScreen parent) {
-        super(parent, PluginNEIMystcraft.instance.config.getConfigElements(), Objects.MOD_ID, false, false, "NEIMystcraft Plugin Configuration");
+        super(parent, new ArrayList<IConfigElement>(PluginNEIMystcraft.configManager.categories.values()), Objects.MOD_ID, false, false, "NEIMystcraft Plugin Configuration");
     }
 
 }

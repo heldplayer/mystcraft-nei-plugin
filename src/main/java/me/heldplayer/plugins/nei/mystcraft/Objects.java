@@ -13,7 +13,7 @@ public final class Objects {
 
     public static final String MOD_ID = "NEI-Mystcraft-Plugin";
     public static final String MOD_NAME = "NEI Mystcraft Plugin";
-    public static final ModInfo MOD_INFO = new ModInfo(MOD_ID, MOD_NAME);
+    public static final ModInfo MOD_INFO = new ModInfo(Objects.MOD_ID, Objects.MOD_NAME);
     // Dependencies: https://github.com/MinecraftForge/MinecraftForge/blob/master/fml/src/main/java/net/minecraftforge/fml/common/versioning/VersionRange.java#L100
     public static final String MOD_DEPENCIES = "after:*;" +
             "required-after:spacore@[01.05.06,);" +

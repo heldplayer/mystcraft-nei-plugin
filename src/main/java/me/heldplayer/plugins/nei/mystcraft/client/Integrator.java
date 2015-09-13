@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.WorldProvider;
 import net.specialattack.forge.core.client.GLState;
 import net.specialattack.forge.core.client.gui.GuiHelper;
-import net.specialattack.forge.core.config.ConfigValue;
 import org.apache.logging.log4j.Level;
 
 /**
@@ -63,22 +62,12 @@ public final class Integrator {
     private Integrator() {
     }
 
-    public static Collection<ConfigValue<?>> getAllConfigValues() {
-        HashSet<ConfigValue<?>> result = new HashSet<ConfigValue<?>>();
-
-        for (IModule module : Integrator.modules) {
-            Collections.addAll(result, module.getConfigEntries());
-        }
-
-        return result;
-    }
-
     public static void reinitialize() {
         if (!Integrator.initialized) {
             return;
         }
 
-        for (IModule module : modules) {
+        for (IModule module : Integrator.modules) {
             try {
                 Objects.log.log(Level.DEBUG, "Disabling module " + module.getClass().getName());
 
@@ -92,7 +81,7 @@ public final class Integrator {
 
         try {
             Objects.log.log(Level.DEBUG, "Getting all link panels");
-            prepareLinkPanels();
+            Integrator.prepareLinkPanels();
         } catch (Exception ex) {
             Objects.log.log(Level.ERROR, "Failed getting all link panels", ex);
         }
@@ -124,7 +113,7 @@ public final class Integrator {
         }
 
         Object[] keys = map.keySet().toArray(new Object[map.size()]);
-        int bin = binary(keys.length);
+        int bin = Integrator.binary(keys.length);
 
         Integrator.allLinkpanels = new ArrayList<ItemStack>();
 
@@ -172,22 +161,22 @@ public final class Integrator {
 
         try {
             Objects.log.log(Level.DEBUG, "Getting all link panels");
-            prepareLinkPanels();
+            Integrator.prepareLinkPanels();
         } catch (Exception ex) {
             Objects.log.log(Level.ERROR, "Failed getting all link panels", ex);
         }
 
         try {
             Objects.log.log(Level.DEBUG, "Getting methods and fields");
-            getMethodsAndFields();
+            Integrator.getMethodsAndFields();
         } catch (Exception ex) {
             Objects.log.log(Level.ERROR, "Failed getting methods and fields", ex);
         }
 
         try {
             Objects.log.log(Level.DEBUG, "Getting GUI classes");
-            guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
-            guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
+            Integrator.guiInkMixerClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiInkMixer");
+            Integrator.guiWritingDeskClass = (Class<? extends GuiContainer>) Class.forName("com.xcompwiz.mystcraft.client.gui.GuiWritingDesk");
         } catch (Exception ex) {
             Objects.log.log(Level.ERROR, "Failed getting GUI classes", ex);
         }

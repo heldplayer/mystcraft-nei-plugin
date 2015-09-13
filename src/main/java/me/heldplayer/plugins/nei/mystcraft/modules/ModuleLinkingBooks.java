@@ -2,16 +2,15 @@ package me.heldplayer.plugins.nei.mystcraft.modules;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.ItemInfo;
-import cpw.mods.fml.relauncher.Side;
 import java.util.List;
 import me.heldplayer.plugins.nei.mystcraft.Objects;
+import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
 import me.heldplayer.plugins.nei.mystcraft.client.Integrator;
 import me.heldplayer.plugins.nei.mystcraft.wrap.MystObjs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.specialattack.forge.core.config.ConfigValue;
 import net.specialattack.forge.core.crafting.CraftingHelper;
 import net.specialattack.forge.core.crafting.FakeShapelessSpACoreRecipe;
 import net.specialattack.forge.core.crafting.ICraftingResultHandler;
@@ -20,19 +19,12 @@ import org.apache.logging.log4j.Level;
 
 public class ModuleLinkingBooks implements IModule {
 
-    public static ConfigValue<Boolean> addLinkingBooks;
-    public static ConfigValue<Boolean> showRecipeForLinkbooks;
     private boolean enabled;
     private boolean recipeEnabled;
 
-    public ModuleLinkingBooks() {
-        addLinkingBooks = new ConfigValue<Boolean>("addLinkingBooks", "myst-nei:config.general.addLinkingBooks", Side.CLIENT, Boolean.TRUE);
-        showRecipeForLinkbooks = new ConfigValue<Boolean>("showRecipeForLinkbooks", "myst-nei:config.general.showRecipeForLinkbooks", Side.CLIENT, Boolean.TRUE);
-    }
-
     @Override
     public void enable() {
-        if (addLinkingBooks.getValue()) {
+        if (PluginNEIMystcraft.config.addLinkingBooks) {
             Objects.log.log(Level.DEBUG, "Adding linking books to NEI view");
 
             for (ItemStack panel : Integrator.getAllLinkpanels()) {
@@ -43,10 +35,10 @@ public class ModuleLinkingBooks implements IModule {
                 API.addItemListEntry(book);
             }
 
-            enabled = true;
+            this.enabled = true;
         }
 
-        if (!recipeEnabled) {
+        if (!this.recipeEnabled) {
             Objects.log.log(Level.DEBUG, "Adding fake linkbook recipe");
 
             ICraftingResultHandler handler = new ICraftingResultHandler() {
@@ -106,36 +98,30 @@ public class ModuleLinkingBooks implements IModule {
 
                 @Override
                 public boolean isEnabled() {
-                    return showRecipeForLinkbooks.getValue();
+                    return PluginNEIMystcraft.config.showRecipeForLinkbooks;
                 }
 
             };
 
             CraftingHelper.fakeRecipes.add(recipe);
 
-            recipeEnabled = true;
+            this.recipeEnabled = true;
         }
     }
 
     @Override
     public void disable() {
-        if (enabled) {
+        if (this.enabled) {
             Objects.log.log(Level.DEBUG, "Removing linking books from NEI view");
 
             ItemInfo.itemOverrides.removeAll(MystObjs.linkingBookUnlinked);
 
-            enabled = false;
+            this.enabled = false;
         }
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
-
-    @Override
-    public ConfigValue<?>[] getConfigEntries() {
-        return new ConfigValue<?>[] { addLinkingBooks, showRecipeForLinkbooks };
-    }
-
 }

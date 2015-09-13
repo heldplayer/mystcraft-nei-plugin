@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import me.heldplayer.plugins.nei.mystcraft.AgeInfo;
 import me.heldplayer.plugins.nei.mystcraft.CommonProxy;
 import me.heldplayer.plugins.nei.mystcraft.PluginNEIMystcraft;
-import me.heldplayer.plugins.nei.mystcraft.modules.ModuleDescriptiveBooks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -36,23 +35,23 @@ public class C01RequestAges extends MystNEIPacket {
 
     @Override
     public void handle(MessageContext context, EntityPlayer player) {
-        boolean addToNEI = ModuleDescriptiveBooks.addAgeList.getValue();
-        boolean listSymbols = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowSymbolExploring.getValue();
-        boolean listPages = PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowPageExploring.getValue();
-        boolean allowRendering = CommonProxy.lookingGlassLoaded && PluginNEIMystcraft.addAgeExplorer.getValue() && PluginNEIMystcraft.allowAgeViewer.getValue();
+        boolean addToNEI = PluginNEIMystcraft.config.addAgeList;
+        boolean listSymbols = PluginNEIMystcraft.config.addAgeExplorer && PluginNEIMystcraft.config.allowSymbolExploring;
+        boolean listPages = PluginNEIMystcraft.config.addAgeExplorer && PluginNEIMystcraft.config.allowPageExploring;
+        boolean allowRendering = CommonProxy.lookingGlassLoaded && PluginNEIMystcraft.config.addAgeExplorer && PluginNEIMystcraft.config.allowAgeViewer;
 
         boolean playerOpped = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 
-        if (addToNEI && PluginNEIMystcraft.opOnlyAgeList.getValue()) {
+        if (addToNEI && PluginNEIMystcraft.config.opOnlyAgeList) {
             addToNEI = playerOpped;
         }
-        if (listSymbols && PluginNEIMystcraft.opOnlySymbolExplorer.getValue()) {
+        if (listSymbols && PluginNEIMystcraft.config.opOnlySymbolExplorer) {
             listSymbols = playerOpped;
         }
-        if (listPages && PluginNEIMystcraft.opOnlyPageExploring.getValue()) {
+        if (listPages && PluginNEIMystcraft.config.opOnlyPageExploring) {
             listPages = playerOpped;
         }
-        if (allowRendering && PluginNEIMystcraft.opOnlyAgeViewer.getValue()) {
+        if (allowRendering && PluginNEIMystcraft.config.opOnlyAgeViewer) {
             allowRendering = playerOpped;
         }
 
