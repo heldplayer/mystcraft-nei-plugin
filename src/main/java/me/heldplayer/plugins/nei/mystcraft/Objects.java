@@ -16,7 +16,7 @@ public final class Objects {
     public static final ModInfo MOD_INFO = new ModInfo(Objects.MOD_ID, Objects.MOD_NAME);
     // Dependencies: https://github.com/MinecraftForge/MinecraftForge/blob/master/fml/src/main/java/net/minecraftforge/fml/common/versioning/VersionRange.java#L100
     public static final String MOD_DEPENCIES = "after:*;" +
-            "required-after:spacore@[01.05.06,);" +
+            "required-after:spacore@[01.05.09,);" +
             "required-after:NotEnoughItems;" +
             "required-after:Mystcraft@(0.11.6,);" +
             "after:LookingGlass@[0.1.0.00,)";
