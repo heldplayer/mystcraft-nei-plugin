@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "sonatype"
@@ -11,7 +11,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
+            changing = true
+        }
     }
 }
 
@@ -26,11 +28,15 @@ repositories {
     }
     maven {
         name 'ForgeFS'
-        url 'http://files.minecraftforge.net/maven'
+        url "https://maven.minecraftforge.net/"
     }
     maven {
         name 'MinecraftS3'
         url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
+    }
+    maven {
+        name = "gtnh"
+        url = uri("https://nexus.gtnewhorizons.com/repository/public/")
     }
 }
 
@@ -43,8 +49,8 @@ idea {
 
 apply plugin: 'forge'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 ext.configFile = file "build.properties"
 ext.configFile.withReader {
@@ -56,9 +62,9 @@ ext.configFile.withReader {
 
 ext.minecraft_version = config.minecraft_version
 ext.forge_version = config.forge_version
-ext.codechickenlib = "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
-ext.codechickencore = "codechicken:CodeChickenCore:${config.minecraft_version}-${config.CCC_version}:dev"
-ext.notenoughitems = "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
+ext.codechickenlib = "com.github.GTNewHorizons:CodeChickenLib:${config.CCLIB_version}:dev"
+ext.codechickencore = "com.github.GTNewHorizons:CodeChickenCore:${config.CCC_version}:dev"
+ext.notenoughitems = "com.github.GTNewHorizons:NotEnoughItems:${config.NEI_version}:dev"
 
 println "$project.name for Forge: " + minecraft_version + "-" + forge_version
 
@@ -101,5 +107,12 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude '*.version'
+    }
+}
+
+// Jar stuff
+jar {
+    manifest {
+        attributes 'AccessTransformer': 'spacore_at.cfg'
     }
 }

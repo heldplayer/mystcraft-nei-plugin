@@ -164,10 +164,10 @@ public class ModuleItemSubsets implements IModule {
     @Override
     public void disable() {
         if (this.enabled) {
-            SubsetWidget.SubsetTag root = ReflectionHelper.getPrivateValue(SubsetWidget.class, null, "root");
+            /*SubsetWidget.SubsetTag root = ReflectionHelper.getPrivateValue(SubsetWidget.class, null, "root");
             synchronized (root) {
                 root.children.remove("mystcraft");
-            }
+            }*/
 
             this.enabled = false;
         }

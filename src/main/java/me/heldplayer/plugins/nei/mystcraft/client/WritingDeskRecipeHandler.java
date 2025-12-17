@@ -232,7 +232,7 @@ public class WritingDeskRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipeId) {
+    public List<String> handleItemTooltip(GuiRecipe<?> gui, ItemStack stack, List<String> currenttip, int recipeId) {
         CachedWritingDeskRecipe recipe = (CachedWritingDeskRecipe) this.arecipes.get(recipeId);
 
         currenttip = super.handleItemTooltip(gui, stack, currenttip, recipeId);

@@ -53,7 +53,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
             Point mousepos = new Point(mouseX, mouseY);
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
-            GuiRecipe guiRecipe = (GuiRecipe) gui;
+            GuiRecipe<?> guiRecipe = (GuiRecipe<?>) gui;
 
             if (currenttip.isEmpty() && GuiContainerManager.shouldShowTooltip(gui)) {
                 if (ModuleTooltips.recipesTooltips && guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
@@ -154,7 +154,7 @@ public class MystTooltipHandler implements IContainerInputHandler, IContainerToo
             Point mousepos = GuiDraw.getMousePosition();
             Point relMouse = new Point(mousepos.x - gui.guiLeft, mousepos.y - gui.guiTop);
 
-            GuiRecipe guiRecipe = (GuiRecipe) gui;
+            GuiRecipe<?> guiRecipe = (GuiRecipe<?>) gui;
 
             if (guiRecipe.currenthandlers.get(guiRecipe.recipetype) instanceof WritingDeskRecipeHandler) {
                 Rectangle rect = new Rectangle(151, 34, 18, 34);
